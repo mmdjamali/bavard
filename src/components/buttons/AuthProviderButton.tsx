@@ -19,18 +19,22 @@ const AuthProviderButton : React.FC<props> = ({
         py-[.5rem] w-full rounded-[.25rem] hover:shadow-[0px_4px_8px]
         hover:bg-violet-100 font-medium
         transition-colors delay-150 ease-linear flex 
-        justify-center items-center shadow-[0px_4px_6px]
+        justify-evenly items-center shadow-[0px_4px_6px]
         shadow-violet-400/50 hover:shadow-violet-400/70
         ${sx ? sx : ""}
         `}
         >
             <div
-            className='text-[1.5rem] px-[.5rem] text-neutral-700'>
+            className='
+            text-[1.25rem] px-[.25rem] text-neutral-700
+            '>
                 {icon}
             </div>
 
             <p
-            className='px-[.5rem] text-neutral-700'>
+            className='
+            px-[.25rem] text-neutral-700
+            '>
                 {"Continue with " + provider}
             </p>
         </button>

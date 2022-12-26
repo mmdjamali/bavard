@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const AuthSlice = createSlice({
     name : "auth",
     initialState : {
-        pending : true,
+        pending : false,
         user : null,
         profile : null
     },
@@ -20,6 +20,6 @@ const AuthSlice = createSlice({
     }
 })
 
-export const { setUser , setProfile } = AuthSlice.actions;
+export const { setUser , setProfile , setPending } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

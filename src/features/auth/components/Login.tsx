@@ -1,11 +1,12 @@
 import React , { useState } from "react"
-import { LoginInput , PasswordInput } from '../components/inputs'
-import { FullWidthButton , AuthProviderButton } from "../components/buttons";
-import { AuthDivider } from "../components/dividers";
+import { LoginInput , PasswordInput } from '../../../components/inputs'
+import { FullWidthButton , AuthProviderButton } from "../../../components/buttons";
+import { AuthDivider } from "../../../components/dividers";
 import { MdEmail , MdVpnKey } from 'react-icons/md';
 import { BsGoogle } from "react-icons/bs"
 import { Link } from "react-router-dom";
-import supabase from "../libs/supabase";
+import supabase from "../../../libs/supabase";
+import { TypographyLG , TypographySM } from "../../../components/typographies";
 
 function Login() {
 
@@ -22,40 +23,26 @@ function Login() {
       email,
       password
     })
-    console.log(error,data)
-
   }
 
   return (
     <form
     onSubmit={async (e) => {
       setLoading(true)
-      console.log("true")
       await LoginWithEmail(e, username, password)
-      console.log("false")
       setLoading(false)
     }}
     className={`
     flex flex-col w-[min(80%_,_18rem)] my-auto
     `}>
 
-      <p
-      className="
-      text-center text-[2rem] font-semibold
-    text-neutral-800
-      "
-      >
-        Welcome Back!
-      </p>
+      <TypographyLG
+      text="Welcome Back!"
+      />
 
-      <p
-      className="
-      text-center text-[1rem] text-neutral-600
-      mb-[3rem]
-      "
-      >
-        Login to your account
-      </p>
+      <TypographySM
+      text="Login to your account"
+      />
 
               <LoginInput
               value={username}

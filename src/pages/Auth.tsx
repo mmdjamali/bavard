@@ -1,5 +1,5 @@
 import React , { useState } from 'react'
-import {Login , Signup} from "./index"
+import {Login , Signup} from "../features/auth"
 
 const Auth : React.FC = () => {
   const [isLogin , setIsLogin] = useState<boolean>(true)
@@ -8,7 +8,7 @@ const Auth : React.FC = () => {
     <div className="flex flex-row">
 
         <div className="
-        hidden md:block w-[40%] h-scree
+        hidden md:block w-[40vw] h-scree
         bg-violet-500
         "/>
 

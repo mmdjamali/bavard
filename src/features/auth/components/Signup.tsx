@@ -1,22 +1,14 @@
 import React , {useState} from 'react'
-import { LoginInput , PasswordInput } from '../components/inputs'
-import { FullWidthButton , AuthProviderButton } from "../components/buttons";
-import { AuthDivider } from "../components/dividers";
+import { LoginInput , PasswordInput } from '../../../components/inputs'
+import { FullWidthButton , AuthProviderButton } from "../../../components/buttons";
+import { AuthDivider } from "../../../components/dividers";
 import { MdEmail , MdVpnKey , MdPerson , MdCheck} from 'react-icons/md';
 import { BsGoogle } from "react-icons/bs"
-
-import supabase from '../libs/supabase'
-
-const SignUpWithEmail = async (e: React.FormEvent<HTMLFormElement>, email: string , password: string) => {
-  e.preventDefault()
-   const { data , error } = await supabase.auth.signUp({
-    email,
-    password
-  })
-}
+import { SignUpWithEmail } from '../utils';
+import { TypographyLG , TypographySM } from "../../../components/typographies";
 
 const Signup :React.FC = () => {
-    const [username , setUsername]  = useState<string>("")
+    const [email , setEmail]  = useState<string>("")
     const [password , setPassword]  = useState<string>("")
     const [confirm , setConfirm]  = useState<string>("")
     const [loading , setLoading]  = useState<boolean>(false)
@@ -25,43 +17,24 @@ const Signup :React.FC = () => {
       <form
       onSubmit={ async (e) => {
         setLoading(true)
-        await SignUpWithEmail(e , username , password)
+        await SignUpWithEmail(e , email , password)
         setLoading(false)
       }}
         className={`
       flex flex-col w-[min(80%_,_18rem)] my-auto
       `}>
 
-        <p
-        className="
-        text-center text-[2rem] font-semibold
-        text-neutral-800
-        "
-        >
-          Welcome!
-        </p>
+        <TypographyLG
+        text="Welcome!"
+        />
 
-        <p
-        className="
-        text-center text-[1rem] text-neutral-600
-        mb-[3rem]
-        "
-        >
-          Create an account and join us!
-        </p>
-
-        <LoginInput
-        value={username}
-        setValue={setUsername}
-        pattern={/./}
-        icon={<MdPerson/>}
-        placeholder="Name"
-        sx="mb-4"
+        <TypographySM
+        text="Create an account and join us!"
         />
 
         <LoginInput
-        value={username}
-        setValue={setUsername}
+        value={email}
+        setValue={setEmail}
         pattern={/^\S+@\S+\.\S+$/}
         icon={<MdEmail/>}
         placeholder="Email"

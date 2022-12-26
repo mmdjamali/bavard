@@ -13,7 +13,6 @@ type props = {
 const LoginInput : FC<props> = ({
     icon , placeholder , value , setValue , pattern , sx
 }) => {
-    
     const [firstLoad , setFirstLoad] = useState<boolean>(true)
     const [empty , setEmpty] = useState<boolean>(false)
     const [valid , setValid] = useState<boolean>(false)

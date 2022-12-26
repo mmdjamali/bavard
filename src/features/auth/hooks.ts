@@ -1,12 +1,50 @@
 import { useState , useEffect } from "react"
 import store from "../../redux/store";
-import { setUser , setProfile } from "../../redux/AuthSlice";
+import { setUser , setProfile , setPending } from "../../redux/AuthSlice";
 import supabase from "../../libs/supabase";
 import { AuthChangeEvent , Session} from "@supabase/supabase-js"
 import { useNavigate } from "react-router-dom";
 
 export const useAuthStateChange = () => {
-    console.log(supabase.auth.getUser().then(data => console.log(data)))
+    const navigate = useNavigate()
+
+    const watch = supabase.auth.onAuthStateChange(async (data , session) => {
+        const dispatch = store.dispatch
+        try{
+            dispatch(setPending(true))
+
+            if(!session?.user){
+                dispatch(setPending(false))
+                dispatch(setUser(null))
+                dispatch(setProfile(null))
+                navigate("/")
+                return
+            }
+
+            const profile = await supabase
+                    .from("profiles")
+                    .select()
+                    .eq("uid",session?.user?.id) 
+                    .single()
+
+            if(!profile?.data){
+                dispatch(setPending(false))
+                dispatch(setUser(session.user.id))
+                dispatch(setProfile(null))
+                navigate("/create-profile")
+                return
+            }
+
+            dispatch(setPending(false))
+            dispatch(setUser(session.user.id))
+            dispatch(setProfile(profile.data))
+        }
+        catch(err){
+            dispatch(setPending(false))
+        }
+    })
+
+    return () => watch?.data?.subscription?.unsubscribe()
 }
 
 export const useCheckForUser = () => {
@@ -18,7 +56,6 @@ export const useCheckForUser = () => {
             const data = await supabase.auth.getUser()
             console.log(data.data)
             if(!data.data.user){
-                console.log("user haven't logged in")
                 store.dispatch(setUser(null))
                 return
             }
@@ -32,8 +69,8 @@ export const useCheckForUser = () => {
                     .single()
 
             if(!profile?.data){
-                navigate("/create-profile")
                 store.dispatch(setProfile(null))
+                navigate("/create-profile")
                 return
             }
 

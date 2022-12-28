@@ -5,13 +5,14 @@ import React from "react"
 
 type props = {
     children : React.ReactNode,
-    value : any
+    value : any,
+    path? : string
 }
 
-const ProtectedRoute :React.FC<props> = ({children , value}) => {
+const ProtectedRoute :React.FC<props> = ({children , value , path}) => {
     return (
         <>
-        {!!value ? children : <Navigate to={"/"}/>}
+        {!!value ? children : <Navigate to={path ? path : "/"}/>}
         </>
     )
 }

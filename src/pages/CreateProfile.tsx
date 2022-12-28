@@ -5,7 +5,7 @@ import { FullWidthButton } from '../components/buttons'
 import { createProfile } from '../features/auth/utils'
 
 const CreateProfile : React.FC = () => {
-  const [image , setImage] = useState<string | ArrayBuffer | null>("")
+  const [image , setImage] = useState<string | ArrayBuffer | File | null>("")
   const [name , setName] = useState<string>("")
   const [loading , setLoading] = useState<boolean>(false)
   

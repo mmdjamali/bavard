@@ -1,5 +1,6 @@
 import { Route , Routes} from "react-router-dom"
 import { Auth , CreateProfile } from "./pages"
+import { Sidebar } from "./components/layout"
 import { useCheckForUser , useAuthStateChange} from "./features/auth/hooks"
 import { ProtectedRoute } from "./features/auth"
 import { useSelector } from "react-redux"
@@ -11,10 +12,14 @@ function App() {
   useAuthStateChange()
 
   return (
+    <>
+    <Sidebar/>
     <Routes>
-      <Route path="/" element={<Auth/>}/>
+      <Route path="/" element={<ProtectedRoute value={!user} path="/home" ><Auth/></ProtectedRoute>}/>
       <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
+      <Route path="/home" element={<p>Home</p>}/>
     </Routes>
+  </>
   )
 }
 

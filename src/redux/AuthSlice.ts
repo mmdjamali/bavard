@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { Slice, SliceCaseReducers, createSlice } from "@reduxjs/toolkit";
 
 const AuthSlice = createSlice({
     name : "auth",

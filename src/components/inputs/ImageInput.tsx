@@ -1,12 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 
 type props = {
-    value : string | ArrayBuffer | null,
-    setValue : React.Dispatch<React.SetStateAction<string | ArrayBuffer | null>>
+    value : string | ArrayBuffer | File | null,
+    setValue : React.Dispatch<React.SetStateAction<string | ArrayBuffer| File | null>>
 }
 
 const ImageInput : React.FC<props> = ({setValue , value}) => {
+    const [image , setImage] = useState<string | ArrayBuffer | null>()
     
     return(
         <>
@@ -19,12 +20,13 @@ const ImageInput : React.FC<props> = ({setValue , value}) => {
                 let files = e.target.files
                 let reader = new FileReader;
                 
-                if(!files) return
+                 if(!files) return
                 
                 reader.readAsDataURL(files[0])
                 reader.onload = () => {
-                    setValue(reader.result)
+                    setImage(reader.result)
                 }
+                setValue(files[0])
             }}
             />
 
@@ -37,7 +39,7 @@ const ImageInput : React.FC<props> = ({setValue , value}) => {
             cursor-pointer bg-center bg-cover
             bg-no-repeat
             `}
-            style={{backgroundImage : `url(${value ? value : ""})`}}
+            style={{backgroundImage : `url(${value ? image : ""})`}}
             >
                 { !value ? 
                     <MdOutlineAddPhotoAlternate

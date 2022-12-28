@@ -6,8 +6,12 @@ type returnString = () => Promise<string>
 
 type createProfile = (
   name : string,
-  profilepic : string | ArrayBuffer | null
+  profilepic : any // string | ArrayBuffer | File | null
 ) => void
+
+export const logout = () => {
+  supabase.auth.signOut()
+}
 
 export const createRandomUser : returnString =  async () => {
     let username : string | Promise<string> = "@user" + Math.round(Math.random() * 100000000)
@@ -41,10 +45,19 @@ export const createProfile : createProfile = async ( name , profilepic) => {
     const {data , error} = await supabase.auth.getUser()
     if(error) return
 
+    const pic = await supabase
+        .storage
+        .from("profiles")
+        .upload(
+          `public/${data.user.id}.png`,
+           profilepic
+        )
+
+
     const profile = await supabase
       .from("profiles")
       .insert({
-        profile_picture : profilepic,
+        profile_picture : pic.data?.path,
         uid:data?.user?.id,
         display_name : name || "unknown",
         username : await createRandomUser(),

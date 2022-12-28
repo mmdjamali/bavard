@@ -10,7 +10,7 @@ module.exports = {
         violet : {
           "dark" : "#0B0033",
         }
-      },
+      }
     },
   },
   plugins: [],

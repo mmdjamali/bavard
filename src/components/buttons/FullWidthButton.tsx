@@ -4,7 +4,7 @@ import { CgSpinner } from "react-icons/cg"
 type props = {
     onClick? : (e : MouseEvent<HTMLButtonElement> ) => void,
     sx? : string | null,
-    title : string,
+    title : string | React.ReactNode | Element,
     loading? : boolean
 }
 
@@ -25,7 +25,7 @@ const FullWidthButton : FC<props> = ({onClick , sx , title , loading}) => {
         ${sx ? sx : ""}
         `}
         >
-            {!!loading ? <CgSpinner className='text-[1.5rem] animate-spin'/> : title}
+            {!!loading ? <CgSpinner className='text-[1.5rem] animate-spin'/> : <>{title}</>}
         </button>
     );
 }

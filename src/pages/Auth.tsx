@@ -5,16 +5,16 @@ const Auth : React.FC = () => {
   const [isLogin , setIsLogin] = useState<boolean>(true)
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row w-[100%]">
 
         <div className="
-        hidden md:block w-[40vw] h-scree
+        hidden md:block w-[40%] h-screen
         bg-violet-500
         "/>
 
         <div
         className='
-        w-[100%] h-screen
+        w-full h-screen
         flex flex-col items-center relative
 
         '>

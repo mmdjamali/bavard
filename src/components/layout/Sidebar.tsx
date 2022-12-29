@@ -5,10 +5,10 @@ import { FullWidthButton } from '../buttons'
 import { ProfileButton } from '../../features/auth'
 import { useSelector } from 'react-redux'
 import { rootType } from '../../redux/store'
-import {HiOutlineDotsHorizontal} from "react-icons/hi";
+import { RiQuillPenLine } from "react-icons/ri";
 
 const Sidebar :React.FC = () => {
-  const { profile , user , pending } : {profile : any , user : string | null , pending : boolean} = useSelector((state : rootType) => state.AuthSlice)
+  const { profile , user , pending } = useSelector((state : rootType) => state.AuthSlice)
   const { current } = useSelector((state : rootType) => state.SidebarSlice) 
   
   if(!profile ||!user || pending) return(<></>)
@@ -16,15 +16,17 @@ const Sidebar :React.FC = () => {
   return (
     <div
     className='
-    sticky w-[16rem] h-screen
+    sticky 
+    w-[80px] md:w-[14rem] h-screen
     bg-white flex justify-center
     border-r-[1px]
     '>
 
       <div
       className='
-      relative w-[10rem]
-      h-screen flex flex-col
+      relative w-[75%] md:w-[10rem]
+      h-screen flex flex-col 
+      items-center md:items-stretch
       '>
 
 
@@ -35,7 +37,8 @@ const Sidebar :React.FC = () => {
 
         <div
         className='
-        flex flex-col gap-3 mt-5
+        flex flex-col gap-3 mt-5 
+        items-center md:items-stretch
         '>
 
           {sidebarSections.map((item , idx) => {
@@ -43,7 +46,7 @@ const Sidebar :React.FC = () => {
                 <p
                 key={idx}
                 className={`
-                px-[9px] text-[12px]
+                md:px-[9px] text-[12px]
                 text-neutral-500 font-medium
                 ${idx !== 0 ? "mt-4" : ""}
                 `}
@@ -62,12 +65,15 @@ const Sidebar :React.FC = () => {
                 :
                 "hover:bg-violet-100 hover:text-violet-600 text-neutral-600"
                 }
+                w-fit md:w-[auto]
                 cursor-pointer flex gap-2
                 p-2 rounded-md
                 `}>
                     <item.icon
                     className='text-[1.5rem]'/>
-                    <p>
+                    <p
+                    className='hidden md:inline'
+                    >
                         {item.title}
                     </p>
                 </Link>
@@ -77,8 +83,22 @@ const Sidebar :React.FC = () => {
         </div>
 
         <FullWidthButton
-        title='New Tweet'
-        sx="mt-6"/>
+        title={
+          <>
+          <span
+          className='hidden md:inline'
+          >
+            New tweet
+          </span>
+          <RiQuillPenLine
+          className='md:hidden text-[1.5rem]'/>
+          </>
+        }
+        sx="
+        mt-6
+        w-fit md:w-full 
+        md:p-0 md:py-2 p-2
+        "/>
 
         <ProfileButton
         profile={profile}/>

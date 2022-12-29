@@ -1,4 +1,4 @@
-import { useState , useEffect } from "react"
+import { useState , useEffect, useLayoutEffect } from "react"
 import store from "../../redux/store";
 import { setUser , setProfile , setPending } from "../../redux/AuthSlice";
 import supabase from "../../libs/supabase";
@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 export const useAuthStateChange = () => {
     const navigate = useNavigate()
+
+    useLayoutEffect(() => {
 
     const watch = supabase.auth.onAuthStateChange(async (data , session) => {
         const dispatch = store.dispatch
@@ -38,6 +40,7 @@ export const useAuthStateChange = () => {
             dispatch(setPending(false))
             dispatch(setUser(session.user.id))
             dispatch(setProfile(profile.data))
+            navigate("/home")
         }
         catch(err){
             dispatch(setPending(false))
@@ -45,12 +48,14 @@ export const useAuthStateChange = () => {
     })
 
     return () => watch?.data?.subscription?.unsubscribe()
+
+    },[])
 }
 
 export const useCheckForUser = () => {
     const navigate = useNavigate()
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const func = async () => {
         try{
             const data = await supabase.auth.getUser()

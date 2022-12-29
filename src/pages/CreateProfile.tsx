@@ -11,7 +11,7 @@ const CreateProfile : React.FC = () => {
   
   return (
     <div
-    className='flex flex-row'>
+    className='flex flex-row w-full'>
 
       <div
       className='

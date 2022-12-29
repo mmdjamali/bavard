@@ -2,6 +2,9 @@ import React , { useEffect, useLayoutEffect, useState } from 'react'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { logout } from '../utils'
 import { getFile } from '../../storage/utils'
+import {
+  RiUserLine , RiLogoutBoxRLine
+} from "react-icons/ri"
 
 type props = {
     profile : any,
@@ -18,6 +21,7 @@ const ProfileButton : React.FC<props> = ({
       let reader = new FileReader;
       let file = await getFile("profiles" , profile?.profile_picture)
       if(!file) return
+      if(file.size === 0) return
       reader.readAsDataURL(file)
       reader.onload = () => {
         setPP(reader.result)
@@ -26,6 +30,7 @@ const ProfileButton : React.FC<props> = ({
 
     func()
   },[profile])
+
   
   return (
     <div
@@ -43,19 +48,30 @@ const ProfileButton : React.FC<props> = ({
         hover:shadow-[0_4px_6px] hover:shadow-[rgba(21,21,21,.16)]
         ">
 
-            <img 
+            {!!pp ? <img 
             src={`${pp ? pp : ""}`}
             className="
             rounded-full
             w-[40px] h-[40px] object-cover
             "
-            />
+            /> 
+            :
+            <div
+            className='
+            w-[40px] h-[40px] flex items-center justify-center
+            bg-violet-200 rounded-full
+            text-violet-dark text-[1.25rem]
+            '>
+              <RiUserLine/>
+            </div>
+            }
 
             <div
             className='
+            hidden
             w-[72px]
             max-w[72px]
-            flex flex-col
+            md:flex flex-col
             '>
                 <span
                 className='
@@ -74,7 +90,10 @@ const ProfileButton : React.FC<props> = ({
                 </span>
             </div>
 
-            <HiOutlineDotsHorizontal/>
+            <HiOutlineDotsHorizontal
+            className='
+            hidden md:inline
+            '/>
 
         </div>
 
@@ -87,6 +106,7 @@ const ProfileButton : React.FC<props> = ({
         bottom-[calc(100%_+_16px)] left-0
         w-full bg-red-50
         rounded-md items-center
+        border-[2px] border-red-300
         `}>
 
             <button
@@ -94,12 +114,25 @@ const ProfileButton : React.FC<props> = ({
                 logout()
             }}
             className='
+            flex items-center justify-center
             bg-red-50 hover:bg-red-100 
             hover:text-red-500 text-red-400
             transition-colors delay-75
             w-full p-2
             '>
+
+              <span
+              className='
+              hidden md:inline
+              '>
                 Logout
+              </span>
+
+              <RiLogoutBoxRLine
+              className='
+              text-[1.5rem] md:hidden
+              '/>
+
             </button>
 
         </div>

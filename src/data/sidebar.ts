@@ -40,8 +40,8 @@ export const sidebarSections = [
     },
     {
         type : "section",
-        title : "Massages",
-        path : "/massages",
+        title : "Messages",
+        path : "/messages",
         icon : RiMessage2Line,
     },
     {

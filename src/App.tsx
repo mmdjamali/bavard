@@ -5,11 +5,18 @@ import { useCheckForUser , useAuthStateChange} from "./features/auth/hooks"
 import { ProtectedRoute } from "./features/auth"
 import { useSelector } from "react-redux"
 import { rootType } from "./redux/store"
+import Loader from "./components/Loader"
+import { 
+  Home , Explore , Messages,
+  Bookmarks , Profile
+} from "./pages"
 
 function App() {
-  const {user , profile} = useSelector((state : rootType) => state.AuthSlice)
+  const {user , profile , pending} = useSelector((state : rootType) => state.AuthSlice)
   useCheckForUser()
   useAuthStateChange()
+
+  if(pending) return(<Loader/>)
 
   return (
     <>
@@ -17,7 +24,11 @@ function App() {
     <Routes>
       <Route path="/" element={<ProtectedRoute value={!user} path="/home" ><Auth/></ProtectedRoute>}/>
       <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
-      <Route path="/home" element={<p>Home</p>}/>
+      <Route path="/home" element={<ProtectedRoute value={user && profile && !pending}><Home/></ProtectedRoute>}/>
+      <Route path="/explore" element={<ProtectedRoute value={user && profile && !pending}><Explore/></ProtectedRoute>}/>
+      <Route path="/messages" element={<ProtectedRoute value={user && profile && !pending}><Messages/></ProtectedRoute>}/>
+      <Route path="/bookmarks" element={<ProtectedRoute value={user && profile && !pending}><Bookmarks/></ProtectedRoute>}/>
+      <Route path="/profile" element={<ProtectedRoute value={user && profile && !pending}><Profile/></ProtectedRoute>}/>
     </Routes>
   </>
   )

@@ -10,6 +10,9 @@ module.exports = {
         violet : {
           "dark" : "#0B0033",
         }
+      },
+      screens:{
+        "xs" : "360px"
       }
     },
   },

@@ -4,6 +4,7 @@ import { setUser , setProfile , setPending } from "../../redux/AuthSlice";
 import supabase from "../../libs/supabase";
 import { AuthChangeEvent , Session} from "@supabase/supabase-js"
 import { useNavigate } from "react-router-dom";
+import { getFile } from "../storage/utils";
 
 export const useAuthStateChange = () => {
     const navigate = useNavigate()
@@ -56,16 +57,26 @@ export const useCheckForUser = () => {
     const navigate = useNavigate()
 
     useLayoutEffect(() => {
+
+        //check for user login history
         const func = async () => {
+        const dispatch = store.dispatch
+        
         try{
+            dispatch(setPending(true))
+
             const data = await supabase.auth.getUser()
             console.log(data.data)
+            
             if(!data.data.user){
-                store.dispatch(setUser(null))
+                dispatch(setPending(false))
+                dispatch(setUser(null))
+                dispatch(setProfile(null))
+                navigate("/")
                 return
             }
 
-            store.dispatch(setUser(data.data.user.id))
+            dispatch(setUser(data.data.user.id))
 
             const profile = await supabase
                     .from("profiles")
@@ -75,19 +86,66 @@ export const useCheckForUser = () => {
 
             if(!profile?.data){
                 store.dispatch(setProfile(null))
+                dispatch(setPending(false))
+
                 navigate("/create-profile")
                 return
             }
 
+            dispatch(setPending(false))
             store.dispatch(setProfile(
                 profile.data
             ))
+            navigate("/home")
         }
         catch(err){
             console.log(err)
+            dispatch(setPending(false))
         }
         }
         func()
     },[])
     
+}
+
+type profile = {
+    profile_picture  : string,
+    display_name : string | profile | ArrayBuffer,
+    username : string
+}
+
+export const useGetUserProfile = (
+    uid : string
+  ) => {
+    const [profile , setProfile] = useState<profile | undefined>()
+    useLayoutEffect(() => {
+
+        const storedData = JSON.parse(sessionStorage.getItem(uid) || "{}")
+        if(Object.keys(storedData).length !== 0){
+            setProfile(storedData);
+            return
+        }
+
+        const func = async () => {
+            const {data , error} = await supabase
+              .from("profiles")
+              .select()
+              .eq("uid" , uid)
+              .single()
+            
+            if(error){
+              console.log(error)
+              return
+            }            
+            setProfile(data)
+            sessionStorage.setItem(
+                uid,
+                JSON.stringify({...data})
+            )
+          }
+          func()
+    },[uid])
+    
+
+      return [profile]
 }

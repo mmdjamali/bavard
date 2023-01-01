@@ -24,11 +24,11 @@ function App() {
     <Routes>
       <Route path="/" element={<ProtectedRoute value={!user} path="/home" ><Auth/></ProtectedRoute>}/>
       <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
-      <Route path="/home" element={<ProtectedRoute value={user && profile && !pending}><Home/></ProtectedRoute>}/>
-      <Route path="/explore" element={<ProtectedRoute value={user && profile && !pending}><Explore/></ProtectedRoute>}/>
-      <Route path="/messages" element={<ProtectedRoute value={user && profile && !pending}><Messages/></ProtectedRoute>}/>
-      <Route path="/bookmarks" element={<ProtectedRoute value={user && profile && !pending}><Bookmarks/></ProtectedRoute>}/>
-      <Route path="/profile" element={<ProtectedRoute value={user && profile && !pending}><Profile/></ProtectedRoute>}/>
+      <Route path="/home" element={<ProtectedRoute value={user && profile}><Home/></ProtectedRoute>}/>
+      <Route path="/explore" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>
+      <Route path="/messages" element={<ProtectedRoute value={user && profile}><Messages/></ProtectedRoute>}/>
+      <Route path="/bookmarks" element={<ProtectedRoute value={user && profile}><Bookmarks/></ProtectedRoute>}/>
+      <Route path="/profile" element={<ProtectedRoute value={user && profile}><Profile/></ProtectedRoute>}/>
     </Routes>
   </>
   )

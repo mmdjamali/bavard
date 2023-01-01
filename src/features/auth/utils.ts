@@ -71,3 +71,27 @@ export const createProfile : createProfile = async ( name , profilepic) => {
     throw err
   }
 }
+
+export const getUserProfile = async (
+  uid : string
+) => {
+  try{
+    const {data , error} = await supabase
+      .from("profiles")
+      .select()
+      .eq("uid" , uid)
+      .single()
+    
+    if(error){
+      console.log(error)
+      return
+    }
+      
+    console.log(data)
+    return data
+  }
+
+  catch(err){
+    console.log(err)
+  }
+}

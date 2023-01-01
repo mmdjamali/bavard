@@ -12,21 +12,22 @@ const Sidebar :React.FC = () => {
   const { current } = useSelector((state : rootType) => state.SidebarSlice) 
   
   if(!profile ||!user || pending) return(<></>)
-  
+
+  if(window.location.pathname === "/") return (<></>)  
   return (
     <div
     className='
     sticky 
-    w-[80px] md:w-[14rem] h-screen
+    w-[80px] sm:w-[14rem] h-screen
     bg-white flex justify-center
     border-r-[1px]
     '>
 
       <div
       className='
-      relative w-[75%] md:w-[10rem]
+      relative w-[95%] sm:w-[10rem]
       h-screen flex flex-col 
-      items-center md:items-stretch
+      items-center sm:items-stretch
       '>
 
 
@@ -38,7 +39,7 @@ const Sidebar :React.FC = () => {
         <div
         className='
         flex flex-col gap-3 mt-5 
-        items-center md:items-stretch
+        items-center sm:items-stretch
         '>
 
           {sidebarSections.map((item , idx) => {
@@ -46,7 +47,7 @@ const Sidebar :React.FC = () => {
                 <p
                 key={idx}
                 className={`
-                md:px-[9px] text-[12px]
+                sm:px-[9px] text-[12px]
                 text-neutral-500 font-medium
                 ${idx !== 0 ? "mt-4" : ""}
                 `}
@@ -65,14 +66,14 @@ const Sidebar :React.FC = () => {
                 :
                 "hover:bg-violet-100 hover:text-violet-600 text-neutral-600"
                 }
-                w-fit md:w-[auto]
+                w-fit sm:w-[auto]
                 cursor-pointer flex gap-2
                 p-2 rounded-md
                 `}>
                     <item.icon
                     className='text-[1.5rem]'/>
                     <p
-                    className='hidden md:inline'
+                    className='hidden sm:inline'
                     >
                         {item.title}
                     </p>
@@ -86,18 +87,18 @@ const Sidebar :React.FC = () => {
         title={
           <>
           <span
-          className='hidden md:inline'
+          className='hidden sm:inline'
           >
             New tweet
           </span>
           <RiQuillPenLine
-          className='md:hidden text-[1.5rem]'/>
+          className='sm:hidden text-[1.5rem]'/>
           </>
         }
         sx="
         mt-6
-        w-fit md:w-full 
-        md:p-0 md:py-2 p-2
+        w-fit sm:w-full 
+        sm:p-0 sm:py-2 p-2
         "/>
 
         <ProfileButton

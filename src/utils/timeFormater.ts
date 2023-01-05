@@ -11,9 +11,15 @@ const TimeFormater = (
 
   if(time <= 60) return(`${Math.floor(time)}m`)
 
-  time = time / 24
+  time = time / 60
   if(time <= 24) return(`${Math.floor(time)}h`)
   
+  time = time / 24
+  if(time <= 30) return(`${Math.floor(time) + (Math.floor(time) === 1 ? "day" : "days")}`)
+
+  time = time / 30
+  if(time <= 12) return(`${Math.floor(time) + (Math.floor(time) === 1 ? "month" : "months")}`)
+
 }
 
 export default TimeFormater;

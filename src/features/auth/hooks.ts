@@ -126,6 +126,8 @@ export const useGetUserProfile = (
             return
         }
 
+        if(!uid) return
+
         const func = async () => {
             const {data , error} = await supabase
               .from("profiles")

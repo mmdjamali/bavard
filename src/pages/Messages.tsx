@@ -6,7 +6,8 @@ const Messages = () => {
   return (
     <div
     className='
-    md:w-[calc(100%_-_14rem)]
+    w-[min(calc(100%_-_79px),450px)]
+    sm:w-[min(calc(100%_-_14rem),450px)]    
     min-h-screen
     '
     >Messages</div>

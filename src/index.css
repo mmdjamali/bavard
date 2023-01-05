@@ -15,6 +15,12 @@
 
 };
 
+#root
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
  
 /* * {
     outline: 1px solid rgba(0, 128, 0, 0.537);

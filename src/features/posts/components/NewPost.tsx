@@ -26,6 +26,7 @@ const NewPost :React.FC = () => {
         {!!pp ? <img 
             src={`${pp ? pp : ""}`}
             className="
+            z-[9]
             rounded-full
             w-[45px] h-[45px] object-cover
             my-2 mr-4 ml-3
@@ -52,6 +53,7 @@ const NewPost :React.FC = () => {
           rows={1}
           placeholder="What's up?"
           className='
+          relative
           resize-none outline-none
           m-2
           '

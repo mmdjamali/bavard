@@ -17,10 +17,9 @@ const Sidebar :React.FC = () => {
   return (
     <div
     className='
-    sticky 
+    sticky top-0
     w-[80px] sm:w-[14rem] h-screen
     bg-white flex justify-center
-    border-r-[1px]
     '>
 
       <div

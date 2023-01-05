@@ -95,3 +95,76 @@ export const getUserProfile = async (
     console.log(err)
   }
 }
+
+export const followUser = async (uid : string) => {
+  let { user } = store.getState().AuthSlice;
+  const profile = await supabase
+        .from("profiles")
+        .select()
+        .eq("uid" , user)
+        .single()
+
+  if(profile?.data?.followed){
+
+    if(profile?.data?.followed?.includes(uid)){
+
+      let array = [...profile?.data?.followed]
+      let idx = profile?.data?.followed.findIndex((data : string) => data === uid);
+      array.splice(idx , 1)
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({"followed" : array})
+        .eq("uid" , user)
+
+      return
+    }
+
+    const { error } = await supabase
+        .from("profiles")
+        .update({"followed" : [...profile?.data?.followed , uid]})
+        .eq("uid" , user)
+
+    return
+  }
+
+  const { error } = await supabase
+        .from("profiles")
+        .update({"followed" : [uid]})
+        .eq("uid" , user)
+
+}
+
+export const likePost = async (pid : string) => {
+  let { user } = store.getState().AuthSlice;
+  const profile = await supabase
+        .from("profiles")
+        .select()
+        .eq("uid" , user)
+        .single()
+
+  if(profile?.data?.bookmarks){
+
+    if(profile?.data?.bookmarks.includes(pid)){
+      let idx = profile?.data?.bookmarks.findIndex((data : string) => data === pid);
+      const { error } = await supabase
+        .from("profiles")
+        .update({"bookmarks" : [...profile?.data?.bookmarks].splice(idx , 1)})
+        .eq("uid" , user)
+        
+      return
+    }
+    const { error } = await supabase
+        .from("profiles")
+        .update({"bookmarks" : [...profile?.data?.bookmarks , pid]})
+        .eq("uid" , user)
+
+    return
+  }
+
+  const { error } = await supabase
+        .from("profiles")
+        .update({"followed" : [pid]})
+        .eq("uid" , user)
+
+}

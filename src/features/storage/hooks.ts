@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect , useState } from "react";
 import { getFile } from "./utils";
 import supabase from "../../libs/supabase";
+import store from "../../redux/store";
 
 export const useGetPicture = (
     from : string,
@@ -47,13 +48,23 @@ export const useGetPosts = () => {
   const [posts , setPosts] = useState<any>([])
   const [pending , setPending] = useState<boolean>(false)
   const [err , setErr] = useState<null | string>()
+  
   useEffect(() => {
+    let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
+
     const func = async () => {
+
+      if(!profile) return
+      let array = [...profile?.followed,profile.uid]
+      console.log(array)
       const {data , error} = await supabase
           .from("posts")
           .select()
+          .in("created_by", array)
+          .order('created_at', { ascending: false })
       
       if(error || !data){
+        console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])
@@ -66,6 +77,26 @@ export const useGetPosts = () => {
 
     }
     func()
+
+  },[])
+
+  useEffect(() : any => {
+    
+    let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
+
+    const channel = supabase
+        .channel("public:posts")
+        .on("postgres_changes" , 
+        { 
+          event : "UPDATE" , 
+          schema:"public" , 
+          table : "posts"
+        } , (payload) => {
+          console.log(payload)
+        })
+        .subscribe()
+
+    return () => supabase.removeChannel(channel)
 
   },[])
   

@@ -53,10 +53,11 @@ export const useGetPosts = () => {
     let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
 
     const func = async () => {
-
       if(!profile) return
       let array = [...profile?.followed,profile.uid]
-      console.log(array)
+
+      setPending(true)
+
       const {data , error} = await supabase
           .from("posts")
           .select()
@@ -74,7 +75,6 @@ export const useGetPosts = () => {
       setPending(false)
       setErr(null)
       setPosts(data)
-
     }
     func()
 
@@ -84,19 +84,38 @@ export const useGetPosts = () => {
     
     let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
 
-    const channel = supabase
-        .channel("public:posts")
-        .on("postgres_changes" , 
-        { 
-          event : "UPDATE" , 
-          schema:"public" , 
-          table : "posts"
-        } , (payload) => {
-          console.log(payload)
-        })
-        .subscribe()
+    const posts = supabase.channel('custom-all-channel')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'posts' },
+      async () => {
 
-    return () => supabase.removeChannel(channel)
+        if(!profile) return
+        let array = [...profile?.followed,profile.uid]
+
+        const {data , error} = await supabase
+            .from("posts")
+            .select()
+            .in("created_by", array)
+            .order('created_at', { ascending: false })
+        
+        if(error || !data){
+          console.log(error)
+          setPending(false)
+          setErr(error.toString())
+          setPosts([])
+          return
+        }
+
+        setPending(false)
+        setErr(null)
+        setPosts(data)
+
+      }
+    )
+    .subscribe()
+
+    return () => supabase.removeChannel(posts)
 
   },[])
   

@@ -1,6 +1,7 @@
 import React from 'react'
 import { horizontalSectionBar } from "../data";
-import { interactWithPost } from '../functions';
+import { interactWithPost, repost } from '../functions';
+import InteractionButton from './InteractionButton';
 
 type props = {
   post : any,
@@ -11,56 +12,71 @@ const HorizontalActionBar : React.FC<props> = ({
   post,
   user
 }) => {
+  if(!post) return <p>9</p>
+
   return (
     <div
     className='
     flex mt-3  justify-evenly mr-4
+    transition-colors
+
     '>
         {horizontalSectionBar.map((item , idx) => {
-          let color = ` hover:bg-${item.color}-200/50 hover:text-${item.color}-500 `
-          let fillColor = ` text-${item.color}-500 `
-          return(
-          <div
-          key={idx}
-          className='
-          flex justify-center items-center
-          '>
-            <button
-            onClick={() => {
-              interactWithPost(item.property , post.id)
-            }}
-            className={`
-            rounded-full
-            ${color}
-            group
-            p-1.5
-            `}>
-              
-              { post[item.property]?.includes(user) ? 
-                <item.filledIcon
-                className={`
-                text-[1rem]
-                ${fillColor}
-                `}/>
-              :
-                <item.linedIcon
-                className={`
-                text-[1rem]
-                  
-                `}/>
-              }
+          switch(item.title){
 
-            </button>
-            
-            <span
-            className='
-            text-[.9rem]
-            '>
-                {post[item.property]?.length || "0"}
-            </span>
+            case("reposts") :
+            if(post.created_by === user) return
+            return(
+              <InteractionButton
+              key={idx}
+              color={item.color}
+              fillColor={item.fillColor}
+              onClick={() => {
+                repost(post)
+              }}
+              data={post[item.property]}
+              FilledIcon={item.filledIcon}
+              LinedIcon={item.linedIcon}
+              user={user}
+              />
+            )
 
-          </div>
-          )
+            case("views") :
+            if(post?.created_by !== user) return
+
+            return(
+              <InteractionButton
+              key={idx}
+              color={item.color}
+              fillColor={item.fillColor}
+              onClick={() => {
+
+              }}
+              data={post[item.property]}
+              FilledIcon={item.filledIcon}
+              LinedIcon={item.linedIcon}
+              user={user}
+              />
+            )
+
+            default : 
+            return(
+              <InteractionButton
+              key={idx}
+              color={item.color}
+              fillColor={item.fillColor}
+              onClick={() => {
+                interactWithPost(item.property , post.id)
+              }}
+              data={post[item.property]}
+              FilledIcon={item.filledIcon}
+              LinedIcon={item.linedIcon}
+              user={user}
+              />
+            )
+
+          }
+          
         })}
     </div>
   )

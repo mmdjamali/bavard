@@ -34,7 +34,7 @@ export const interactWithPost = async (column : string , id : string , ) => {
     if(post?.data[column]){
 
       let currentData = post?.data[column];
-        console.log(currentData)
+
       if(currentData?.includes(user)){
 
         let idx = currentData?.findIndex((data : string) => data === user);
@@ -46,8 +46,6 @@ export const interactWithPost = async (column : string , id : string , ) => {
           .update({[column] : array})
           .eq("id" , id)
           .select()
-
-          console.log(data,error)
 
         return
 
@@ -66,7 +64,52 @@ export const interactWithPost = async (column : string , id : string , ) => {
           .update({[column] : [user]})
           .eq("id" , id)
           .select()
-
-          console.log(data , error , "70")
   
 }
+
+export const repost = async (post : any) => {
+  let { user } = store.getState().AuthSlice;
+      
+    if(post?.reposted_by){
+
+      let currentData = post?.reposted_by;
+
+      if(currentData?.includes(user)){
+
+        return
+
+      }
+
+      const { data, error } = await supabase
+          .from("posts")
+          .update({reposted_by : [...currentData , user]})
+          .eq("id" , post.id)
+
+                  
+          const { error : err } = await supabase
+          .from("posts")
+          .insert([{
+              created_by : user,
+              original_post : post.id,
+              repost : true,
+          }]);
+
+      return
+    }
+  
+    const { data , error } = await supabase
+          .from("posts")
+          .update({reposted_by : [user]})
+          .eq("id" , post.id)
+          .select()
+
+                  
+          const { error : err } = await supabase
+          .from("posts")
+          .insert([{
+              created_by : user,
+              origin_post : post.id,
+              repost : true,
+          }]);
+}
+

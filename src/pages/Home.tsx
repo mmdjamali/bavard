@@ -3,6 +3,8 @@ import useSidebarChanger from '../hooks/useSidebarChanger'
 import { NewPost } from '../features/posts';
 import { useGetPosts } from '../features/storage/hooks';
 import { Post } from '../features/posts';
+import Loader from '../components/Loader';
+import Repost from '../features/posts/components/Repost';
 
 const Home = () => {
   useSidebarChanger("Home")
@@ -52,16 +54,34 @@ const Home = () => {
       w-full relative
       "
       >
+
         <NewPost/>
 
         {
           data.map((post : any , idx : number) => {
-            return <Post 
+            if(post.repost) return(
+                <Repost
+                key={idx
+                }
+                created_at={post?.created_at}
+                pId={post?.original_post}
+                rId={post?.created_by}
+                />
+            )
+
+            return(<Post 
             key={idx}
             post={post}
-            />
+            />)
+
           })
-        }        
+        }     
+
+        {pending &&
+        <Loader
+        sx='h-fit py-4'/>
+        }
+   
       </div>
     </div>
   )

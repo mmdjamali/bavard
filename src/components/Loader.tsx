@@ -1,13 +1,16 @@
 import React from 'react'
 import { CgSpinner } from "react-icons/cg"
-
-const Loader = () => {
+type props = {
+  sx? : string
+}
+const Loader : React.FC<props> = ({sx}) => {
   return (
     <div
-    className='
+    className={`
     w-full h-screen
     flex items-center justify-center
-    '>
+    ${sx ? sx : ""}
+    `}>
 
         <CgSpinner
         className='

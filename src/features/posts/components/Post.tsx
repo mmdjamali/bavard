@@ -29,6 +29,7 @@ const Post :React.FC<props> = ({
     flex w-full relative
     border-b-[1px]
     cursor-pointer
+    transition-colors
     '>
 
         {/* Left section of post*/}
@@ -164,4 +165,4 @@ const Post :React.FC<props> = ({
   )
 }
 
-export default Post
+export default React.memo(Post)

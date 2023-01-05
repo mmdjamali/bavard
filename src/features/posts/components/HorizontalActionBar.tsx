@@ -18,8 +18,6 @@ const HorizontalActionBar : React.FC<props> = ({
     <div
     className='
     flex mt-3  justify-evenly mr-4
-    transition-colors
-
     '>
         {horizontalSectionBar.map((item , idx) => {
           switch(item.title){

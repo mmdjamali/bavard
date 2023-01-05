@@ -106,7 +106,6 @@ export const useGetPosts = () => {
           setPosts([])
           return
         }
-
         setPending(false)
         setErr(null)
         setPosts(data)

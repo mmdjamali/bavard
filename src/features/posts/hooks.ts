@@ -28,9 +28,9 @@ export const useGetPost = (pId : string) => {
         return
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         func()
-    },[])
+    },[pId])
 
     useEffect(() : any => {
         const channel = supabase
@@ -46,7 +46,7 @@ export const useGetPost = (pId : string) => {
         
         return () => supabase.removeChannel(channel);
         
-    },[])
+    },[pId])
 
     return [post,err,pending]
 

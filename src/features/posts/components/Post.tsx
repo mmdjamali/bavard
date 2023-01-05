@@ -165,4 +165,4 @@ const Post :React.FC<props> = ({
   )
 }
 
-export default React.memo(Post)
+export default Post

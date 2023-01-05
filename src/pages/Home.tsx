@@ -57,7 +57,7 @@ const Home = () => {
 
         <NewPost/>
 
-        {
+        { !pending &&
           data.map((post : any , idx : number) => {
             if(post.repost) return(
                 <Repost

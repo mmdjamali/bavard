@@ -1,4 +1,4 @@
-import React from 'react'
+import React , { useState , useRef , useCallback , createRef } from 'react'
 import useSidebarChanger from '../hooks/useSidebarChanger'
 import { NewPost } from '../features/posts';
 import { useGetPosts } from '../features/storage/hooks';
@@ -8,7 +8,25 @@ import Repost from '../features/posts/components/Repost';
 
 const Home = () => {
   useSidebarChanger("Home")
-  const [data , pending] = useGetPosts()
+  const [max , setMax] = useState<number>(10)
+  const [data , pending , error , hasMore] = useGetPosts(max)
+
+  const observer = useRef<IntersectionObserver | null>(null)
+
+  const setupObserver = useCallback((node : any) => {
+    if(pending) return
+    if(observer.current) observer.current.disconnect()
+    
+    observer.current = new IntersectionObserver(entries => {
+      if(entries[0].isIntersecting){
+        if(pending || !hasMore) return
+        setMax(prev => prev + 10)
+      }
+    })
+
+    if(node) observer.current.observe(node)
+
+  },[pending , hasMore])
 
   return (
     <div
@@ -57,20 +75,58 @@ const Home = () => {
 
         <NewPost/>
 
-        { !pending &&
-          data.map((post : any , idx : number) => {
+        { data?.map((post : any , idx : number) => {
+            if(idx === data.length - 1){
+
+              if(post.repost) return(
+                <>
+                  <Repost
+                  repostID={post?.id}
+                  key={idx+Math.random()}
+                  created_at={post?.created_at}
+                  pId={post?.original_post}
+                  rId={post?.created_by}
+                  />
+                  <div
+                  key={idx+Math.random()}
+                  ref={setupObserver}
+                  className="
+                  h-1
+                  w-full
+                  "
+                  />
+                </>
+              )
+
+              return(
+              <>
+                <Post
+                key={idx+Math.random()}
+                post={post}
+                />
+                <div
+                key={idx+Math.random()}
+                ref={setupObserver}
+                className="
+                h-1
+                w-full
+                "
+                />
+              </>
+              )
+            }
             if(post.repost) return(
                 <Repost
-                key={idx
-                }
+                repostID={post?.id}
+                key={idx+Math.random()}
                 created_at={post?.created_at}
                 pId={post?.original_post}
                 rId={post?.created_by}
                 />
             )
 
-            return(<Post 
-            key={idx}
+            return(<Post
+            key={idx+Math.random()}
             post={post}
             />)
 

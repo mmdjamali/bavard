@@ -67,49 +67,27 @@ export const interactWithPost = async (column : string , id : string , ) => {
   
 }
 
-export const repost = async (post : any) => {
+export const repost = async (post : any , reposted : boolean) => {
   let { user } = store.getState().AuthSlice;
-      
-    if(post?.reposted_by){
 
-      let currentData = post?.reposted_by;
+    if(post?.created_by === user) return;
 
-      if(currentData?.includes(user)){
-
-        return
-
-      }
-
-      const { data, error } = await supabase
-          .from("posts")
-          .update({reposted_by : [...currentData , user]})
-          .eq("id" , post.id)
-
-                  
-          const { error : err } = await supabase
-          .from("posts")
-          .insert([{
-              created_by : user,
-              original_post : post.id,
-              repost : true,
-          }]);
-
-      return
-    }
+    if(reposted) return
+                        
+    const { error : err } = await supabase
+    .from("posts")
+    .insert([{
+        created_by : user,
+        original_post : post.id,
+        repost : true,
+    }]);
   
-    const { data , error } = await supabase
-          .from("posts")
-          .update({reposted_by : [user]})
-          .eq("id" , post.id)
-          .select()
+}
 
-                  
-          const { error : err } = await supabase
-          .from("posts")
-          .insert([{
-              created_by : user,
-              origin_post : post.id,
-              repost : true,
-          }]);
+export const deletePost = async (pId : string) => {
+  await supabase
+    .from("posts")
+    .delete()
+    .eq("id",pId)
 }
 

@@ -7,8 +7,9 @@ type props = {
     fillColor : string,
     FilledIcon : IconType,
     LinedIcon : IconType,    
-    data : string[],
-    user : string
+    data : number | null,
+    user : string,
+    interacted : boolean
 }
 const InteractionButton : React.FC<props> = ({
     onClick,
@@ -17,8 +18,10 @@ const InteractionButton : React.FC<props> = ({
     FilledIcon ,
     LinedIcon ,
     data,
-    user
+    user,
+    interacted
 }) => {
+  
   return (
     <div
     className='
@@ -34,7 +37,7 @@ const InteractionButton : React.FC<props> = ({
       text-neutral-600
       `}>
         
-        { data?.includes(user) ? 
+        { interacted ? 
           
           <FilledIcon
           className={`
@@ -55,7 +58,7 @@ const InteractionButton : React.FC<props> = ({
       className='
       text-[.9rem]
       '>
-          { data?.length || "0"}
+          { data || "0"}
       </span>
 
     </div>

@@ -7,7 +7,7 @@ export const useGetPicture = (
     from : string,
     path : string 
     ) => {
-      const [picrure , setPicture] = useState<string | ArrayBuffer | null>()
+      const [picture , setPicture] = useState<string | ArrayBuffer | null>()
 
       useEffect(() => {
 
@@ -41,13 +41,14 @@ export const useGetPicture = (
         func()
       },[path , from])
 
-    return [picrure]
+    return [picture]
 }
 
-export const useGetPosts = () => {
+export const useGetPosts = (max : number) => {
   const [posts , setPosts] = useState<any>([])
   const [pending , setPending] = useState<boolean>(false)
   const [err , setErr] = useState<null | string>()
+  const [hasMore , setHasMore] = useState<boolean>(false)
   
   useEffect(() => {
     let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
@@ -58,66 +59,82 @@ export const useGetPosts = () => {
 
       setPending(true)
 
-      const {data , error} = await supabase
+      const {count , data , error} = await supabase
           .from("posts")
-          .select()
+          .select("*",{count : "exact"})
           .in("created_by", array)
           .order('created_at', { ascending: false })
+          .range(0 , max)
       
       if(error || !data){
         console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])
+        setHasMore(false)
         return
       }
 
       setPending(false)
       setErr(null)
       setPosts(data)
+      setHasMore(max - 1 <= (count || 0))
+
     }
     func()
 
-  },[])
+  },[max])
 
   useEffect(() : any => {
     
     let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
+    let user : string | null = store.getState().AuthSlice.user;
 
-    const posts = supabase.channel('custom-all-channel')
+    const channel = supabase.channel('custom-all-channel')
     .on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'posts' },
-      async () => {
+      async (payload : any) => {
 
-        if(!profile) return
-        let array = [...profile?.followed,profile.uid]
+        let isNotForUser = !(payload.eventType === "INSERT" && payload?.new.created_by === user) 
+        let alreadyHaveIt = !posts.some((item : any) => item.id === payload?.old?.id)
 
-        const {data , error} = await supabase
-            .from("posts")
-            .select()
-            .in("created_by", array)
-            .order('created_at', { ascending: false })
-        
-        if(error || !data){
-          console.log(error)
-          setPending(false)
-          setErr(error.toString())
-          setPosts([])
-          return
-        }
+        if(isNotForUser && alreadyHaveIt) return
+
+      if(!profile) return
+      let array = [...profile?.followed,profile.uid]
+
+      setPending(true)
+
+      const {count , data , error} = await supabase
+          .from("posts")
+          .select("*",{count : "exact"})
+          .in("created_by", array)
+          .order('created_at', { ascending: false })
+          .range(0 , max)
+      
+      if(error || !data){
+        console.log(error)
         setPending(false)
-        setErr(null)
-        setPosts(data)
+        setErr(error.toString())
+        setPosts([])
+        setHasMore(false)
+        return
+      }
+
+      setPending(false)
+      setErr(null)
+      setPosts(data)
+      setHasMore(max - 1 <= (count || 0))
 
       }
     )
     .subscribe()
 
-    return () => supabase.removeChannel(posts)
+    return () => supabase.removeChannel(channel)
 
-  },[])
+  },[posts,max])
   
-  return[posts,pending,err]
+  return[posts,pending,err,hasMore]
 
 }

@@ -28,12 +28,4 @@ export const horizontalSectionBar = [
         fillColor : "text-violet-500",
         property:  "bookmarked_by"
     },
-    {
-        title : "views",
-        linedIcon : RiEyeFill,
-        filledIcon : RiEyeFill,
-        color : "hover:bg-neutral-200/50 hover:text-neutral-600",
-        fillColor : "text-violet-600",
-        property:  "viewed_by"
-    },
 ]

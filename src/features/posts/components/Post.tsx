@@ -8,13 +8,14 @@ import { useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
 import { followUser } from '../../auth/utils'
 import HorizontalActionBar from './HorizontalActionBar'
+import { deletePost } from '../functions'
 
 type props = {
   post : any
 }
 const Post :React.FC<props> = ({
-  post
-}) => {
+      post
+    }) => {
   const auth : any = useSelector((state : rootType) => state.AuthSlice);
   const [show , setShow] = useState<boolean>(false)
   const [profile] = useGetUserProfile(post?.created_by);
@@ -50,9 +51,9 @@ const Post :React.FC<props> = ({
               :
               <div
               className='
-              w-[40px] h-[40px] flex items-center justify-center
+              w-[45px] h-[45px] flex items-center justify-center
               bg-violet-200 rounded-full
-              text-violet-dark text-[1.25rem] m-2
+              text-violet-dark text-[1.25rem] m-3
               '>
                   <RiUserLine/>
               </div>
@@ -125,8 +126,24 @@ const Post :React.FC<props> = ({
             right-10
             shadow-[0_0_6px_rgba(40,40,40,.16)]
             p-1 rounded-md
-            z-10
+            z-10 flex flex-col
             `}>
+
+                  { post?.created_by === auth.user ?
+                  <button
+                  onClick={() => {
+                    deletePost(post.id)
+                  }}
+                  className='
+                  text-[.9rem] text-red-500
+                  hover:bg-red-100
+                  '>
+                    Delete
+                  </button>
+                  :
+                  ""
+                  }
+
               <button
               onClick={() => {
                 followUser(post?.created_by)
@@ -151,7 +168,20 @@ const Post :React.FC<props> = ({
             break-words text-neutral-700
             text-[.9rem]
             '>
-            { post.content || "" }
+            { post?.content.replace("\n"," ✧ ").split(" ").map((item : string , idx : number) => {
+                if(item === "✧") return <br key={idx}/>
+
+                if(item[0] === "#") 
+                return(<span
+                key={idx}
+                className='text-violet-600'
+                >
+                {item + " "}
+                </span>)
+
+              return item + " "
+
+            }) || "" }
             </p>
           </div>
 
@@ -165,4 +195,4 @@ const Post :React.FC<props> = ({
   )
 }
 
-export default Post
+export default React.memo(Post)

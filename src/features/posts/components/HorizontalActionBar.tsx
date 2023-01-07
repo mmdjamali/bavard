@@ -2,6 +2,8 @@ import React from 'react'
 import { horizontalSectionBar } from "../data";
 import { interactWithPost, repost } from '../functions';
 import InteractionButton from './InteractionButton';
+import { useGetReposts } from '../hooks';
+import { CgSpinner } from "react-icons/cg"
 
 type props = {
   post : any,
@@ -12,7 +14,7 @@ const HorizontalActionBar : React.FC<props> = ({
   post,
   user
 }) => {
-  if(!post) return <p>9</p>
+  const [REPOST_COUNT , ERR , PENDING , REPOSTED] = useGetReposts(post?.id , user);
 
   return (
     <div
@@ -23,53 +25,39 @@ const HorizontalActionBar : React.FC<props> = ({
           switch(item.title){
 
             case("reposts") :
-            if(post.created_by === user) return
-            return(
-              <InteractionButton
-              key={idx}
-              color={item.color}
-              fillColor={item.fillColor}
-              onClick={() => {
-                repost(post)
-              }}
-              data={post[item.property]}
-              FilledIcon={item.filledIcon}
-              LinedIcon={item.linedIcon}
-              user={user}
-              />
-            )
 
-            case("views") :
-            if(post?.created_by !== user) return
+            if(PENDING) return <CgSpinner key={idx} className="text-violet-500 animate-spin" />
 
             return(
               <InteractionButton
-              key={idx}
+              key={idx+Math.random()}
               color={item.color}
               fillColor={item.fillColor}
               onClick={() => {
-
+                repost(post , REPOSTED)
               }}
-              data={post[item.property]}
+              data={REPOST_COUNT}
               FilledIcon={item.filledIcon}
               LinedIcon={item.linedIcon}
               user={user}
+              interacted={REPOSTED}
               />
             )
 
             default : 
             return(
               <InteractionButton
-              key={idx}
+              key={idx+Math.random()}
               color={item.color}
               fillColor={item.fillColor}
               onClick={() => {
                 interactWithPost(item.property , post.id)
               }}
-              data={post[item.property]}
+              data={post[item.property]?.length}
               FilledIcon={item.filledIcon}
               LinedIcon={item.linedIcon}
               user={user}
+              interacted={post[item.property]?.includes(user)}
               />
             )
 

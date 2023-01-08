@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IconType } from 'react-icons/lib'
 
 type props = {
@@ -21,14 +21,27 @@ const InteractionButton : React.FC<props> = ({
     user,
     interacted
 }) => {
-  
+  const [length , setLength] = useState<number | null>(data)
+  const [disable , setDisable] = useState<boolean>(interacted)
   return (
     <div
     className='
     flex justify-center items-center
     '>
       <button
-      onClick={onClick}
+      onClick={() => {
+        if(!disable){
+        onClick()
+        setLength(prev => prev + 1)
+        setDisable(true)
+        console.log(length)
+        return
+        }
+        onClick()
+        setLength(prev => prev - 1)
+        setDisable(false)
+        console.log(length)
+      }}
       className={`
       transition-colors
       rounded-full group
@@ -37,7 +50,7 @@ const InteractionButton : React.FC<props> = ({
       text-neutral-600
       `}>
         
-        { interacted ? 
+        { disable ? 
           
           <FilledIcon
           className={`
@@ -58,7 +71,7 @@ const InteractionButton : React.FC<props> = ({
       className='
       text-[.9rem]
       '>
-          { data || "0"}
+          { length || "0"}
       </span>
 
     </div>

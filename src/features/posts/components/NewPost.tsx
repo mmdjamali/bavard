@@ -53,6 +53,7 @@ const NewPost :React.FC = () => {
           rows={1}
           placeholder="What's up?"
           className='
+          w-[80%]
           relative
           resize-none outline-none
           m-2
@@ -71,9 +72,9 @@ const NewPost :React.FC = () => {
 
           <div
           className='
-          inline w-[97.5%] h-[1px]
+          inline w-[84%] h-[1px]
           bg-neutral-200
-          self-center
+          
           '/>
           
           <div
@@ -83,25 +84,44 @@ const NewPost :React.FC = () => {
           '>
 
             <div
-            style={{"backgroundImage" 
-            : 
+            style={{
+            "backgroundImage" 
+              : 
             `conic-gradient(
-              ${content.length <= 360 ? "#8B5CF6" : "rgb(239 68 68)"} 
-              ${content.length + "deg"} ,#eee ${content.length + "deg"} )`}}
+              ${content.length <= 160 ? "#8B5CF6" : ""}
+              ${content.length > 160 && content.length <= 180 ? "rgb(253,224,71)" : ""}
+              ${content.length > 180 ? "#EF4444" : ""}
+              ${(content.length * 2 )+ "deg"} ,#eee ${(content.length * 2) + "deg"} )
+            `}}
+
             className={`
             w-[30px] h-[30px]
             relative flex items-center justify-center
-            rounded-full after:content-[""""]
-            after:inline-block after:w-[80%] after:h-[80%]
-            after:bg-white after:rounded-full
+            rounded-full 
+            after:content-[""""]
+            after:inline-block 
+            after:w-[80%] after:h-[80%]
+            after:bg-white 
+            after:rounded-full
             `}
-            />
+            >
+              <span
+              className={`
+              absolute
+              text-[.75rem]
+              ${content.length <= 160 ? "text-neutral-500" : ""}
+              ${(content.length > 160 && content.length <= 180 ) ? "text-yellow-300" : ""}
+              ${(content.length > 180 ) ? "text-red-500" : ""}
+              `}>
+                {content && 180 - content.length}
+              </span>
+            </div>
 
             {/* TODO! */}
             {/* Create a custom component for this button */}
             <button
             onClick={async () => {
-              if(!content && (content.length >= 360)) return
+              if(!content && (content.length > 180)) return
               
               try{
                 setLoading(true)
@@ -115,7 +135,7 @@ const NewPost :React.FC = () => {
               }
             }}
             className={`
-            ${(content && (content.length <= 360)) ? "bg-violet-500" : "bg-violet-300 pointer-events-none"} 
+            ${(content && (content.length <= 180)) ? "bg-violet-500" : "bg-violet-300 pointer-events-none"} 
             text-white
             px-3 py-1 rounded-md mx-4
             `}>

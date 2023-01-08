@@ -33,8 +33,8 @@ const HorizontalActionBar : React.FC<props> = ({
               key={idx+Math.random()}
               color={item.color}
               fillColor={item.fillColor}
-              onClick={() => {
-                repost(post , REPOSTED)
+              onClick={ async () => {
+                await repost(post , REPOSTED)
               }}
               data={REPOST_COUNT}
               FilledIcon={item.filledIcon}
@@ -50,8 +50,8 @@ const HorizontalActionBar : React.FC<props> = ({
               key={idx+Math.random()}
               color={item.color}
               fillColor={item.fillColor}
-              onClick={() => {
-                interactWithPost(item.property , post.id)
+              onClick={async () => {
+                await interactWithPost(item.property , post.id)
               }}
               data={post[item.property]?.length}
               FilledIcon={item.filledIcon}

@@ -12,9 +12,11 @@ import {
 } from "./pages"
 
 function App() {
-  const {user , profile , pending} = useSelector((state : rootType) => state.AuthSlice)
+  const {user , profile , pending , error} = useSelector((state : rootType) => state.AuthSlice)
   useCheckForUser()
   useAuthStateChange()
+
+  if(error) return(<p>Error!!</p>)
 
   if(pending) return(<Loader/>)
 
@@ -22,7 +24,7 @@ function App() {
     <>
     <Sidebar/>
     <Routes>
-      <Route path="/" element={<ProtectedRoute value={!user} path="/home" ><Auth/></ProtectedRoute>}/>
+      <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>
       <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
       <Route path="/home" element={<ProtectedRoute value={user && profile}><Home/></ProtectedRoute>}/>
       <Route path="/explore" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>

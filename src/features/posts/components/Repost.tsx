@@ -165,9 +165,9 @@ const Repost : React.FC<props> = ({
                 bg-white
                 right-10
                 shadow-[0_0_6px_rgba(40,40,40,.16)]
-                p-1 rounded-md
+                p-1 px-3 rounded-md
                 z-10
-                flex flex-col
+                flex flex-col gap-1
                 `}>
 
                   { rId === auth.user ?
@@ -177,7 +177,7 @@ const Repost : React.FC<props> = ({
                   }}
                   className='
                   text-[.9rem] text-red-500
-                  hover:bg-red-100
+                  hover:font-medium
                   '>
                     Delete
                   </button>
@@ -209,8 +209,8 @@ const Repost : React.FC<props> = ({
                 break-words text-neutral-700
                 text-[.9rem]
                 '>
-                { post?.content.replace("\n"," ✧ ").split(" ").map((item : string , idx : number) => {
-                if(item === "✧") return <br/>
+                { post?.content.replaceAll("\n"," mm✧mm ").split(" ").map((item : string , idx : number) => {
+                if(item === "mm✧mm") return <br/>
                 
                 if(item[0] === "#")
                 return(<span

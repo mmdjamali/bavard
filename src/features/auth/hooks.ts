@@ -1,6 +1,6 @@
 import { useState , useEffect, useLayoutEffect } from "react"
 import store from "../../redux/store";
-import { setUser , setProfile , setPending } from "../../redux/AuthSlice";
+import { setUser , setProfile , setPending , setError } from "../../redux/AuthSlice";
 import supabase from "../../libs/supabase";
 import { AuthChangeEvent , Session} from "@supabase/supabase-js"
 import { useNavigate } from "react-router-dom";
@@ -66,13 +66,21 @@ export const useCheckForUser = () => {
             dispatch(setPending(true))
 
             const data = await supabase.auth.getUser()
-            console.log(data.data)
             
+            if(data.error){
+                dispatch(setPending(false))
+                dispatch(setUser(null))
+                dispatch(setProfile(null))
+                dispatch(setError(data.error.message))
+                return
+            }
+
             if(!data.data.user){
                 dispatch(setPending(false))
                 dispatch(setUser(null))
                 dispatch(setProfile(null))
                 navigate("/")
+                dispatch(setError(null))
                 return
             }
 
@@ -83,6 +91,14 @@ export const useCheckForUser = () => {
                     .select()
                     .eq("uid",data?.data?.user?.id) 
                     .single()
+
+            if(profile.error){
+                dispatch(setPending(false))
+                dispatch(setUser(null))
+                dispatch(setProfile(null))
+                dispatch(setError(profile.error.message))
+                return
+            }
 
             if(!profile?.data){
                 store.dispatch(setProfile(null))
@@ -101,6 +117,7 @@ export const useCheckForUser = () => {
         catch(err){
             console.log(err)
             dispatch(setPending(false))
+            dispatch(setError(err?.toString()))
         }
         }
         func()

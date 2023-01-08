@@ -86,20 +86,12 @@ export const useGetPosts = (max : number) => {
   },[max])
 
   useEffect(() : any => {
-    
-    let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
-    let user : string | null = store.getState().AuthSlice.user;
 
-    const channel = supabase.channel('custom-all-channel')
-    .on(
-      'postgres_changes',
-      { event: '*', schema: 'public', table: 'posts' },
-      async (payload : any) => {
+    let handleChanges = async (payload : any) => {
+      let isNotForUser = !(payload.eventType === "INSERT" && payload?.new.created_by === user) 
+      let alreadyHaveIt = !posts.some((item : any) => item.id === payload?.old?.id)
 
-        let isNotForUser = !(payload.eventType === "INSERT" && payload?.new.created_by === user) 
-        let alreadyHaveIt = !posts.some((item : any) => item.id === payload?.old?.id)
-
-        if(isNotForUser && alreadyHaveIt) return
+      if(isNotForUser && alreadyHaveIt) return
 
       if(!profile) return
       let array = [...profile?.followed,profile.uid]
@@ -126,6 +118,27 @@ export const useGetPosts = (max : number) => {
       setErr(null)
       setPosts(data)
       setHasMore(max - 1 <= (count || 0))
+    }
+    
+    let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
+    let user : string | null = store.getState().AuthSlice.user;
+
+    const channel = supabase.channel('custom-all-channel')
+    .on(
+      'postgres_changes',
+      { event: 'DELETE', schema: 'public', table: 'posts', filter:"created_by=eq." + user },
+      async (payload : any) => {
+
+        handleChanges(payload)
+
+      }
+    )
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'posts', filter:"created_by=eq." + user },
+      async (payload : any) => {
+
+        handleChanges(payload)
 
       }
     )

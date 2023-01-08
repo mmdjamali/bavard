@@ -168,8 +168,8 @@ const Post :React.FC<props> = ({
             break-words text-neutral-700
             text-[.9rem]
             '>
-            { post?.content.replace("\n"," ✧ ").split(" ").map((item : string , idx : number) => {
-                if(item === "✧") return <br key={idx}/>
+            { post?.content.replaceAll("\n"," mm✧mm ").split(" ").map((item : string , idx : number) => {
+                if(item === "mm✧mm") return <br key={idx}/>
 
                 if(item[0] === "#") 
                 return(<span
@@ -181,7 +181,8 @@ const Post :React.FC<props> = ({
 
               return item + " "
 
-            }) || "" }
+            }) || "" 
+            }
             </p>
           </div>
 

@@ -5,7 +5,8 @@ const AuthSlice = createSlice({
     initialState : {
         pending :true,
         user : null,
-        profile : null
+        profile : null,
+        error : null
     },
     reducers:{
         setPending : (state , action) => {
@@ -16,10 +17,13 @@ const AuthSlice = createSlice({
         },
         setProfile : (state , action) => {
             state.profile = action.payload
+        },
+        setError : (state , action) => {
+            state.error = action.payload
         }
     }
 })
 
-export const { setUser , setProfile , setPending } = AuthSlice.actions;
+export const { setUser , setProfile , setPending , setError } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

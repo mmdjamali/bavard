@@ -65,9 +65,9 @@ export const useCheckForUser = () => {
         try{
             dispatch(setPending(true))
 
-            const data = await supabase.auth.getUser()
+            const data : {error : {status : number}} | any = await supabase.auth.getUser()
             
-            if(data.error){
+            if(data.error && data.error.status !== 401){
                 dispatch(setPending(false))
                 dispatch(setUser(null))
                 dispatch(setProfile(null))

@@ -34,13 +34,11 @@ const InteractionButton : React.FC<props> = ({
         onClick()
         setLength(prev => prev + 1)
         setDisable(true)
-        console.log(length)
         return
         }
         onClick()
         setLength(prev => prev - 1)
         setDisable(false)
-        console.log(length)
       }}
       className={`
       transition-colors

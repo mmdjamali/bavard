@@ -88,10 +88,10 @@ export const useGetPosts = (max : number) => {
   useEffect(() : any => {
 
     let handleChanges = async (payload : any) => {
-      let isNotForUser = !(payload.eventType === "INSERT" && payload?.new.created_by === user) 
-      let alreadyHaveIt = !posts.some((item : any) => item.id === payload?.old?.id)
+      let isNotForUser = !(payload?.old.created_by === user)
+      console.log(payload) 
 
-      if(isNotForUser && alreadyHaveIt) return
+      if(isNotForUser) return
 
       if(!profile) return
       let array = [...profile?.followed,profile.uid]

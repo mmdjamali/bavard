@@ -94,22 +94,20 @@ export const useCheckForUser = () => {
 
             if(profile.error){
                 dispatch(setPending(false))
-                dispatch(setUser(null))
                 dispatch(setProfile(null))
                 dispatch(setError(profile.error.message))
                 return
             }
 
             if(!profile?.data){
-                store.dispatch(setProfile(null))
+                dispatch(setProfile(null))
                 dispatch(setPending(false))
-
                 navigate("/create-profile")
                 return
             }
 
             dispatch(setPending(false))
-            store.dispatch(setProfile(
+            dispatch(setProfile(
                 profile.data
             ))
             navigate("/home")

@@ -16,25 +16,6 @@ const Explore = () => {
     '>
 
         <SearchBox/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
-        <NewPost/>
     </div>
   )
 }

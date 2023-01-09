@@ -66,7 +66,7 @@ export const useGetReposts = (pId : string , user : string) => {
                 .eq("original_post" , pId)
 
             setPending(false)
-            setReposted(data?.some(item => item.created_by === user))
+            setReposted(data?.some((item : any) => item.created_by === user))
             setErr(error)
             setCount(count)
         }

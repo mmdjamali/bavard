@@ -1,3 +1,4 @@
+import { PostgrestError } from '@supabase/supabase-js'
 import React, { useState } from 'react'
 import { IconType } from 'react-icons/lib'
 
@@ -7,9 +8,9 @@ type props = {
     fillColor : string,
     FilledIcon : IconType,
     LinedIcon : IconType,    
-    data : number | null,
+    data : number | boolean | PostgrestError | null,
     user : string,
-    interacted : boolean
+    interacted : number | boolean | PostgrestError | null
 }
 const InteractionButton : React.FC<props> = ({
     onClick,
@@ -21,8 +22,8 @@ const InteractionButton : React.FC<props> = ({
     user,
     interacted
 }) => {
-  const [length , setLength] = useState<number | null>(data)
-  const [disable , setDisable] = useState<boolean>(interacted)
+  const [length , setLength] = useState<number | boolean | PostgrestError | null>(data)
+  const [disable , setDisable] = useState<number | boolean | PostgrestError | null>(interacted)
   return (
     <div
     className='
@@ -32,12 +33,18 @@ const InteractionButton : React.FC<props> = ({
       onClick={() => {
         if(!disable){
         onClick()
-        setLength(prev => prev + 1)
+        setLength((prev) => {
+          if(typeof prev === "number") return prev + 1
+          return 0
+        })
         setDisable(true)
         return
         }
         onClick()
-        setLength(prev => prev - 1)
+        setLength(prev => {
+          if(typeof prev === "number") return prev - 1
+          return 0
+        })
         setDisable(false)
       }}
       className={`
@@ -69,7 +76,7 @@ const InteractionButton : React.FC<props> = ({
       className='
       text-[.9rem]
       '>
-          { length || "0"}
+          { length?.toString() || "0"}
       </span>
 
     </div>

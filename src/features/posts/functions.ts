@@ -1,3 +1,4 @@
+import { PostgrestError } from "@supabase/supabase-js";
 import supabase from "../../libs/supabase";
 import store from "../../redux/store";
 
@@ -67,7 +68,7 @@ export const interactWithPost = async (column : string , id : string , ) => {
   
 }
 
-export const repost = async (post : any , reposted : boolean) => {
+export const repost = async (post : any , reposted : number | boolean | PostgrestError | null) => {
   let { user } = store.getState().AuthSlice;
 
     if(post?.created_by === user) return;

@@ -78,7 +78,7 @@ const Repost : React.FC<props> = ({
             <div
           className='relative'>
     
-              { pp ? <img 
+              { pp ? <img
                   src={`${pp ? pp : ""}`}
                   draggable="false"
                   className="

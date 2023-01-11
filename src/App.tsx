@@ -1,15 +1,19 @@
+import React , { Suspense } from "react"
 import { Route , Routes} from "react-router-dom"
-import { Auth , CreateProfile } from "./pages"
 import { Sidebar } from "./components/layout"
 import { useCheckForUser , useAuthStateChange} from "./features/auth/hooks"
 import { ProtectedRoute } from "./features/auth"
 import { useSelector } from "react-redux"
 import { rootType } from "./redux/store"
 import Loader from "./components/Loader"
-import { 
-  Home , Explore , Messages,
-  Bookmarks , Profile
-} from "./pages"
+
+const Home = React.lazy(() => import("./pages/Home"))
+const Auth = React.lazy(() => import("./pages/Auth"))
+const Explore = React.lazy(() => import("./pages/Explore"))
+const Messages = React.lazy(() => import("./pages/Messages"))
+const Profile = React.lazy(() => import("./pages/Profile"))
+const CreateProfile = React.lazy(() => import("./pages/CreateProfile"))
+const Bookmarks = React.lazy(() => import("./pages/Bookmarks"))
 
 function App() {
   const {user , profile , pending , error} = useSelector((state : rootType) => state.AuthSlice)
@@ -23,15 +27,18 @@ function App() {
   return (
     <>
     <Sidebar/>
-    <Routes>
-      <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>
-      <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
-      <Route path="/home" element={<ProtectedRoute value={user && profile}><Home/></ProtectedRoute>}/>
-      <Route path="/explore" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>
-      <Route path="/messages" element={<ProtectedRoute value={user && profile}><Messages/></ProtectedRoute>}/>
-      <Route path="/bookmarks" element={<ProtectedRoute value={user && profile}><Bookmarks/></ProtectedRoute>}/>
-      <Route path="/profile" element={<ProtectedRoute value={user && profile}><Profile/></ProtectedRoute>}/>
-    </Routes>
+    <Suspense fallback={<Loader/>}>
+      <Routes>
+        <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>
+        <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
+        <Route path="/home" element={<ProtectedRoute value={user && profile}><Home/></ProtectedRoute>}/>
+        <Route path="/explore" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>
+        <Route path="/explore/:query" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>
+        <Route path="/messages" element={<ProtectedRoute value={user && profile}><Messages/></ProtectedRoute>}/>
+        <Route path="/bookmarks" element={<ProtectedRoute value={user && profile}><Bookmarks/></ProtectedRoute>}/>
+        <Route path="/profile" element={<ProtectedRoute value={user && profile}><Profile/></ProtectedRoute>}/>
+      </Routes>
+    </Suspense>
   </>
   )
 }

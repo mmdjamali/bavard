@@ -9,12 +9,14 @@ import { rootType } from '../../../redux/store'
 import { followUser } from '../../auth/utils'
 import HorizontalActionBar from './HorizontalActionBar'
 import { deletePost } from '../functions'
+import { Link } from 'react-router-dom'
 
 type props = {
-  post : any
+  post : any,
+  sx? : string
 }
 const Post :React.FC<props> = ({
-      post
+      post , sx
     }) => {
   const auth : any = useSelector((state : rootType) => state.AuthSlice);
   const [show , setShow] = useState<boolean>(false)
@@ -25,13 +27,14 @@ const Post :React.FC<props> = ({
 
   return (
     <div
-    className='
+    className={`
     bg-white hover:bg-violet-50
     flex w-full relative
     border-b-[1px]
     cursor-pointer
     transition-colors
-    '>
+    ${sx ? sx : ""}
+    `}>
 
         {/* Left section of post*/}
 
@@ -171,13 +174,17 @@ const Post :React.FC<props> = ({
             { post?.content.replaceAll("\n"," mm✧mm ").split(" ").map((item : string , idx : number) => {
                 if(item === "mm✧mm") return <br key={idx}/>
 
-                if(item[0] === "#") 
-                return(<span
+                if(item[0] === "#" && /^[a-zA-Z0-9_#]*$/.test(item)) 
+                return(<Link
+                to={"/explore/"+item.replaceAll(/[^a-zA-Z0-9_]/g, '') }
                 key={idx}
-                className='text-violet-600'
+                className='
+                text-violet-600
+                hover:underline
+                '
                 >
                 {item + " "}
-                </span>)
+                </Link>)
 
               return item + " "
 
@@ -196,4 +203,4 @@ const Post :React.FC<props> = ({
   )
 }
 
-export default React.memo(Post)
+export default Post

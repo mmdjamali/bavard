@@ -30,7 +30,7 @@ const ProfileButton : React.FC<props> = ({
         relative 
         p-1 sm:p-2 rounded-md flex items-center justify-between
         bg-white cursor-pointer hover:bg-violet-100
-        hover:shadow-[0_4px_6px] hover:shadow-[rgba(21,21,21,.16)]
+        hover:shadow-[0_4px_6px] hover:shadow-violet-500/50
         ">
 
             {!!pp ? <img 

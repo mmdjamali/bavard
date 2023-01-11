@@ -56,7 +56,7 @@ export const useAuthStateChange = () => {
 export const useCheckForUser = () => {
     const navigate = useNavigate()
 
-    useLayoutEffect(() => {
+    useEffect(() => {
 
         //check for user login history
         const func = async () => {
@@ -79,7 +79,6 @@ export const useCheckForUser = () => {
                 dispatch(setPending(false))
                 dispatch(setUser(null))
                 dispatch(setProfile(null))
-                navigate("/")
                 dispatch(setError(null))
                 return
             }
@@ -110,12 +109,12 @@ export const useCheckForUser = () => {
             dispatch(setProfile(
                 profile.data
             ))
-            navigate("/home")
         }
         catch(err){
             console.log(err)
             dispatch(setPending(false))
             dispatch(setError(err?.toString()))
+            dispatch(setUser(null))
         }
         }
         func()

@@ -42,27 +42,36 @@ export const interactWithPost = async (column : string , id : string , ) => {
         let array = [...currentData];
         array.splice(idx , 1)
 
+        let obj = column === "liked_by" ? {[column] : array , "likes" : array.length} : {[column] : array}
         const { data , error } = await supabase
           .from("posts")
-          .update({[column] : array})
+          .update(
+            obj
+            )
           .eq("id" , id)
           .select()
 
         return
 
       }
-
+      let obj = column === "liked_by" ? {[column] : [...currentData , user] , "likes" : currentData.length + 1} : {[column] : [...currentData , user]}
       const { data, error } = await supabase
           .from("posts")
-          .update({[column] : [...currentData , user]})
+          .update(
+            obj
+            )
           .eq("id" , id)
 
       return
     }
-  
+
+    let obj = column === "liked_by" ? {[column] : [user] , "likes" : 1} : {[column] : [user]}
+
     const { data , error } = await supabase
           .from("posts")
-          .update({[column] : [user]})
+          .update(
+            obj
+            )
           .eq("id" , id)
           .select()
   

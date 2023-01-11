@@ -2,19 +2,24 @@ import React , { useState , useCallback } from 'react'
 import { RiSearchLine , RiCloseCircleLine , RiCloseCircleFill } from "react-icons/ri";
 
 type props = {
-
+  setSearchValue : React.Dispatch<React.SetStateAction<string | undefined>>
+  searchValue : string | undefined
 }
 
-const SearchBox : React.FC<props> = () => {
-  const [value , setValue] = useState<string>("")
+const SearchBox : React.FC<props> = ({
+  setSearchValue,
+  searchValue
+}) => {
+  const [value , setValue] = useState<string>(searchValue || "")
 
   return (
     <div
-    className='
+    className={`
     sticky top-0
-    bg-white/50 z-10
+    bg-gradient-to-b 
+    from-white/90 to-white/50 z-10
     backdrop-blur-sm flex items-center justify-center
-    '>
+    `}>
 
     <div
     className='
@@ -23,7 +28,7 @@ const SearchBox : React.FC<props> = () => {
     flex items-center
     justify-between
     py-2 px-4
-    gap-4
+    gap-2
     bg-violet-50
     rounded-lg
     my-2
@@ -40,22 +45,27 @@ const SearchBox : React.FC<props> = () => {
         text-[1.25rem]
         
         `}/>
-
-        <input
-        value={value}
-        onChange={(e) => {
-            setValue(e.target.value)
-        }}
-        className='
-        w-[65%]
-        outline-none
-        bg-transparent
-        text-[1rem]
-        text-neutral-500
-        '
-        placeholder='Search...'
-        type={"text"}
-        />
+        <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          setSearchValue(value)
+        }}>
+          <input
+          value={value}
+          onChange={(e) => {
+              setValue(e.target.value)
+          }}
+          className='
+          w-[70%]
+          outline-none
+          bg-transparent
+          text-[1rem]
+          text-neutral-500
+          '
+          placeholder='Search...'
+          type={"text"}
+          />
+        </form>
 
         <RiCloseCircleFill
         className={`

@@ -76,45 +76,38 @@ const Home = () => {
         <NewPost/>
 
         { data?.map((post : any , idx : number) => {
-            if(idx === data.length - 1){
+            // if(idx === data.length - 1){
 
-              if(post.repost) return(
-                <>
-                  <Repost
-                  repostID={post?.id}
-                  key={idx+Math.random()}
-                  created_at={post?.created_at}
-                  pId={post?.original_post}
-                  rId={post?.created_by}
-                  />
-                  <div
-                  key={idx+Math.random()}
-                  ref={setupObserver}
-                  className="
-                  h-1
-                  w-full
-                  "
-                  />
-                </>
-              )
+            //   if(post.repost) return(
+            //     <>
+            //       <Repost
+            //       repostID={post?.id}
+            //       key={idx+Math.random()}
+            //       created_at={post?.created_at}
+            //       pId={post?.original_post}
+            //       rId={post?.created_by}
+            //       />
+                  
+            //     </>
+            //   )
 
-              return(
-              <>
-                <Post
-                key={idx+Math.random()}
-                post={post}
-                />
-                <div
-                key={idx+Math.random()}
-                ref={setupObserver}
-                className="
-                h-1
-                w-full
-                "
-                />
-              </>
-              )
-            }
+            //   return(
+            //   <>
+            //     <Post
+            //     key={idx+Math.random()}
+            //     post={post}
+            //     />
+            //     <div
+            //     key={idx + Math.random()}
+            //     ref={setupObserver}
+            //     className="
+            //     h-1
+            //     w-full
+            //     "
+            //     />
+            //   </>
+            //   )
+            // }
             if(post.repost) return(
                 <Repost
                 repostID={post?.id}
@@ -126,7 +119,7 @@ const Home = () => {
             )
 
             return(<Post
-            key={idx+Math.random()}
+            key={idx}
             post={post}
             />)
 
@@ -136,6 +129,17 @@ const Home = () => {
         {pending &&
         <Loader
         sx='h-fit py-4'/>
+        }
+
+        {
+          !pending && data &&
+          <div
+          ref={setupObserver}
+          className="
+          h-[1px]
+          w-full
+          "
+          />
         }
    
       </div>

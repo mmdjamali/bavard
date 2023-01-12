@@ -37,7 +37,8 @@ const Explore = () => {
         <div
         className='
         fixed
-        w-[min(calc(100%_-_80px),calc(450px_-_2px)]
+        w-full
+        xs:w-[min(calc(100%_-_79px),450px)]
         sm:w-[min(calc(100%_-_14rem),calc(450px_-_2px))]
         bg-white h-[60px] z-[8]
         '/>

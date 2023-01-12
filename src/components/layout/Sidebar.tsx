@@ -17,9 +17,10 @@ const Sidebar :React.FC = () => {
   return (
     <div
     className='
+    hidden xs:flex
     sticky top-0
     w-[80px] sm:w-[14rem] h-screen
-    bg-white flex justify-center
+    bg-white justify-center
     '>
 
       <div

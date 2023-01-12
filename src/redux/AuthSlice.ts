@@ -3,7 +3,7 @@ import { Slice, SliceCaseReducers, createSlice } from "@reduxjs/toolkit";
 const AuthSlice = createSlice({
     name : "auth",
     initialState : {
-        pending :true,
+        pending : true,
         user : null,
         profile : null,
         error : null

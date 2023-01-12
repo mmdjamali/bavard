@@ -8,6 +8,7 @@ import store from './redux/store'
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <div
   className='
+  flex-col xs:flex-row
   flex w-full justify-center
   '>
     <React.StrictMode>

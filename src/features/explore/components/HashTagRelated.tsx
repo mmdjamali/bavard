@@ -11,7 +11,11 @@ type props = {
 const HashTagRelated : React.FC<props> = ({
     query
 }) => {
-  const [data , count , pending , error] = useGetPostByQuery(query , "likes")
+  const [data , count , pending , error] : any = useGetPostByQuery(query , "likes")
+  
+  if(pending)
+  return(<Loader sx='py-4 h-fit'/>)
+  
   return (
     <div
     className=''>
@@ -31,13 +35,10 @@ const HashTagRelated : React.FC<props> = ({
             </h3>
         </div>
         <div>
-            {
-                pending && <Loader sx='py-4 h-fit'/>
-            }
 
-            {data && data?.map((post , idx) => {
+            {data && data?.map((post : any , idx : number) => {
                 return <Post
-                sx={`border-b-[0px] ${ idx !== 0 ? "border-t-[1px]" : ""}`}
+                sx={`border-b-0 ${ idx !== 0 ? "border-t-[1px]" : ""}`}
                 key={idx+Math.random()}
                 post={post}
                 />
@@ -46,11 +47,11 @@ const HashTagRelated : React.FC<props> = ({
             { data &&
                 <div
                 className='
-                p-1 px-2
+                p-1 px-2 border-none
                 text-violet-500
                 hover:text-violet-600
                 '>
-                    <Link to={"/explore/"+query}>Show more</Link>
+                    <Link to={"/explore/"+query.replace("#",'')}>Show more</Link>
                 </div>
             }
 

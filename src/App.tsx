@@ -1,6 +1,6 @@
 import React , { Suspense } from "react"
 import { Route , Routes} from "react-router-dom"
-import { Sidebar } from "./components/layout"
+import { Sidebar , BottomNavbar} from "./components/layout"
 import { useCheckForUser , useAuthStateChange} from "./features/auth/hooks"
 import { ProtectedRoute } from "./features/auth"
 import { useSelector } from "react-redux"
@@ -39,6 +39,7 @@ function App() {
         <Route path="/profile" element={<ProtectedRoute value={user && profile}><Profile/></ProtectedRoute>}/>
       </Routes>
     </Suspense>
+    <BottomNavbar/>
   </>
   )
 }

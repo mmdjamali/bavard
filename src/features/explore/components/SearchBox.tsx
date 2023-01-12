@@ -1,5 +1,6 @@
-import React , { useState , useCallback } from 'react'
+import React , { useState , useCallback, useEffect } from 'react'
 import { RiSearchLine , RiCloseCircleLine , RiCloseCircleFill } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
 
 type props = {
   setSearchValue : React.Dispatch<React.SetStateAction<string | undefined>>
@@ -12,9 +13,17 @@ const SearchBox : React.FC<props> = ({
 }) => {
   const [value , setValue] = useState<string>(searchValue || "")
 
+  const navigate = useNavigate()
+
+  // useEffect(() => {
+  //   setValue(searchValue)
+  // }, [searchValue])
+  
+
   return (
     <div
     className={`
+    mx-3
     sticky top-0
     bg-gradient-to-b 
     from-white/90 to-white/50 z-10
@@ -24,17 +33,17 @@ const SearchBox : React.FC<props> = ({
     <div
     className='
     relative
-    w-[80%]  top-0
+    top-0
     flex items-center
     justify-between
     py-2 px-4
-    gap-2
+    gap-3
     bg-violet-50
     rounded-lg
     my-2
     border-2 border-transparent
     focus-within:border-violet-500 
-    focus-within:text-violet-500 
+    focus-within:text-violet-500
     focus-within:bg-white 
     text-violet-dark/75
     
@@ -43,12 +52,13 @@ const SearchBox : React.FC<props> = ({
         <RiSearchLine
         className={`
         text-[1.25rem]
-        
+        min-w-10
         `}/>
         <form
         onSubmit={(e) => {
           e.preventDefault()
           setSearchValue(value)
+          navigate("/explore/" + value.replace("#",""))
         }}>
           <input
           value={value}
@@ -56,7 +66,7 @@ const SearchBox : React.FC<props> = ({
               setValue(e.target.value)
           }}
           className='
-          w-[70%]
+          w-[75%]
           outline-none
           bg-transparent
           text-[1rem]

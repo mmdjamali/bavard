@@ -16,11 +16,15 @@ const SearchResult : React.FC<props> = ({
   const [posts , count , pending , err] : any = useGetPostByQuery(query , filter , max)
   
   if(pending) return <Loader sx='h-fit py-4'/>
-  
+
   return (
     <div>
         {posts && posts.map((item : any , idx : number) => {
-            return <Post post={item} key={idx}/>
+            return (
+            <Post
+            ID={item?.ID}
+            key={idx}
+            />)
         })}
     </div>
   )

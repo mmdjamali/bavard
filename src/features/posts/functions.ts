@@ -1,4 +1,4 @@
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError, PostgrestResponse } from "@supabase/supabase-js";
 import supabase from "../../libs/supabase";
 import store from "../../redux/store";
 
@@ -10,10 +10,7 @@ export const createPost = async (
             .from("posts")
             .insert([{
                 content,
-                created_by,
-                reposted_by:[],
-                viewed_by:[],
-                liked_by:[],
+                created_by
             }]);
 
     if(error){
@@ -77,6 +74,95 @@ export const interactWithPost = async (column : string , id : string , ) => {
   
 }
 
+export const likePost = async (pId : string) => {
+  let user = store.getState().AuthSlice.user;
+
+  const profile : any = await supabase
+      .from("profiles")
+      .select("liked")
+      .eq("uid",user)
+      .single()
+
+  if(profile.error) return
+
+  if(!profile?.data?.liked){
+
+    const profileUpdate = await supabase
+    .from("profiles")
+    .update({
+      liked : [pId]
+    })
+    .eq("uid",user)
+
+    if(profileUpdate.error) return
+
+    const { error , count } = await supabase
+    .from("profiles")
+    .select("*",{count :"exact"})
+    .contains("liked",[pId])
+
+    const updateLikes = await supabase
+        .from("posts")
+        .update({
+          likes : count
+        })
+        .eq("ID",pId)
+
+    return
+  }
+
+  if(profile?.data?.liked.includes(pId)){
+    let array = [...profile?.data?.liked]
+    let idx = array.findIndex(item => item === pId);
+    array.splice(idx,1)
+
+    const profileUpdate = await supabase
+    .from("profiles")
+    .update({
+      liked : array
+    })
+    .eq("uid",user)
+
+    const { error , count } = await supabase
+    .from("profiles")
+    .select("uid",{count :"exact"})
+    .contains("liked",[pId])
+
+    const updateLikes = await supabase
+        .from("posts")
+        .update({
+          likes : count
+        })
+        .eq("ID",pId)
+
+    return
+  }
+
+  const profileUpdate = await supabase
+    .from("profiles")
+    .update({
+      liked : [...profile.data.liked,pId]
+    })
+    .eq("uid",user)
+
+    if(profile.error) return
+
+    const { error , count } = await supabase
+    .from("profiles")
+    .select("*",{count :"exact"})
+    .contains("liked",[pId])
+
+    console.log(error , count)
+
+    const updateLikes = await supabase
+        .from("posts")
+        .update({
+          likes : count
+        })
+        .eq("ID",pId)
+ 
+}
+
 export const repost = async (post : any , reposted : number | boolean | PostgrestError | null) => {
   let { user } = store.getState().AuthSlice;
 
@@ -84,20 +170,78 @@ export const repost = async (post : any , reposted : number | boolean | Postgres
 
     if(reposted) return
                         
-    const { error : err } = await supabase
+    const { error : err1 } = await supabase
     .from("posts")
     .insert([{
         created_by : user,
-        original_post : post.id,
-        repost : true,
+        parent : post.ID,
     }]);
-  
+
+    if(err1) return
+
+    const { error : err2 , count } = await supabase
+        .from("posts")
+        .select("ID",{count:"exact"})
+        .eq("parent",post?.ID)
+
+    if(err2) return
+    
+    const { error : err3 } = await supabase
+        .from("posts")
+        .update({
+          reposts : count || 0
+        })
+        .eq("ID",post.ID)
+
 }
 
 export const deletePost = async (pId : string) => {
   await supabase
     .from("posts")
     .delete()
-    .eq("id",pId)
+    .eq("ID",pId)
+}
+
+export const deleteRepost = async (pId : string , rId : string) => {
+  const remove = await supabase
+      .from("posts")
+      .delete()
+      .eq("ID",rId)
+    
+  console.log(remove)
+
+  const parent = await supabase
+      .from("posts")
+      .select("*",{count:"exact"})
+      .eq("parent",pId)
+
+  console.log(parent)
+ 
+  const change = await supabase
+      .from("posts")
+      .update({
+        reposts : parent.count || 0 
+      })
+      .eq("ID",pId)
+
+  console.log(change)
+}
+
+export const changeReposts = async (pId : string) => {
+  if(!pId) return
+  
+  const { count , error } = await supabase
+      .from("posts")
+      .select("ID",{count:"exact"})
+      .eq("parent",pId)
+
+  const update = await supabase
+    .from("posts")
+    .update({
+      reposts : count
+    })
+    .eq("ID",pId);
+
+    console.log(update)
 }
 

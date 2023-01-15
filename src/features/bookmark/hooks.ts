@@ -11,7 +11,7 @@ export const useGetBookmarkedPosts = (max : number | undefined = 10) => {
     const [ err , setErr ] = useState<PostgrestError | null>(null)
     const user = useSelector((state : rootType) => state.AuthSlice.user);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const func = async () => {
             if(max === 10) setPending(true)
             const {data , count , error} = await supabase

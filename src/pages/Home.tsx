@@ -34,14 +34,14 @@ const Home = () => {
     w-full
     xs:w-[min(calc(100%_-_79px),450px)]
     sm:w-[min(calc(100%_-_14rem),450px)]
-    relative border-x-[1px]
+    relative border-x-[1px] border-color
     min-h-screen flex flex-col
     '
     >
       <div
       className='
       fixed p-2
-      bg-white/50 z-10
+      bg-white/75 z-10
       backdrop-blur-sm
       '>
         <h2
@@ -77,51 +77,20 @@ const Home = () => {
         <NewPost/>
 
         { data?.map((post : any , idx : number) => {
-            // if(idx === data.length - 1){
 
-            //   if(post.repost) return(
-            //     <>
-            //       <Repost
-            //       repostID={post?.id}
-            //       key={idx+Math.random()}
-            //       created_at={post?.created_at}
-            //       pId={post?.original_post}
-            //       rId={post?.created_by}
-            //       />
-                  
-            //     </>
-            //   )
-
-            //   return(
-            //   <>
-            //     <Post
-            //     key={idx+Math.random()}
-            //     post={post}
-            //     />
-            //     <div
-            //     key={idx + Math.random()}
-            //     ref={setupObserver}
-            //     className="
-            //     h-1
-            //     w-full
-            //     "
-            //     />
-            //   </>
-            //   )
-            // }
-            if(post.repost) return(
+            if(post?.parent) return(
                 <Repost
-                repostID={post?.id}
+                repostID={post?.ID}
                 key={idx+Math.random()}
                 created_at={post?.created_at}
-                pId={post?.original_post}
+                pId={post?.parent}
                 rId={post?.created_by}
                 />
             )
 
             return(<Post
             key={idx}
-            post={post}
+            ID={post?.ID}
             />)
 
           })

@@ -55,12 +55,13 @@ export const useAuthStateChange = () => {
 
 export const useCheckForUser = () => {
     const navigate = useNavigate()
+    const dispatch = store.dispatch
+    const profile : any = store.getState().AuthSlice.profile;
 
     useEffect(() => {
 
         //check for user login history
         const func = async () => {
-        const dispatch = store.dispatch
         
         try{
             dispatch(setPending(true))
@@ -109,6 +110,7 @@ export const useCheckForUser = () => {
             dispatch(setProfile(
                 profile.data
             ))
+
         }
         catch(err){
             console.log(err)
@@ -119,7 +121,6 @@ export const useCheckForUser = () => {
         }
         func()
     },[])
-    
 }
 
 type profile = {
@@ -133,12 +134,6 @@ export const useGetUserProfile = (
   ) => {
     const [profile , setProfile] = useState<profile | undefined>()
     useLayoutEffect(() => {
-
-        const storedData = JSON.parse(sessionStorage.getItem(uid) || "{}")
-        if(Object.keys(storedData).length !== 0){
-            setProfile(storedData);
-            return
-        }
 
         if(!uid) return
 
@@ -154,10 +149,7 @@ export const useGetUserProfile = (
               return
             }            
             setProfile(data)
-            sessionStorage.setItem(
-                uid,
-                JSON.stringify({...data})
-            )
+
           }
           func()
     },[uid])

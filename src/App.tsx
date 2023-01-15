@@ -6,6 +6,7 @@ import { ProtectedRoute } from "./features/auth"
 import { useSelector } from "react-redux"
 import { rootType } from "./redux/store"
 import Loader from "./components/Loader"
+import { QueryClientProvider , QueryClient } from 'react-query'
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Auth = React.lazy(() => import("./pages/Auth"))
@@ -25,7 +26,7 @@ function App() {
   if(pending) return(<Loader/>)
 
   return (
-    <>
+    <QueryClientProvider client={new QueryClient}>
     <Sidebar/>
     <Suspense fallback={<Loader/>}>
       <Routes>
@@ -40,7 +41,7 @@ function App() {
       </Routes>
     </Suspense>
     <BottomNavbar/>
-  </>
+  </QueryClientProvider>
   )
 }
 

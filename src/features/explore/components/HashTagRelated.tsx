@@ -24,6 +24,7 @@ const HashTagRelated : React.FC<props> = ({
         w-full bg-white
         p-2 text-[1.1rem]
         border-t-[1px]
+        border-neutral-100
         '>
             <h3
             className='
@@ -40,7 +41,7 @@ const HashTagRelated : React.FC<props> = ({
                 return <Post
                 sx={`border-b-0 ${ idx !== 0 ? "border-t-[1px]" : ""}`}
                 key={idx+Math.random()}
-                post={post}
+                ID={post?.ID}
                 />
             })}
 

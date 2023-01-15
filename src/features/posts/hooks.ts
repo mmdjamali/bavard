@@ -8,45 +8,46 @@ export const useGetPost = (pId : string) => {
     const [err, setErr] = useState<PostgrestError | null>(null)
     const [pending, setPending] = useState(true)
 
-    const func = async () => {
-        const { data , error } = await supabase
-            .from("posts")
-            .select()
-            .eq("id",pId)
-            .single()
-
-        if(error){
+    useEffect(() => {
+        const func = async () => {
+            const { data , error } = await supabase
+                .from("posts")
+                .select()
+                .eq("ID",pId)
+                .single()
+    
+            if(error){
+                setPending(false)
+                setErr(error)
+                setPost(null)
+                return
+            }
+    
             setPending(false)
-            setErr(error)
-            setPost(null)
+            setErr(null)
+            setPost(data)
             return
         }
-
-        setPending(false)
-        setErr(null)
-        setPost(data)
-        return
-    }
-
-    useEffect(() => {
         func()
     },[pId])
 
-    useEffect(() : any => {
-        const channel = supabase
-            .channel("getting" + pId)
-            .on(
-            "postgres_changes",
-            { event: '*', schema: 'public', table: 'posts' , filter : "id=eq."+pId },
-            async () => {
-                await func()
-            }
-            )
-            .subscribe()
+    // useEffect(() => {
         
-        return () => supabase.removeChannel(channel);
-        
-    },[pId])
+    //     const channel = supabase
+    //         .channel("nohing" + pId)
+    //         .on(
+    //             "postgres_changes",
+    //             {event:"UPDATE",schema:"public",table:"posts",filter : "ID=eq." + pId},
+    //             (payload : any) => {
+    //                 setPost(payload.new)
+    //             }
+    //         )
+    //         .subscribe()
+
+    //         return () => {
+    //             supabase.removeChannel(channel)
+    //         }
+    // },[])
 
     return [post,err,pending]
 
@@ -76,4 +77,67 @@ export const useGetReposts = (pId : string , user : string) => {
     },[pId])
 
     return [count , err , pending , reposted]
+}
+
+export const useCheckForRepost = (
+    postID :string,
+    user : string
+) => {
+    const [reposted , setReposted] = useState<boolean>(false)
+
+    useEffect(() => {
+
+        if(!postID ||!user) return
+
+        const func = async () => {
+            const { error , data } = await supabase
+                    .from("posts")
+                    .select("ID")
+                    .match({"parent" : postID , "created_by" : user})
+                    
+            if(error || !data[0]) {
+                setReposted(false)
+                return
+            }
+
+            if(data[0]){
+                setReposted(true)
+                return 
+            }
+        }
+        func()
+
+    },[postID,user])
+
+    return [reposted]
+}
+
+export const useCheckForLike = (
+    pId : string
+) => {
+    const [liked , setLiked] = useState<boolean>(false)
+    
+    useEffect(() => {
+        let user :any = store.getState().AuthSlice.user;
+        
+        const func = async () => {
+            const profile = await supabase
+                    .from("profiles")
+                    .select("liked")
+                    .eq("uid",user)
+                    .single()
+            
+                    if(!profile.data || !profile?.data.liked) {
+                setLiked(false)
+                return
+            }
+    
+            setLiked(profile?.data?.liked?.includes(pId))
+        }
+
+        func()
+
+    },[pId])
+
+    return [liked , setLiked]
 }

@@ -4,17 +4,20 @@ import { interactWithPost, repost } from '../functions';
 import InteractionButton from './InteractionButton';
 import { useGetReposts } from '../hooks';
 import { CgSpinner } from "react-icons/cg"
+import RepostButton from './interactions/RepostButton';
+import LikeButton from './interactions/LikeButton';
 
 type props = {
   post : any,
-  user : string
+  user : string,
 };
 
 const HorizontalActionBar : React.FC<props> = ({
   post,
   user
 }) => {
-  const [REPOST_COUNT , ERR , PENDING , REPOSTED] = useGetReposts(post?.id , user);
+
+  if(!post) return <></>
 
   return (
     <div
@@ -23,24 +26,28 @@ const HorizontalActionBar : React.FC<props> = ({
     '>
         {horizontalSectionBar.map((item , idx) => {
           switch(item.title){
-
             case("reposts") :
+            return(
+            <RepostButton
+            key={idx}
+            fillColor={item.fillColor}
+            color={item.color}
+            FilledIcon={item.filledIcon}
+            LinedIcon={item.linedIcon}
+            post={post}
+            />
+            )
 
-            if(PENDING) return <CgSpinner key={idx} className="text-violet-500 animate-spin" />
+            case("likes") :
 
             return(
-              <InteractionButton
-              key={idx+Math.random()}
-              color={item.color}
+              <LikeButton
+              key={idx}
               fillColor={item.fillColor}
-              onClick={ async () => {
-                await repost(post , REPOSTED)
-              }}
-              data={REPOST_COUNT}
+              color={item.color}
               FilledIcon={item.filledIcon}
               LinedIcon={item.linedIcon}
-              user={user}
-              interacted={REPOSTED}
+              post={post}
               />
             )
 
@@ -53,11 +60,11 @@ const HorizontalActionBar : React.FC<props> = ({
               onClick={async () => {
                 await interactWithPost(item.property , post.id)
               }}
-              data={post[item.property]?.length}
+              data={post[item?.property]}
               FilledIcon={item.filledIcon}
               LinedIcon={item.linedIcon}
               user={user}
-              interacted={post[item.property]?.includes(user)}
+              interacted={false}
               />
             )
 

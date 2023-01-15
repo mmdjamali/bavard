@@ -103,7 +103,7 @@ export const followUser = async (uid : string) => {
         .select()
         .eq("uid" , user)
         .single()
-
+        
   if(profile?.data?.followed){
 
     if(profile?.data?.followed?.includes(uid)){

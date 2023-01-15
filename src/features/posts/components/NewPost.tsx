@@ -19,7 +19,7 @@ const NewPost :React.FC = () => {
     <div
     className='
     flex w-full
-    border-b-[1px]
+    border-b-[1px] border-color
     '
     >
 
@@ -53,7 +53,7 @@ const NewPost :React.FC = () => {
           rows={1}
           placeholder="What's up?"
           className='
-          w-[80%]
+          w-[90%]
           relative
           resize-none outline-none
           m-2
@@ -72,7 +72,7 @@ const NewPost :React.FC = () => {
 
           <div
           className='
-          inline w-[84%] h-[1px]
+          inline w-[95%] h-[1px]
           bg-neutral-200
           
           '/>

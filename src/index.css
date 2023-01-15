@@ -12,7 +12,10 @@
 }
 
 @layer components {
-
+    .border-color
+    {
+        @apply border-gray-200/60 dark:border-neutral-600;
+    }
 };
 
 #root

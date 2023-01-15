@@ -1,4 +1,4 @@
-import React , { useState } from 'react'
+import React , { useEffect, useState } from 'react'
 import { RiUserLine } from 'react-icons/ri'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { useGetUserProfile } from '../../auth/hooks'
@@ -10,27 +10,35 @@ import { followUser } from '../../auth/utils'
 import HorizontalActionBar from './HorizontalActionBar'
 import { deletePost } from '../functions'
 import { Link } from 'react-router-dom'
+import { useGetPost } from '../hooks'
+import VeriticalActionBar from './VeriticalActionBar'
+import Loader from '../../../components/Loader'
 
 type props = {
-  post : any,
+  ID : any,
   sx? : string
 }
-const Post :React.FC<props> = ({
-      post , sx
+const Post : React.FC<props> = ({
+      ID , sx
     }) => {
   const auth : any = useSelector((state : rootType) => state.AuthSlice);
   const [show , setShow] = useState<boolean>(false)
-  const [profile] = useGetUserProfile(post?.created_by);
+  const [post , error , pending] : any = useGetPost(ID)
+  const [profile] = useGetUserProfile(post?.created_by || "");
   const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
 
-  let time = TimeFormater(post.created_at)
+  let time = TimeFormater(post?.created_at || "")
+
+  if(pending) return(
+    <Loader sx="h-fit py-8"/>
+  )
 
   return (
     <div
     className={`
-    bg-white hover:bg-violet-50
+    bg-white md:hover:bg-violet-50
     flex w-full relative
-    border-b-[1px]
+    border-b-[1px] border-color
     cursor-pointer
     transition-colors
     ${sx ? sx : ""}
@@ -110,54 +118,11 @@ const Post :React.FC<props> = ({
               {time || "..."}
             </p>
 
-            <button
-            onClick={() => {
-              setShow(prev => !prev)
-            }}
-            className='
-            rounded-full ml-auto
-            hover:bg-violet-100 p-1
-            '>
-              <HiOutlineDotsHorizontal/>
-            </button>
-
-            <div
-            className={`
-            ${!show && "scale-0"}
-            absolute
-            bg-white
-            right-10
-            shadow-[0_0_6px_rgba(40,40,40,.16)]
-            p-1 rounded-md
-            z-10 flex flex-col
-            `}>
-
-                  { post?.created_by === auth.user ?
-                  <button
-                  onClick={() => {
-                    deletePost(post.id)
-                  }}
-                  className='
-                  text-[.9rem] text-red-500
-                  hover:bg-red-100
-                  '>
-                    Delete
-                  </button>
-                  :
-                  ""
-                  }
-
-              <button
-              onClick={() => {
-                followUser(post?.created_by)
-              }}
-              className='
-              text-[.9rem]
-              '>
-                {`${auth?.profile?.followed?.includes(post.created_by) ? "unfollow " : "follow "}`}
-                {`${profile?.display_name}`}
-              </button>
-            </div>
+            <VeriticalActionBar
+            creator={profile}
+            created_by={post?.created_by}
+            ID={post?.ID}
+            />
 
           </div>
 

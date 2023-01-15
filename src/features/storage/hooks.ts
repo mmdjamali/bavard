@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect , useState } from "react";
 import { getFile } from "./utils";
 import supabase from "../../libs/supabase";
 import store from "../../redux/store";
+import { useQuery } from "react-query";
 
 export const useGetPicture = (
     from : string,
@@ -45,15 +46,52 @@ export const useGetPicture = (
 }
 
 export const useGetPosts = (max : number) => {
+
+  const profile = store.getState().AuthSlice.profile;
+  
   const [posts , setPosts] = useState<any>([])
   const [pending , setPending] = useState<boolean>(false)
   const [err , setErr] = useState<null | string>()
   const [hasMore , setHasMore] = useState<boolean>(false)
   
-  useEffect(() => {
-    let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
+  // useEffect(() => {
+  //   let profile : {followed : string[] , uid : string } | null = store.getState().AuthSlice.profile;
 
+  //   const func = async () => {
+  //     if(!profile) return
+  //     let array = [...profile?.followed,profile.uid]
+
+  //     setPending(true)
+
+  //     const {count , data , error} = await supabase
+  //         .from("posts")
+  //         .select("*",{count : "exact"})
+  //         .in("created_by", array)
+  //         .order('created_at', { ascending: false })
+  //         .range(0 , max)
+      
+  //     if(error || !data){
+  //       console.log(error)
+  //       setPending(false)
+  //       setErr(error.toString())
+  //       setPosts([])
+  //       setHasMore(false)
+  //       return
+  //     }
+
+  //     setPending(false)
+  //     setErr(null)
+  //     setPosts(data)
+  //     setHasMore(max - 1 <= (count || 0))
+
+  //   }
+  //   func()
+
+  // },[max])
+
+  useEffect(() => {
     const func = async () => {
+      let profile :any = store.getState().AuthSlice.profile;
       if(!profile) return
       let array = [...profile?.followed,profile.uid]
 
@@ -61,10 +99,10 @@ export const useGetPosts = (max : number) => {
 
       const {count , data , error} = await supabase
           .from("posts")
-          .select("*",{count : "exact"})
+          .select("ID,parent,replying,created_by",{count : "exact"})
           .in("created_by", array)
           .order('created_at', { ascending: false })
-          .range(0 , max)
+          .range(0, max)
       
       if(error || !data){
         console.log(error)
@@ -78,12 +116,10 @@ export const useGetPosts = (max : number) => {
       setPending(false)
       setErr(null)
       setPosts(data)
-      setHasMore(max - 1 <= (count || 0))
-
+      setHasMore(max - 1 < (count || 0))
     }
     func()
-
-  },[max])
+  },[max,profile])
 
   useEffect(() : any => {
 
@@ -142,7 +178,7 @@ export const useGetPosts = (max : number) => {
 
     return () => supabase.removeChannel(channel)
 
-  },[posts,max])
+  },[max,profile])
   
   return[posts,pending,err,hasMore]
 

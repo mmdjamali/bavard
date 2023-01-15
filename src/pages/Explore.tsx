@@ -26,7 +26,7 @@ const Explore = () => {
     w-full
     xs:w-[min(calc(100%_-_79px),450px)]
     sm:w-[min(calc(100%_-_14rem),450px)]
-    relative border-x-[1px]
+    relative border-x-[1px] border-color
     min-h-screen flex flex-col
     '>
 

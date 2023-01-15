@@ -1,4 +1,4 @@
-import React , { useState } from 'react'
+import React , { useState , useEffect} from 'react'
 import { useGetPost } from '../hooks'
 import { useGetUserProfile } from '../../auth/hooks'
 import { useGetPicture } from '../../storage/hooks'
@@ -11,7 +11,8 @@ import { rootType } from '../../../redux/store'
 import HorizontalActionBar from './HorizontalActionBar'
 import { Link } from 'react-router-dom'
 import Loader from '../../../components/Loader'
-import { deletePost } from '../functions'
+import { deletePost, deleteRepost } from '../functions'
+import VeriticalActionBar from './VeriticalActionBar'
 
 type props = {
   pId : string,
@@ -25,18 +26,18 @@ const Repost : React.FC<props> = ({
   created_at,
   repostID
 }) => {
-  const auth : any = useSelector((state : rootType) => state.AuthSlice);
+  const user : any = useSelector((state : rootType) => state.AuthSlice.user);
   const [show , setShow] = useState<boolean>(false)
 
   const [post,err,pending] : any = useGetPost(pId);
-  const [reposter] = useGetUserProfile(rId);
+  const [reposter] = useGetUserProfile(rId || "");
   const [profile] = useGetUserProfile(post?.created_by || "");
   const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
 
   let time = TimeFormater(created_at)
 
   if(pending)return(
-    <Loader sx="h-fit my-3"/>
+    <Loader sx="h-fit my-12"/>
   )
 
   return (
@@ -45,7 +46,7 @@ const Repost : React.FC<props> = ({
       bg-white hover:bg-violet-50
       transition-colors
       flex flex-col
-      border-b-[1px]
+      border-b-[1px] border-color
       cursor-pointer
       '>
         <span
@@ -147,55 +148,12 @@ const Repost : React.FC<props> = ({
                   {time || "..."}
                 </p>
     
-                <button
-                onClick={() => {
-                  setShow(prev => !prev)
-                }}
-                className='
-                rounded-full ml-auto
-                hover:bg-violet-100 p-1
-                '>
-                  <HiOutlineDotsHorizontal/>
-                </button>
-    
-                <div
-                className={`
-                ${!show && "scale-0"}
-                absolute
-                bg-white
-                right-10
-                shadow-[0_0_6px_rgba(40,40,40,.16)]
-                p-1 px-3 rounded-md
-                z-10
-                flex flex-col gap-1
-                `}>
-
-                  { rId === auth.user ?
-                  <button
-                  onClick={() => {
-                    deletePost(repostID)
-                  }}
-                  className='
-                  text-[.9rem] text-red-500
-                  hover:font-medium
-                  '>
-                    Delete
-                  </button>
-                  :
-                  ""
-                  }
-
-                  <button
-                  onClick={() => {
-                    followUser(post?.created_by)
-                  }}
-                  className='
-                  text-[.9rem]
-                  '>
-                    {`${auth?.profile?.followed?.includes(post?.created_by) ? "unfollow " : "follow "}`}
-                    {`${profile?.display_name}`}
-                  </button>
-                </div>
+                <VeriticalActionBar
+                ID={repostID}
+                created_by={rId}
+                creator={user}
+                parent={pId}
+                />
     
               </div>
     
@@ -228,7 +186,7 @@ const Repost : React.FC<props> = ({
     
               <HorizontalActionBar
               post={post}
-              user={auth.user}/>
+              user={user}/>
     
             </div>
     

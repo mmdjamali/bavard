@@ -32,7 +32,7 @@ const Bookmarks = () => {
     w-full
     xs:w-[min(calc(100%_-_79px),450px)]
     sm:w-[min(calc(100%_-_14rem),450px)]    
-    min-h-screen border-x-[1px]
+    min-h-screen border-x-[1px] border-color
     '/>
   )
 
@@ -42,7 +42,7 @@ const Bookmarks = () => {
     w-full
     xs:w-[min(calc(100%_-_79px),450px)]
     sm:w-[min(calc(100%_-_14rem),450px)]    
-    min-h-screen border-x-[1px]
+    min-h-screen border-x-[1px] border-color
     '
     >
 

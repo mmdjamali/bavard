@@ -17,7 +17,7 @@ const BookMarkedPosts : React.FC<props> = ({
             return(
                 <Post
                 key={idx}
-                post={item}
+                ID={item?.ID}
                 />
             )
         })}

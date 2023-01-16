@@ -5,6 +5,7 @@ import { useGetPosts } from '../features/storage/hooks';
 import { Post } from '../features/posts';
 import Loader from '../components/Loader';
 import Repost from '../features/posts/components/Repost';
+import SkeletonPost from '../features/posts/components/SkeletonPost';
 
 const Home = () => {
   useSidebarChanger("Home")

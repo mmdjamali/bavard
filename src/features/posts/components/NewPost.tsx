@@ -79,7 +79,7 @@ const NewPost :React.FC = () => {
           
           <div
           className='
-          flex w-full my-2 
+          flex w-full my-4 
           justify-end
           '>
 

@@ -3,9 +3,15 @@ import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { useGetUserProfile } from '../../auth/hooks'
 import { useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
-import { changeReposts, deletePost } from '../functions'
+import { bookmarkPost, changeReposts, deletePost } from '../functions'
 import { followUser } from '../../auth/utils'
-import { RiDeleteBin7Line , RiUserUnfollowLine , RiUserAddLine } from "react-icons/ri"
+import { 
+    RiDeleteBin7Line , 
+    RiUserUnfollowLine , 
+    RiUserAddLine ,
+    RiBookmarkLine ,
+    RiBookmarkFill
+} from "react-icons/ri"
 
 type props = {
     ID : string,
@@ -79,7 +85,7 @@ const VeriticalActionBar : React.FC<props> = ({
                 w-full
                 flex
                 items-center
-                justify-center
+                justify-left
                 gap-2
                 '>
                 <RiDeleteBin7Line/>
@@ -96,7 +102,7 @@ const VeriticalActionBar : React.FC<props> = ({
                 py-1
                 flex
                 items-center
-                justify-center
+                justify-left
                 gap-2
                 '>
                 {profile?.followed?.includes(created_by) ? <> <RiUserUnfollowLine/> Unfollow </> : <> <RiUserAddLine/>Fallow </>}
@@ -104,6 +110,34 @@ const VeriticalActionBar : React.FC<props> = ({
                 </button>
                 }
 
+                    <button
+                    onClick={() => {
+                        bookmarkPost(profile,ID)
+                    }}
+                    className='
+                    text-[.9rem] text-neutral-500
+                    hover:bg-violet-100
+                    px-2
+                    py-1
+                    text-left
+                    w-full
+                    flex
+                    flex-row
+                    items-center
+                    justify-left
+                    gap-2
+                    '>
+                      {
+                      profile?.bookmarked?.includes(ID) ?
+
+                        <><RiBookmarkFill/> Remove Bookmark </>
+
+                        :
+
+                        <><RiBookmarkLine/> Add Bookmark </>
+
+                      }
+                    </button>
             
             </>
             }

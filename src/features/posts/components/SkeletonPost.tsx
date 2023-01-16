@@ -1,7 +1,7 @@
 import React from 'react'
 
 type props = {
-  sx : string
+  sx ?: string
 }
 
 const SkeletonPost : React.FC<props> = ({
@@ -20,7 +20,7 @@ const SkeletonPost : React.FC<props> = ({
 
         {/* Left section of post*/}
 
-        <div
+      <div
       className='relative'>
 
               <div
@@ -28,6 +28,7 @@ const SkeletonPost : React.FC<props> = ({
               w-[45px] h-[45px] flex items-center justify-center
               bg-violet-200 rounded-full
               text-violet-dark text-[1.25rem] m-3
+              animate-pulse
               '>
               </div>
           
@@ -48,34 +49,41 @@ const SkeletonPost : React.FC<props> = ({
           className='
           relative
           flex w-[100%] pr-4
+          gap-2
           '>
 
-            <p
+            <span
             className='
-            font-medium
-            text-neutral-700
-            text-[.9rem]
+            bg-neutral-400
+            inline-block
+            w-[2.5rem]
+            h-2
+            animate-pulse
+            rounded-md
             overflow-hidden text-ellipsis
-            '>
-            </p>
+            '/>
 
-            <p
+            <span
             className='
-            mx-1 font-normal
-            text-neutral-500
-            text-[.9rem]
+            bg-neutral-400
+            inline-block
+            w-[4rem]
+            h-2
+            animate-pulse
+            rounded-md
             overflow-hidden text-ellipsis
-            '>
-            </p>
+            '/>
 
-            <p
+            <span
             className='
-            mx-1 font-normal
-            text-neutral-500
-            text-[.8rem]
+            bg-neutral-400
+            inline-block
+            w-[1.5rem]
+            h-2
+            animate-pulse
+            rounded-md
             overflow-hidden text-ellipsis
-            '>
-            </p>
+            '/>
 
             {/* VeriticalActionBar */}
             
@@ -86,17 +94,81 @@ const SkeletonPost : React.FC<props> = ({
           <div
           className='
           relative w-[100%] pr-4
+          flex flex-col
+          gap-1.5
           '>
-            <p
+
+            <span
             className='
-            break-words text-neutral-700
-            text-[.9rem]
-            '>
+            bg-neutral-300
+            inline-block
+            w-[80%]
+            mt-3
+            h-2
+            animate-pulse
+            rounded-md
+            overflow-hidden text-ellipsis
+            '/>
+
+            <span
+            className='
+            bg-neutral-300
+            inline-block
+            w-[90%]
+            h-2
+            animate-pulse
+            rounded-md
+            overflow-hidden text-ellipsis
+            '/>
+
+            <span
+            className='
+            bg-neutral-300
+            inline-block
+            w-[40%]
+            h-2
+            animate-pulse
+            rounded-md
+            overflow-hidden text-ellipsis
+            '/>
             
-            </p>
+            
           </div>
 
-            {/* HorizontalActionBar */}
+            <div
+            className='
+            flex
+            items-center
+            justify-evenly
+            mt-3
+            '>
+
+              <span
+              className='
+              w-5 h-5
+              rounded-full
+              bg-neutral-300
+              animate-pulse
+              '
+              />
+
+              <span
+              className='
+              w-5 h-5
+              rounded-full
+              bg-neutral-300
+              animate-pulse
+              '/>
+
+              <span
+              className='
+              w-5 h-5
+              rounded-full
+              bg-neutral-300
+              animate-pulse
+              '/>
+
+            </div>
 
         </div>
 

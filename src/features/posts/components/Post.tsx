@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import { useGetPost } from '../hooks'
 import VeriticalActionBar from './VeriticalActionBar'
 import Loader from '../../../components/Loader'
+import SkeletonPost from './SkeletonPost'
 
 type props = {
   ID : any,
@@ -29,8 +30,8 @@ const Post : React.FC<props> = ({
 
   let time = TimeFormater(post?.created_at || "")
 
-  if(pending) return(
-    <Loader sx="h-fit py-8"/>
+  if(pending || !post) return(
+    <SkeletonPost/>
   )
 
   return (

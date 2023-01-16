@@ -245,3 +245,44 @@ export const changeReposts = async (pId : string) => {
     console.log(update)
 }
 
+export const bookmarkPost = async ( 
+  profile : {bookmarked : string[] , uid : string} ,
+  pId : string
+) => {
+  console.log(profile)
+
+  if(!profile.bookmarked){
+      const l = await supabase
+        .from("profiles")
+        .update({
+          bookmarked : [pId]
+        })
+        .eq("uid",profile?.uid)
+
+      return
+  }
+
+  if(!profile?.bookmarked?.includes(pId)){
+
+    const js = await supabase
+        .from("profiles")
+        .update({
+          bookmarked : [...profile?.bookmarked, pId]
+        })
+        .eq("uid",profile?.uid);
+    
+    return;
+  }
+
+  let array = [...profile?.bookmarked];
+  let idx = array.findIndex((item) => item === pId);
+  array.splice(idx,1);
+
+  const l = await supabase
+        .from("profiles")
+        .update({
+          bookmarked : array
+        })
+        .eq("uid",profile?.uid)
+
+}

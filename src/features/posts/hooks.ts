@@ -141,3 +141,34 @@ export const useCheckForLike = (
 
     return [liked , setLiked]
 }
+
+export const useCheckForReply = (
+    postID : string,
+    user :string | null
+) => {
+    const [replied , setReplied] = useState<boolean>(false)
+
+    useEffect(() => {
+        if(!postID ||!user) return
+
+        const func = async () => {
+            const { error , data } = await supabase
+                    .from("posts")
+                    .select("ID")
+                    .match({"replying" : postID , "created_by" : user})
+                    
+            if(error || !data[0]) {
+                setReplied(false)
+                return
+            }
+
+            if(data[0]){
+                setReplied(true)
+                return 
+            }
+        }
+        func()
+    },[postID , user])
+
+    return [replied]
+}

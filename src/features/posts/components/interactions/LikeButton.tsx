@@ -25,6 +25,10 @@ const LikeButton : React.FC<props> = ({
   const [ likes , setLikes ] = useState<number>(post.likes)
   const [disable , setDisable] = useState<boolean>(false)
 
+  useEffect(() => {
+    setLikes(post?.likes)
+  },[post])
+
   return (
     <div
     className='

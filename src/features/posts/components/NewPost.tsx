@@ -6,7 +6,22 @@ import { rootType } from '../../../redux/store'
 import { RiUserLine } from 'react-icons/ri'
 import { CgSpinner } from "react-icons/cg"
 
-const NewPost :React.FC = () => {
+type props = {
+  sx? : string,
+  placeholder? : string,
+  property? : string | null,
+  value? : string | null,
+  cleanup : () => void
+}
+
+const NewPost :React.FC<props> = ({
+  sx,
+  placeholder,
+  property,
+  value,
+  cleanup
+
+}) => {
   const {user , profile} : any = useSelector((state : rootType) => state.AuthSlice)
   const [content , setContent] = useState<string>("")
   const [loading , setLoading] = useState<boolean>(false)
@@ -17,10 +32,11 @@ const NewPost :React.FC = () => {
 
   return (
     <div
-    className='
+    className={`
     flex w-full
     border-b-[1px] border-color
-    '
+    ${sx ? sx : ""}
+    `}
     >
 
         {!!pp ? <img 
@@ -43,7 +59,25 @@ const NewPost :React.FC = () => {
             </div>
         }
 
-        <div
+        <form
+        onSubmit={async (e) => {
+          e.preventDefault()
+
+          if(!content && (content.length > 180)) return
+          
+          try{
+            setLoading(true)
+            await createPost(content , user , property || "" , value || "")
+            setLoading(false)
+            setContent("")
+            cleanup && cleanup()
+          }
+          catch(err){
+            console.log(err)
+            setLoading(false)
+            cleanup && cleanup()
+          }
+        }}
         className='
         flex flex-col
         w-[calc(100%_-_75px)]
@@ -51,7 +85,7 @@ const NewPost :React.FC = () => {
 
           <textarea
           rows={1}
-          placeholder="What's up?"
+          placeholder={placeholder || "What's up?"}
           className='
           w-[90%]
           relative
@@ -120,20 +154,6 @@ const NewPost :React.FC = () => {
             {/* TODO! */}
             {/* Create a custom component for this button */}
             <button
-            onClick={async () => {
-              if(!content && (content.length > 180)) return
-              
-              try{
-                setLoading(true)
-                await createPost(content , user)
-                setLoading(false)
-                setContent("")
-              }
-              catch(err){
-                console.log(err)
-                setLoading(false)
-              }
-            }}
             className={`
             ${(content && (content.length <= 180)) ? "bg-violet-500" : "bg-violet-300 pointer-events-none"} 
             text-white
@@ -146,7 +166,7 @@ const NewPost :React.FC = () => {
 
           </div>
 
-        </div>
+        </form>
         
     </div>
   )

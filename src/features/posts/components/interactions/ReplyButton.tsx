@@ -1,8 +1,9 @@
 import React , {useState , useEffect, useRef} from 'react'
 import { IconType } from 'react-icons/lib'
 import { useCheckForReply } from '../../hooks'
-import { useSelector } from 'react-redux'
+import { useSelector , useDispatch } from 'react-redux'
 import { rootType } from '../../../../redux/store'
+import { setActive, setProperty , setValue } from '../../../../redux/NewPostPopupSlice'
 
 type props = {
     FilledIcon : IconType,
@@ -23,7 +24,7 @@ const ReplyButton : React.FC<props> = ({
   const [replies , setReplies] = useState<number>(post.replies);
   const [replied] = useCheckForReply(post?.ID, user);
 
-  const container = useRef<null | HTMLDivElement>(null)
+  const dispatch = useDispatch()
 
   return (
     <div
@@ -33,6 +34,9 @@ const ReplyButton : React.FC<props> = ({
     '>
       <button
       onClick={() => {
+        dispatch(setActive(true))
+        dispatch(setProperty("replying"))
+        dispatch(setValue(post?.ID))
       }}
       className={`
       transition-colors

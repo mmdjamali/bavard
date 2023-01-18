@@ -1,13 +1,13 @@
 import {
     RiHeartLine , RiHeartFill , RiRepeatFill,
-    RiBookmarkLine , RiBookmarkFill , RiEyeFill , RiChat1Line
+    RiBookmarkLine , RiBookmarkFill , RiEyeFill , RiChat1Line, RiChat1Fill
 } from "react-icons/ri"
 
 export const horizontalSectionBar = [
     {
         title : "replies",
         linedIcon : RiChat1Line,
-        filledIcon : RiChat1Line,
+        filledIcon : RiChat1Fill,
         color : "hover:bg-violet-200/50 hover:text-violet-500",
         fillColor : "text-violet-500",
         property:  "replies"

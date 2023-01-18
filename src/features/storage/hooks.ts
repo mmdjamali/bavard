@@ -99,7 +99,7 @@ export const useGetPosts = (max : number) => {
 
       const {count , data , error} = await supabase
           .from("posts")
-          .select("ID,parent,replying,created_by,created_at",{count : "exact"})
+          .select("ID,parent,replying,created_by,created_at,replying",{count : "exact"})
           .in("created_by", array)
           .order('created_at', { ascending: false })
           .range(0, max)

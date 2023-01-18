@@ -115,7 +115,7 @@ const VeriticalActionBar : React.FC<props> = ({
                         bookmarkPost(profile,ID)
                     }}
                     className='
-                    text-[.9rem] text-neutral-500
+                    text-[.9rem] text-neutral-700
                     hover:bg-violet-100
                     px-2
                     py-1

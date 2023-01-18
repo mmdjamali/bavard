@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 import { rootType } from "./redux/store"
 import Loader from "./components/Loader"
 import { QueryClientProvider , QueryClient } from 'react-query'
+import { NewPostPopup } from "./features/posts"
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Auth = React.lazy(() => import("./pages/Auth"))
@@ -28,6 +29,7 @@ function App() {
   return (
     <QueryClientProvider client={new QueryClient}>
     <Sidebar/>
+    <NewPostPopup/>
     <Suspense fallback={<Loader/>}>
       <Routes>
         <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>

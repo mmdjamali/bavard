@@ -8,7 +8,10 @@ import { rootType } from '../../redux/store'
 import { RiQuillPenLine } from "react-icons/ri";
 
 const BottomNavbar = () => {
-    const current = useSelector((state : rootType) => state.SidebarSlice.current)
+  const current = useSelector((state : rootType) => state.SidebarSlice.current)
+  const { profile , user , pending } = useSelector((state : rootType) => state.AuthSlice)
+
+  if(!profile ||!user || pending) return(<></>)
 
   return (
     <div

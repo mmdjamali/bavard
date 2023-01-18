@@ -4,18 +4,48 @@ import store from "../../redux/store";
 
 export const createPost = async (
     content : string,
-    created_by : string
+    created_by : string,
+    property? : string,
+    value? :string
 ) => {
+    let postData = (property && value) ? 
+    {
+      content,
+      created_by,
+      [property] : value
+    }
+    :
+    {
+      content,
+      created_by,
+    }
+
     const { error } = await supabase
             .from("posts")
-            .insert([{
-                content,
-                created_by
-            }]);
+            .insert([postData]);
 
     if(error){
         console.log(error)
         return
+    }
+
+    if(property && value){
+      const { count , error } = await supabase
+          .from("posts")
+          .select("*",{count : "exact"})
+          .eq(property,value)
+
+      if(error){
+
+      }
+
+      const update = await supabase
+      .from("posts")
+      .update({
+        [property === "replying" ? "replies" : "reposts"] : count
+      })
+      .eq("ID",value)
+
     }
 }
 
@@ -166,7 +196,7 @@ export const likePost = async (pId : string) => {
 export const repost = async (post : any , reposted : number | boolean | PostgrestError | null) => {
   let { user } = store.getState().AuthSlice;
 
-    if(post?.created_by === user) return;
+    if(!user) return
 
     if(reposted) return
                         

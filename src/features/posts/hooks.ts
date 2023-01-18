@@ -9,6 +9,10 @@ export const useGetPost = (pId : string) => {
     const [pending, setPending] = useState(true)
 
     useEffect(() => {
+        if(!pId) {
+            setPending(false)
+            return
+        }
         const func = async () => {
             const { data , error } = await supabase
                 .from("posts")

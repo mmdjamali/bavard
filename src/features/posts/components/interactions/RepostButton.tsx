@@ -4,8 +4,9 @@ import { IconType } from 'react-icons/lib'
 import { RiQuillPenLine } from "react-icons/ri";
 import { repost } from '../../functions';
 import { useCheckForRepost } from '../../hooks';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { rootType } from '../../../../redux/store';
+import { setActive as setPopupActive , setProperty , setValue } from '../../../../redux/NewPostPopupSlice';
 
 type props = {
     FilledIcon : IconType,
@@ -27,6 +28,8 @@ const RepostButton : React.FC<props> = ({
   const [ active , setActive ] = useState<boolean>(false)
 
   const container = useRef<any>()
+
+  const dispatch = useDispatch()
   
   return (
     <div
@@ -87,7 +90,7 @@ const RepostButton : React.FC<props> = ({
       flex-col
       items-start
       whitespace-nowrap
-      ${ (active && !reposted && user !== post.created_by) ? "scale-100" : "scale-0"}
+      ${ active ? "scale-100" : "scale-0"}
       rounded-md
       overflow-hidden
       transition-all
@@ -97,6 +100,11 @@ const RepostButton : React.FC<props> = ({
       `}>
 
         <button
+        onClick={() => {
+          dispatch(setPopupActive(true))
+          dispatch(setProperty("parent"))
+          dispatch(setValue(post.ID))
+        }}
         className='
         hover:text-emerald-600
         hover:bg-emerald-100

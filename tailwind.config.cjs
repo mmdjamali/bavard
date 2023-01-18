@@ -15,6 +15,15 @@ module.exports = {
       screens:{
         "xs" : "400px"
       },
+      keyframes:{
+        "slide-down" : {
+          "0%" : {transform: "translateY(25px)"},
+          "100%" : {transform : "translateY(0)"},
+        },
+      },
+      animation : {
+        "slide-down" : "slide-down 1s forwards",
+      }
     },
   },
   plugins: [],

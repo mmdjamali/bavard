@@ -11,7 +11,7 @@ type props = {
   placeholder? : string,
   property? : string | null,
   value? : string | null,
-  cleanup : () => void
+  cleanup? : () => void
 }
 
 const NewPost :React.FC<props> = ({

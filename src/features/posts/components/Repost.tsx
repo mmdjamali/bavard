@@ -14,37 +14,40 @@ import Loader from '../../../components/Loader'
 import { deletePost, deleteRepost } from '../functions'
 import VeriticalActionBar from './VeriticalActionBar'
 import SkeletonPost from './SkeletonPost'
+import Post from './Post'
 
 type props = {
   pId : string,
   rId : string,
-  created_at : string,
-  repostID : string
+  parent : string,
+  repostID : string,
+  content : string
 }
 const Repost : React.FC<props> = ({
   pId,
   rId,
-  created_at,
-  repostID
+  parent,
+  repostID,
+  content,
 }) => {
   const user : any = useSelector((state : rootType) => state.AuthSlice.user);
   const [show , setShow] = useState<boolean>(false)
 
-  const [post,err,pending] : any = useGetPost(pId);
+  const [post,err,pending] : any = useGetPost(content ? pId : parent);
   const [reposter] = useGetUserProfile(rId || "");
   const [profile] = useGetUserProfile(post?.created_by || "");
   const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
 
-  let time = TimeFormater(created_at)
+  let time = TimeFormater(post?.created_at || "")
 
-  if(pending || !post) return(
+  if(pending || !post || !pp) return(
     <SkeletonPost/>
   )
 
   return (
       <div
       className='
-      bg-white hover:bg-violet-50
+      bg-white md:hover:bg-violet-50
       transition-colors
       flex flex-col
       border-b-[1px] border-color
@@ -54,7 +57,7 @@ const Repost : React.FC<props> = ({
         className='
         ml-3 py-1 flex
         text-[.9rem]
-        font-medium
+        font-normal
         text-neutral-600
         gap-1
         '>
@@ -62,7 +65,7 @@ const Repost : React.FC<props> = ({
           <p>{"reposted by"}</p>
           <Link
           className='
-          hover:text-neutral-700
+          text-violet-500
           hover:underline
           '
           to={""}>
@@ -78,7 +81,7 @@ const Repost : React.FC<props> = ({
             {/* Left section of post*/}
     
             <div
-          className='relative'>
+            className='relative'>
     
               { pp ? <img
                   src={`${pp ? pp : ""}`}
@@ -169,19 +172,24 @@ const Repost : React.FC<props> = ({
                 text-[.9rem]
                 '>
                 { post?.content.replaceAll("\n"," mm✧mm ").split(" ").map((item : string , idx : number) => {
-                if(item === "mm✧mm") return <br/>
-                
-                if(item[0] === "#")
-                return(<span
-                key={idx}
-                className='text-violet-600'
-                >
-                {item + " "}
-                </span>)
+               if(item === "mm✧mm") return <br key={idx}/>
 
-              return item + " "
+               if(item[0] === "#" && /^[a-zA-Z0-9_#]*$/.test(item)) 
+               return(<Link
+               to={"/explore/"+item.replaceAll(/[^a-zA-Z0-9_]/g, '') }
+               key={idx}
+               className='
+               text-violet-600
+               hover:underline
+               '
+               >
+               {item + " "}
+               </Link>)
 
-            }) || "" }
+               return item + " "
+
+               }) || "" 
+                }
                 </p>
               </div>
     
@@ -192,6 +200,26 @@ const Repost : React.FC<props> = ({
             </div>
     
         </div>
+        
+        { content ? 
+          <div
+        className='
+        w-[90%]
+        mx-auto
+        overflow-hidden
+        rounded-md
+        border-[1px]
+        mb-2
+        '
+        >
+          <Post
+          ID={parent}
+          />
+          </div>
+          :
+          <></>
+        }
+
       </div>
   )
 }

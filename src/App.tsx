@@ -8,6 +8,7 @@ import { rootType } from "./redux/store"
 import Loader from "./components/Loader"
 import { QueryClientProvider , QueryClient } from 'react-query'
 import { NewPostPopup } from "./features/posts"
+import LoaderLogo from "./components/LoaderLogo"
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Auth = React.lazy(() => import("./pages/Auth"))
@@ -24,7 +25,7 @@ function App() {
 
   if(error) return(<p>Error!!</p>)
 
-  if(pending) return(<Loader/>)
+  if(pending) return(<LoaderLogo/>)
 
   return (
     <QueryClientProvider client={new QueryClient}>

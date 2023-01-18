@@ -83,9 +83,10 @@ const Home = () => {
                 <Repost
                 repostID={post?.ID}
                 key={idx+Math.random()}
-                created_at={post?.created_at}
-                pId={post?.parent}
+                parent={post?.parent}
+                pId={post?.ID}
                 rId={post?.created_by}
+                content={post?.content}
                 />
             )
 

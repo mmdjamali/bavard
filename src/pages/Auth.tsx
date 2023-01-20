@@ -1,22 +1,25 @@
 import React , { useState } from 'react'
 import {Login , Signup} from "../features/auth"
+import useSidebarChanger from '../hooks/useSidebarChanger'
 
 const Auth : React.FC = () => {
   const [isLogin , setIsLogin] = useState<boolean>(true)
-
+  useSidebarChanger("login")
   return (
     <div className="flex flex-row w-[100%]">
 
         <div className="
-        hidden md:block w-[40%] h-screen
+        hidden sm:block md:w-[40%]
+        lg:w-[50%]
+        h-screen
         bg-violet-500
         "/>
 
         <div
         className='
-        w-full h-screen
+        w-full md:w-[60%] h-screen
+        lg:w-[50%]
         flex flex-col items-center relative
-
         '>
           
           <div

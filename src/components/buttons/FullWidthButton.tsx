@@ -5,14 +5,21 @@ type props = {
     onClick? : (e : MouseEvent<HTMLButtonElement> ) => void,
     sx? : string | null,
     title : string | React.ReactNode | Element,
-    loading? : boolean
+    loading? : boolean,
+    TYPE? : "button" | "submit" | "reset" | undefined
 }
 
-const FullWidthButton : FC<props> = ({onClick , sx , title , loading}) => {
+const FullWidthButton : FC<props> = ({
+    onClick , 
+    sx , 
+    title , 
+    loading,
+    TYPE
+}) => {
 
     return (
         <button
-        type="submit"
+        type={TYPE ? TYPE : "submit"}
         onClick={onClick}
         className={`
         ${!!loading ? "pointer-events-none" : ""}

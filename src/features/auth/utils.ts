@@ -4,17 +4,12 @@ import { setProfile } from "../../redux/AuthSlice"
 
 type returnString = () => Promise<string>
 
-type createProfile = (
-  name : string,
-  profilepic : any // string | ArrayBuffer | File | null
-) => void
-
 export const logout = () => {
   supabase.auth.signOut()
 }
 
 export const createRandomUser : returnString =  async () => {
-    let username : string | Promise<string> = "@user" + Math.round(Math.random() * 100000000)
+    let username : string | Promise<string> = "@user" + Math.round(Math.random() * 1000000000)
     const {data , error} = await supabase
         .from("profiles")
         .select()
@@ -40,28 +35,40 @@ export const SignUpWithEmail = async (
     })
 }
 
-export const createProfile : createProfile = async ( name , profilepic) => {
+export const createProfile  = async ( 
+  name : string, 
+  profilePic : any ,// string | ArrayBuffer | File | null,
+  imageURL : string | null,
+  username : string,
+  interests : string[] | []
+  ) => {
   try{
     const {data , error} = await supabase.auth.getUser()
+    let pic :any;
     if(error) return
 
-    const pic = await supabase
-        .storage
-        .from("profiles")
-        .upload(
-          `public/${data.user.id}.png`,
-           profilepic
-        )
+      if(!imageURL){
+          pic = await supabase
+          .storage
+          .from("profiles")
+          .upload(
+            `public/${data.user.id}.png`,
+            profilePic
+          )
+      }
+
+    if(pic?.error) return
 
 
     const profile = await supabase
       .from("profiles")
       .insert({
-        profile_picture : pic.data?.path,
+        profile_picture : imageURL ? imageURL : pic.data?.path,
         uid:data?.user?.id,
         display_name : name || "unknown",
-        username : await createRandomUser(),
-        email : data?.user?.email
+        username : username ? "@" + username : await createRandomUser(),
+        email : data?.user?.email,
+        interests
       })
       .select()
 
@@ -167,4 +174,28 @@ export const likePost = async (pid : string) => {
         .update({"followed" : [pid]})
         .eq("uid" , user)
 
+}
+
+export const signInWithLinkedin = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider : "linkedin"
+  })
+}
+
+export const checkForUserName = async (
+  username : string
+) => {
+
+  if(username?.length < 3 || username?.length > 16) return false
+
+  const { data , error } = await supabase
+            .from("profiles")
+            .select("username")
+            .eq("username","@" + username)
+
+            if(error) return false
+
+            if(data.length === 0) return true
+
+            return false
 }

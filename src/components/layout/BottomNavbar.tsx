@@ -13,6 +13,12 @@ const BottomNavbar = () => {
 
   if(!profile ||!user || pending) return(<></>)
 
+  if(
+    !profile ||
+    !user ||
+    current === "login"
+    ) return <></>
+
   return (
     <div
     className='

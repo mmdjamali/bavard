@@ -9,6 +9,7 @@ import Loader from "./components/Loader"
 import { QueryClientProvider , QueryClient } from 'react-query'
 import { NewPostPopup } from "./features/posts"
 import LoaderLogo from "./components/LoaderLogo"
+import { logout } from "./features/auth/utils"
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Auth = React.lazy(() => import("./pages/Auth"))
@@ -22,11 +23,13 @@ function App() {
   const {user , profile , pending , error} = useSelector((state : rootType) => state.AuthSlice)
   useCheckForUser()
   useAuthStateChange()
-
-  if(error) return(<p>Error!!</p>)
+  
+  if(error) {
+    return(<p>Error!!</p>
+  )}
 
   if(pending) return(<LoaderLogo/>)
-
+  
   return (
     <QueryClientProvider client={new QueryClient}>
     <Sidebar/>

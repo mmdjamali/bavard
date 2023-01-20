@@ -5,7 +5,7 @@ import supabase from "../../libs/supabase";
 import { AuthChangeEvent , Session} from "@supabase/supabase-js"
 import { useNavigate } from "react-router-dom";
 import { getFile } from "../storage/utils";
-
+import { setName , setProfileURL , setEmail } from "../../redux/DefaultProfileSlice"; 
 export const useAuthStateChange = () => {
     const navigate = useNavigate()
 
@@ -56,7 +56,6 @@ export const useAuthStateChange = () => {
 export const useCheckForUser = () => {
     const navigate = useNavigate()
     const dispatch = store.dispatch
-    const profile : any = store.getState().AuthSlice.profile;
 
     useEffect(() => {
 
@@ -72,7 +71,6 @@ export const useCheckForUser = () => {
                 dispatch(setPending(false))
                 dispatch(setUser(null))
                 dispatch(setProfile(null))
-                dispatch(setError(data.error.message))
                 return
             }
 
@@ -84,28 +82,39 @@ export const useCheckForUser = () => {
                 return
             }
 
-            dispatch(setUser(data.data.user.id))
-
             const profile = await supabase
                     .from("profiles")
                     .select()
                     .eq("uid",data?.data?.user?.id) 
                     .single()
 
-            if(profile.error){
-                dispatch(setPending(false))
-                dispatch(setProfile(null))
-                dispatch(setError(profile.error.message))
+            if(profile.error && profile.error.code !== "PGRST116"){
+                console.log(profile.error)
                 return
             }
 
-            if(!profile?.data){
+            if(!profile.data){
+                let user_metadata = data?.data?.user?.user_metadata;
+                
+                if(Object.keys(user_metadata).length !== 0){
+                    let email = user_metadata.email;
+                    let idx = email.indexOf("@");
+                    email = email.slice(0,idx)
+
+                    dispatch(setProfileURL(user_metadata?.picture))
+                    dispatch(setName(user_metadata?.name))
+                    dispatch(setEmail(email))
+                }
                 dispatch(setProfile(null))
-                dispatch(setPending(false))
-                navigate("/create-profile")
+                dispatch(setUser(data.data.user.id))
+                setTimeout(() => {
+                    dispatch(setPending(false))
+                    navigate("/create-profile")
+                } , 1000)
                 return
             }
 
+            dispatch(setUser(data.data.user.id))
             dispatch(setPending(false))
             dispatch(setProfile(
                 profile.data
@@ -156,4 +165,30 @@ export const useGetUserProfile = (
     
 
       return [profile]
+}
+
+export const useCheckForUserName = (
+    username :string
+) => {
+    const [available , setAvailable] = useState<boolean>();
+
+    useEffect(() => {
+        const func = async () => {
+            const { data , error } = await supabase
+            .from("profiles")
+            .select("username")
+            .eq("username",username)
+
+            if(error || !data){
+                setAvailable(false)
+                return
+            }
+
+            setAvailable(true)
+
+        }
+        func()
+    },[username])
+
+    return [available]
 }

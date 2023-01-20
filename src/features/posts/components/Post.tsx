@@ -2,7 +2,6 @@ import React , { useEffect, useState } from 'react'
 import { RiUserLine } from 'react-icons/ri'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { useGetUserProfile } from '../../auth/hooks'
-import { useGetPicture } from '../../storage/hooks' 
 import TimeFormater from '../../../utils/timeFormater';
 import { useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
@@ -14,6 +13,7 @@ import { useGetPost } from '../hooks'
 import VeriticalActionBar from './VeriticalActionBar'
 import Loader from '../../../components/Loader'
 import SkeletonPost from './SkeletonPost'
+import { getFile } from '../../storage/utils'
 
 type props = {
   ID : any,
@@ -31,14 +31,14 @@ const Post : React.FC<props> = ({
   const [repliedPost , repliedError , repliedPending] : any = useGetPost(post?.replying || "")
   const [profile] = useGetUserProfile(post?.created_by || "");
   const [repliedProfile] = useGetUserProfile(repliedPost?.created_by || "");
-  const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
-
+  // const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
+  const pp = getFile("profiles" , profile?.profile_picture || "")
   let time = TimeFormater(post?.created_at || "")
-
   if(
     pending || 
     repliedPending|| 
     !post || 
+    !profile ||
     !pp||
     (repliedPost && !repliedProfile)
     ) return(
@@ -78,6 +78,7 @@ const Post : React.FC<props> = ({
         className='relative'>
 
             { pp ? <img 
+                loading='lazy'
                 src={`${pp ? pp : ""}`}
                 draggable="false"
                 className="
@@ -121,7 +122,9 @@ const Post : React.FC<props> = ({
               font-medium
               text-neutral-700
               text-[.9rem]
-              overflow-hidden text-ellipsis
+              whitespace-nowrap
+              overflow-hidden 
+              text-ellipsis
               '>
                 {profile?.display_name.toString() || "..."}
               </p>

@@ -6,6 +6,8 @@ import { MdEmail , MdVpnKey , MdPerson , MdCheck} from 'react-icons/md';
 import { BsGoogle } from "react-icons/bs"
 import { SignUpWithEmail } from '../utils';
 import { TypographyLG , TypographySM } from "../../../components/typographies";
+import { RiLinkedinBoxFill } from "react-icons/ri";
+import { signInWithLinkedin } from "../utils";
 
 const Signup :React.FC = () => {
     const [email , setEmail]  = useState<string>("")
@@ -65,9 +67,11 @@ const Signup :React.FC = () => {
         <AuthDivider/>
 
         <AuthProviderButton
-        icon={<BsGoogle/>}
-        provider="Google"
-        onClick={() => {}}
+        icon={<RiLinkedinBoxFill/>}
+        provider="Linkedin"
+        onClick={() => {
+          signInWithLinkedin()
+        }}
         sx=""
         />
 

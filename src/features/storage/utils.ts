@@ -3,16 +3,22 @@ import supabase from "../../libs/supabase"
 type getFile = (
     bucket : string,
     path : string
-) => Promise< Blob | null >
+) => string | null
 
-export const getFile : getFile = async (bucket , path) => {
+export const getFile : getFile = (bucket , path) => {
+    
+    if(
+        path?.slice(0,7) === "http://" || 
+        path?.slice(0,8) === "https://"
+    ) return path
+
     try{
-    const {data , error} = await supabase
+    const {data} = supabase
             .storage
             .from(bucket)
-            .download(path)
+            .getPublicUrl(path)
 
-    return data
+    return data.publicUrl
     }
     catch(err){
         console.log(err)

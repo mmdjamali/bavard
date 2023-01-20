@@ -7,6 +7,8 @@ import { BsGoogle } from "react-icons/bs"
 import { Link } from "react-router-dom";
 import supabase from "../../../libs/supabase";
 import { TypographyLG , TypographySM } from "../../../components/typographies";
+import { signInWithLinkedin } from "../utils";
+import { RiLinkedinBoxFill } from "react-icons/ri";
 
 function Login() {
 
@@ -78,13 +80,10 @@ function Login() {
               <AuthDivider/>
 
               <AuthProviderButton
-              icon={<BsGoogle/>}
-              provider="Google"
+              icon={<RiLinkedinBoxFill/>}
+              provider="Linkedin"
               onClick={() => {
-                supabase.auth.signOut()
-                .then(() => {
-                  console.log("yo")
-                })
+                signInWithLinkedin()
               }}
               sx=""
               />

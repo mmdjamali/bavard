@@ -1,7 +1,6 @@
 import React , { useState , useEffect} from 'react'
 import { useGetPost } from '../hooks'
 import { useGetUserProfile } from '../../auth/hooks'
-import { useGetPicture } from '../../storage/hooks'
 import { RiUserLine } from 'react-icons/ri'
 import TimeFormater from '../../../utils/timeFormater'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
@@ -15,6 +14,7 @@ import { deletePost, deleteRepost } from '../functions'
 import VeriticalActionBar from './VeriticalActionBar'
 import SkeletonPost from './SkeletonPost'
 import Post from './Post'
+import { getFile } from '../../storage/utils'
 
 type props = {
   pId : string,
@@ -36,11 +36,17 @@ const Repost : React.FC<props> = ({
   const [post,err,pending] : any = useGetPost(content ? pId : parent);
   const [reposter] = useGetUserProfile(rId || "");
   const [profile] = useGetUserProfile(post?.created_by || "");
-  const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
+  const pp = getFile("profiles" , profile?.profile_picture || "")
 
   let time = TimeFormater(post?.created_at || "")
 
-  if(pending || !post || !pp) return(
+  if(
+    pending || 
+    !post || 
+    !pp ||
+    !profile ||
+    !reposter
+  ) return(
     <SkeletonPost/>
   )
 
@@ -53,30 +59,35 @@ const Repost : React.FC<props> = ({
       border-b-[1px] border-color
       cursor-pointer
       '>
-        <span
-        className='
-        ml-3 py-1 flex
-        text-[.9rem]
-        font-normal
-        text-neutral-600
-        gap-1
-        '>
 
-          <p>{"reposted by"}</p>
-          <Link
+        { !content &&
+          <span
           className='
-          text-violet-500
-          hover:underline
-          '
-          to={""}>
-            {reposter?.username}
-          </Link>
+          ml-3 py-1 flex
+          text-[.9rem]
+          font-normal
+          text-neutral-600
+          gap-1
+          '>
 
-        </span>
+            <p>{"reposted by"}</p>
+            <Link
+            className='
+            text-violet-500
+            hover:underline
+            '
+            to={""}>
+              {reposter?.username}
+            </Link>
+
+          </span>
+        }
+
         <div
-        className='
+        className={`
         flex w-full relative
-        '>
+        ${content ? "mt-3" : ""}
+        `}>
     
             {/* Left section of post*/}
     
@@ -209,11 +220,13 @@ const Repost : React.FC<props> = ({
         overflow-hidden
         rounded-md
         border-[1px]
-        mb-2
+        mb-3
+        border-color
         '
         >
           <Post
           ID={parent}
+          sx="border-none"
           />
           </div>
           :

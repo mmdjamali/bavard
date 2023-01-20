@@ -4,46 +4,47 @@ import supabase from "../../libs/supabase";
 import store from "../../redux/store";
 import { useQuery } from "react-query";
 
-export const useGetPicture = (
-    from : string,
-    path : string 
-    ) => {
-      const [picture , setPicture] = useState<string | ArrayBuffer | null>()
+// export const useGetPicture = (
+//     from : string,
+//     path : string 
+//     ) => {
+//       return [""]
+//       const [picture , setPicture] = useState<string | ArrayBuffer | null>()
 
-      useEffect(() => {
+//       useEffect(() => {
 
-        if(!path) return
+//         if(!path) return
 
-        // in order to reduce request numbers
-        // we are saving picture on session storage
-        const storedPic = JSON.parse(sessionStorage.getItem(path) || "{}")
-        if(Object.keys(storedPic).length !== 0){
-          setPicture(storedPic)
-          return
-        }
+//         // in order to reduce request numbers
+//         // we are saving picture on session storage
+//         const storedPic = JSON.parse(sessionStorage.getItem(path) || "{}")
+//         if(Object.keys(storedPic).length !== 0){
+//           setPicture(storedPic)
+//           return
+//         }
 
-        const func = async () => {
-          let reader = new FileReader;
-          let file = await getFile(from , path)
-          if(!file) return
-          if(file.size === 0) return
-          reader.readAsDataURL(file)
-          reader.onload = () => {
-            setPicture(reader.result)
+//         const func = async () => {
+//           let reader = new FileReader;
+//           let file = await getFile(from , path)
+//           if(!file) return
+//           if(file.size === 0) return
+//           reader.readAsDataURL(file)
+//           reader.onload = () => {
+//             setPicture(reader.result)
 
-            // svaing to session storage
-            sessionStorage.setItem(
-              path,
-              JSON.stringify(reader.result)
-            )
-          }
-        }
+//             // svaing to session storage
+//             sessionStorage.setItem(
+//               path,
+//               JSON.stringify(reader.result)
+//             )
+//           }
+//         }
     
-        func()
-      },[path , from])
+//         func()
+//       },[path , from])
 
-    return [picture]
-}
+//     return [picture]
+// }
 
 export const useGetPosts = (max : number) => {
 
@@ -93,7 +94,7 @@ export const useGetPosts = (max : number) => {
     const func = async () => {
       let profile :any = store.getState().AuthSlice.profile;
       if(!profile) return
-      let array = [...profile?.followed,profile.uid]
+      let array = [...profile?.followed || "",profile.uid]
 
       setPending(true)
 

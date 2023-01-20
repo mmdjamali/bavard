@@ -3,18 +3,30 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 
 type props = {
     value : string | ArrayBuffer | File | null,
-    setValue : React.Dispatch<React.SetStateAction<string | ArrayBuffer| File | null>>
+    setValue : React.Dispatch<React.SetStateAction<string | ArrayBuffer| File | null>>,
+    defaultURL : string | null,
+    setDefaultURL : React.Dispatch<React.SetStateAction<string | null>>,
+    sx? : string
 }
 
-const ImageInput : React.FC<props> = ({setValue , value}) => {
-    const [image , setImage] = useState<string | ArrayBuffer | null>()
-    
+const ImageInput : React.FC<props> = ({
+    setValue , 
+    value ,
+    defaultURL,
+    setDefaultURL,
+    sx,
+}) => {
+    const [image , setImage] = useState<string | ArrayBuffer | null>(defaultURL)
+
     return(
-        <>
+        <div
+        className={`
+        ${sx ? sx : ""}
+        `}>
             <input
             id="ImageInput"
             type="file"
-            accept=".png,.svg,.jpeg"
+            accept=".png,.jpeg"
             className="hidden"
             onChange={(e : React.ChangeEvent<HTMLInputElement>) => {
                 let files = e.target.files
@@ -26,6 +38,7 @@ const ImageInput : React.FC<props> = ({setValue , value}) => {
                 reader.onload = () => {
                     setImage(reader.result)
                 }
+                setDefaultURL(null)
                 setValue(files[0])
             }}
             />
@@ -39,9 +52,9 @@ const ImageInput : React.FC<props> = ({setValue , value}) => {
             cursor-pointer bg-center bg-cover
             bg-no-repeat
             `}
-            style={{backgroundImage : `url(${value ? image : ""})`}}
+            style={{backgroundImage : `url(${image ? image : ""})`}}
             >
-                { !value ? 
+                { !image ? 
                     <MdOutlineAddPhotoAlternate
                     className="
                     text-[1.5rem]
@@ -50,7 +63,7 @@ const ImageInput : React.FC<props> = ({setValue , value}) => {
                     /> : ""
                 }
             </label>
-        </>
+        </div>
     )
 }
 

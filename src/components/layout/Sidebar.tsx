@@ -16,7 +16,7 @@ const Sidebar :React.FC = () => {
 
   if(!profile ||!user || pending) return(<></>)
 
-  if(window.location.pathname === "/") return (<></>)  
+  if(current === "login") return (<></>)  
   return (
     <div
     className='

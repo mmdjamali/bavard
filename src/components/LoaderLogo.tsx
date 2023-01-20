@@ -1,4 +1,5 @@
 import React from 'react'
+import Icon from "/app-icon.svg"
 
 type props = {
     sx? : string
@@ -10,13 +11,14 @@ const LoaderLogo : React.FC<props> = ({
   return (
     <div
     className={`
-    w-full h-screen
+    w-full h-screen relative
     flex items-center justify-center
+    flex-col
     ${sx ? sx : ""}
     `}>
 
         <img 
-        src="/app-icon.svg" 
+        src={Icon}
         width="60"
         className='
         animate-slide-down

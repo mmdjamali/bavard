@@ -1,10 +1,10 @@
 import React, { useState , useRef } from 'react'
-import { useGetPicture } from '../../storage/hooks'
 import { createPost } from '../functions'
 import { useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
 import { RiUserLine } from 'react-icons/ri'
 import { CgSpinner } from "react-icons/cg"
+import { getFile } from '../../storage/utils'
 
 type props = {
   sx? : string,
@@ -28,7 +28,7 @@ const NewPost :React.FC<props> = ({
   
   const input = useRef<any>();
   
-  const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
+  const pp = getFile("profiles" , profile?.profile_picture || "")
 
   return (
     <div

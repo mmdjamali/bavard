@@ -1,10 +1,10 @@
 import React , { useEffect, useLayoutEffect, useState } from 'react'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { logout } from '../utils'
-import { useGetPicture } from '../../storage/hooks';
 import {
   RiUserLine , RiLogoutBoxRLine
 } from "react-icons/ri"
+import { getFile } from '../../storage/utils'
 
 type props = {
     profile : any,
@@ -15,7 +15,7 @@ const ProfileButton : React.FC<props> = ({
 }) => {
   const [show , setShow] = useState(false);
 
-  const [pp] = useGetPicture("profiles" , profile.profile_picture)
+  const pp = getFile("profiles" , profile.profile_picture)
   
   return (
     <div
@@ -62,6 +62,7 @@ const ProfileButton : React.FC<props> = ({
                 className='
                 text-neutral-700 text-[14px]
                 text-ellipsis overflow-hidden
+                whitespace-nowrap
                 '
                 >
                 {profile.display_name}
@@ -70,6 +71,7 @@ const ProfileButton : React.FC<props> = ({
                 className='
                 text-neutral-500 text-[12px]
                 text-ellipsis overflow-hidden
+                whitespace-nowrap
                 '>
                 {profile?.username}
                 </span>

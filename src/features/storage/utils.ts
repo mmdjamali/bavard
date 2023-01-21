@@ -12,6 +12,10 @@ export const getFile : getFile = (bucket , path) => {
         path?.slice(0,8) === "https://"
     ) return path
 
+    if(!path){
+        return""
+    }
+
     try{
     const {data} = supabase
             .storage

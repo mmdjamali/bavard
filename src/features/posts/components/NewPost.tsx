@@ -39,7 +39,7 @@ const NewPost :React.FC<props> = ({
     `}
     >
 
-        {!!pp ? <img 
+        { pp ? <img 
             src={`${pp ? pp : ""}`}
             className="
             z-[9]

@@ -125,18 +125,22 @@ const CreateProfile : React.FC = () => {
 
       <div 
       className='
-      flex flex-col justify-center 
+      flex flex-col 
+      justify-center 
       items-center
       w-full md:w-[60%]
       lg:w-[50%]
-      py-12
+      pb-12
       min-h-fit
       '>
-
-        <div
+        {/* TODO: in future if steps become more than
+        two add progressbar. */}
+        {/* <div
         className='
-        flex items-center justify-center
-        mb-[1rem]
+        flex 
+        items-center 
+        justify-center
+        my-[1rem]
         '>
 
           { show ?
@@ -158,9 +162,18 @@ const CreateProfile : React.FC = () => {
             <span
             className='
             flex
-            w-[50px]
+            w-[25px]
             h-[3px]
-            bg-neutral-300
+            bg-violet-500
+            '
+            />
+
+            <span
+            className='
+            flex
+            w-[25px]
+            h-[3px]
+            bg-violet-200
             '
             />
 
@@ -169,8 +182,8 @@ const CreateProfile : React.FC = () => {
             flex
             items-center
             justify-center
-            bg-neutral-300
-            text-neutral-700
+            bg-violet-200
+            text-violet-dark
             w-[30px]
             h-[30px]
             rounded-md
@@ -219,7 +232,7 @@ const CreateProfile : React.FC = () => {
           </>
         }
 
-        </div>
+        </div> */}
 
         <form
         onSubmit={async (e) => {
@@ -324,10 +337,12 @@ const CreateProfile : React.FC = () => {
 
               setLoading(true)
 
-              if(
-                !await checkForUserName(username) ||
-                name?.length > 16
-              ){
+              if(username && !await checkForUserName(username)){
+                setLoading(false)
+                return
+              }
+
+              if(name && name?.length > 16){
                 setLoading(false)
                 return
               }

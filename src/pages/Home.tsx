@@ -39,6 +39,7 @@ const Home = () => {
     min-h-screen flex flex-col
     '
     >
+      
       <div
       className='
       fixed p-2

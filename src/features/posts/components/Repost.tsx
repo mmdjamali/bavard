@@ -1,7 +1,7 @@
 import React , { useState , useEffect} from 'react'
 import { useGetPost } from '../hooks'
 import { useGetUserProfile } from '../../auth/hooks'
-import { RiUserLine } from 'react-icons/ri'
+import { RiRepeatFill, RiUserLine } from 'react-icons/ri'
 import TimeFormater from '../../../utils/timeFormater'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { followUser } from '../../auth/utils'
@@ -34,8 +34,8 @@ const Repost : React.FC<props> = ({
   const [show , setShow] = useState<boolean>(false)
 
   const [post,err,pending] : any = useGetPost(content ? pId : parent);
-  const [reposter] = useGetUserProfile(rId || "");
-  const [profile] = useGetUserProfile(post?.created_by || "");
+  const [reposter] : any = useGetUserProfile(rId || "");
+  const [profile] : any= useGetUserProfile(post?.created_by || "");
   const pp = getFile("profiles" , profile?.profile_picture || "")
 
   let time = TimeFormater(post?.created_at || "")
@@ -64,11 +64,19 @@ const Repost : React.FC<props> = ({
           <span
           className='
           ml-3 py-1 flex
+          items-center
           text-[.9rem]
           font-normal
           text-neutral-600
           gap-1
           '>
+
+            <div
+            className='
+            text-[.8rem]
+            '>
+              <RiRepeatFill/>
+            </div>
 
             <p>{"reposted by"}</p>
             <Link

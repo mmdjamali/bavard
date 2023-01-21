@@ -2,7 +2,7 @@ import React , { Suspense } from "react"
 import { Route , Routes} from "react-router-dom"
 import { Sidebar , BottomNavbar} from "./components/layout"
 import { useCheckForUser , useAuthStateChange} from "./features/auth/hooks"
-import { ProtectedRoute } from "./features/auth"
+import { ProtectedRoute , ProtectedAuth } from "./features/auth"
 import { useSelector } from "react-redux"
 import { rootType } from "./redux/store"
 import Loader from "./components/Loader"
@@ -38,12 +38,12 @@ function App() {
       <Routes>
         <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>
         <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
-        <Route path="/home" element={<ProtectedRoute value={user && profile}><Home/></ProtectedRoute>}/>
-        <Route path="/explore" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>
-        <Route path="/explore/:query" element={<ProtectedRoute value={user && profile}><Explore/></ProtectedRoute>}/>
-        <Route path="/messages" element={<ProtectedRoute value={user && profile}><Messages/></ProtectedRoute>}/>
-        <Route path="/bookmarks" element={<ProtectedRoute value={user && profile}><Bookmarks/></ProtectedRoute>}/>
-        <Route path="/profile" element={<ProtectedRoute value={user && profile}><Profile/></ProtectedRoute>}/>
+        <Route path="/home" element={<ProtectedAuth><Home/></ProtectedAuth>}/>
+        <Route path="/explore" element={<ProtectedAuth><Explore/></ProtectedAuth>}/>
+        <Route path="/explore/:query" element={<ProtectedAuth><Explore/></ProtectedAuth>}/>
+        <Route path="/messages" element={<ProtectedAuth><Messages/></ProtectedAuth>}/>
+        <Route path="/bookmarks" element={<ProtectedAuth><Bookmarks/></ProtectedAuth>}/>
+        <Route path="/profile" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
       </Routes>
     </Suspense>
     <BottomNavbar/>

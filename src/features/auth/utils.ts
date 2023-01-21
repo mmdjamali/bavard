@@ -33,6 +33,7 @@ export const SignUpWithEmail = async (
       email,
       password
     })
+    console.log(error)
 }
 
 export const createProfile  = async ( 
@@ -47,7 +48,7 @@ export const createProfile  = async (
     let pic :any;
     if(error) return
 
-      if(!imageURL){
+      if(!imageURL && profilePic){
           pic = await supabase
           .storage
           .from("profiles")
@@ -185,6 +186,7 @@ export const signInWithLinkedin = async () => {
 export const checkForUserName = async (
   username : string
 ) => {
+  if(!/^[a-zA-Z][a-zA-Z0-9_#]*$/i.test(username)) return false
 
   if(username?.length < 3 || username?.length > 16) return false
 

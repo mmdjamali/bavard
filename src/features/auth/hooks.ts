@@ -2,7 +2,7 @@ import { useState , useEffect, useLayoutEffect } from "react"
 import store from "../../redux/store";
 import { setUser , setProfile , setPending , setError } from "../../redux/AuthSlice";
 import supabase from "../../libs/supabase";
-import { AuthChangeEvent , Session} from "@supabase/supabase-js"
+import { AuthChangeEvent , PostgrestError, Session} from "@supabase/supabase-js"
 import { useNavigate } from "react-router-dom";
 import { getFile } from "../storage/utils";
 import { setName , setProfileURL , setEmail } from "../../redux/DefaultProfileSlice"; 
@@ -64,7 +64,9 @@ export const useCheckForUser = () => {
         
         try{
             dispatch(setPending(true))
-
+            dispatch(setUser(null))
+            dispatch(setProfile(null))
+            
             const data : {error : {status : number}} | any = await supabase.auth.getUser()
             
             if(data.error && data.error.status !== 401){
@@ -107,10 +109,8 @@ export const useCheckForUser = () => {
                 }
                 dispatch(setProfile(null))
                 dispatch(setUser(data.data.user.id))
-                setTimeout(() => {
-                    dispatch(setPending(false))
-                    navigate("/create-profile")
-                } , 1000)
+                dispatch(setPending(false))
+                navigate("/create-profile")
                 return
             }
 
@@ -141,11 +141,15 @@ type profile = {
 export const useGetUserProfile = (
     uid : string
   ) => {
-    const [profile , setProfile] = useState<profile | undefined>()
+    const [profile , setProfile] = useState<profile | null>(null)
+    const [pending , setPending] = useState<boolean>(true)
+    
     useLayoutEffect(() => {
 
         if(!uid) return
 
+        setPending(true)
+        setProfile(null)
         const func = async () => {
             const {data , error} = await supabase
               .from("profiles")
@@ -154,17 +158,19 @@ export const useGetUserProfile = (
               .single()
             
             if(error){
-              console.log(error)
+                setPending(false)
+                setProfile(null)
               return
             }            
             setProfile(data)
+            setPending(false)
 
           }
           func()
     },[uid])
     
 
-      return [profile]
+      return [profile , pending]
 }
 
 export const useCheckForUserName = (
@@ -191,4 +197,42 @@ export const useCheckForUserName = (
     },[username])
 
     return [available]
+}
+
+export const useGetFollowers = (
+    uid : string
+) => {
+    const [followers , setFollowers] = useState<number | null>(null)
+    const [pending , setPending] = useState<boolean>(true)
+    const [err , setErr] = useState<PostgrestError | null>(null)
+
+    useLayoutEffect(() => {
+
+        if(!uid) return
+
+        const func = async () => {
+            setErr(null)
+            setPending(true)
+            setFollowers(null)
+            
+            const {count , error} = await supabase
+              .from("profiles")
+              .select("uid",{count : "exact"})
+              .contains("followed" , [uid])
+            
+            if(error){
+              setErr(error)
+              setPending(false)
+              setFollowers(count)
+              return
+            }
+
+            setErr(null)
+            setPending(false)
+            setFollowers(count)
+
+          }
+          func()
+    },[uid])
+    return [followers , pending , err]
 }

@@ -1,5 +1,5 @@
 import React , { useEffect, useState } from 'react'
-import { RiUserLine } from 'react-icons/ri'
+import { RiChat1Line, RiUserLine } from 'react-icons/ri'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { useGetUserProfile } from '../../auth/hooks'
 import TimeFormater from '../../../utils/timeFormater';
@@ -29,8 +29,8 @@ const Post : React.FC<props> = ({
   const [show , setShow] = useState<boolean>(false)
   const [post , error , pending] : any = useGetPost(ID)
   const [repliedPost , repliedError , repliedPending] : any = useGetPost(post?.replying || "")
-  const [profile] = useGetUserProfile(post?.created_by || "");
-  const [repliedProfile] = useGetUserProfile(repliedPost?.created_by || "");
+  const [profile] : any = useGetUserProfile(post?.created_by || "");
+  const [repliedProfile] : any = useGetUserProfile(repliedPost?.created_by || "");
   // const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
   const pp = getFile("profiles" , profile?.profile_picture || "")
   let time = TimeFormater(post?.created_at || "")
@@ -57,6 +57,9 @@ const Post : React.FC<props> = ({
       { repliedPost &&
       <span
       className='
+      flex
+      flex-row
+      items-center
       text-[.9rem] pl-3 pt-1
       font-normal
       text-neutral-700

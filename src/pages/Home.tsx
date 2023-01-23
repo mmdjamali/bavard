@@ -6,28 +6,12 @@ import { Post } from '../features/posts';
 import Loader from '../components/Loader';
 import Repost from '../features/posts/components/Repost';
 import SkeletonPost from '../features/posts/components/SkeletonPost';
+import InfiniteScroll from '../utils/InfiniteScroll';
 
 const Home = () => {
   useSidebarChanger("Home")
   const [max , setMax] = useState<number>(10)
   const [data , pending , error , hasMore] = useGetPosts(max)
-
-  const observer = useRef<IntersectionObserver | null>(null)
-
-  const setupObserver = useCallback((node : any) => {
-    if(pending) return
-    if(observer.current) observer.current.disconnect()
-    
-    observer.current = new IntersectionObserver(entries => {
-      if(entries[0].isIntersecting){
-        if(pending || !hasMore) return
-        setMax(prev => prev + 10)
-      }
-    })
-
-    if(node) observer.current.observe(node)
-
-  },[pending , hasMore])
 
   return (
     <div
@@ -82,11 +66,10 @@ const Home = () => {
 
             if(post?.parent) return(
                 <Repost
-                repostID={post?.ID}
                 key={idx+Math.random()}
                 parent={post?.parent}
-                pId={post?.ID}
-                rId={post?.created_by}
+                postId={post?.ID}
+                reposterId={post?.created_by}
                 content={post?.content}
                 />
             )
@@ -104,16 +87,12 @@ const Home = () => {
         sx='h-fit py-4'/>
         }
 
-        {
-          !pending && data &&
-          <div
-          ref={setupObserver}
-          className="
-          h-[1px]
-          w-full
-          "
-          />
-        }
+        <InfiniteScroll
+        setMax={setMax}
+        pending={pending}
+        data={data}
+        hasMore={hasMore}
+        />
    
       </div>
     </div>

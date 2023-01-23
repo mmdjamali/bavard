@@ -3,12 +3,11 @@ import { useGetBookmarkedPosts } from '../hooks'
 import { Post } from '../../posts'
 
 type props = {
-    posts : any ,
-    setMax : React.Dispatch<React.SetStateAction<number>>
+    posts : any 
 }
 
 const BookMarkedPosts : React.FC<props> = ({
-    posts , setMax
+    posts
 }) => {
   
   return (

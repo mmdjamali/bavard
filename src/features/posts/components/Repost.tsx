@@ -17,24 +17,22 @@ import Post from './Post'
 import { getFile } from '../../storage/utils'
 
 type props = {
-  pId : string,
-  rId : string,
+  postId : string,
+  reposterId : string,
   parent : string,
-  repostID : string,
   content : string
 }
 const Repost : React.FC<props> = ({
-  pId,
-  rId,
+  postId,
+  reposterId,
   parent,
-  repostID,
   content,
 }) => {
   const user : any = useSelector((state : rootType) => state.AuthSlice.user);
   const [show , setShow] = useState<boolean>(false)
 
-  const [post,err,pending] : any = useGetPost(content ? pId : parent);
-  const [reposter] : any = useGetUserProfile(rId || "");
+  const [post,err,pending] : any = useGetPost(content ? postId : parent);
+  const [reposter] : any = useGetUserProfile(reposterId || "");
   const [profile] : any= useGetUserProfile(post?.created_by || "");
   const pp = getFile("profiles" , profile?.profile_picture || "")
 
@@ -74,19 +72,28 @@ const Repost : React.FC<props> = ({
             <div
             className='
             text-[.8rem]
+            mr-1
             '>
               <RiRepeatFill/>
             </div>
 
-            <p>{"reposted by"}</p>
-            <Link
-            className='
-            text-violet-500
-            hover:underline
-            '
-            to={""}>
-              {reposter?.username}
-            </Link>
+            { reposter?.uid === user ?
+            <span>
+              You reposted
+            </span>
+            :
+            <>
+              <p>{"reposted by"}</p>
+              <Link
+              className='
+              text-violet-500
+              hover:underline
+              '
+              to={"/profile/" + reposter?.username}>
+                {reposter?.username}
+              </Link>
+            </>
+            }
 
           </span>
         }
@@ -151,15 +158,17 @@ const Repost : React.FC<props> = ({
                   {profile?.display_name.toString() || "..."}
                 </p>
     
-                <p
+                <Link
+                to={"/profile/" + profile?.username}
                 className='
                 mx-1 font-normal
                 text-neutral-500
                 text-[.9rem]
                 overflow-hidden text-ellipsis
+                hover:underline
                 '>
                   {profile?.username.toString() || "..."}
-                </p>
+                </Link>
     
                 <p
                 className='
@@ -172,10 +181,9 @@ const Repost : React.FC<props> = ({
                 </p>
     
                 <VeriticalActionBar
-                ID={repostID}
-                created_by={rId}
-                creator={user}
-                parent={pId}
+                ID={postId}
+                created_by={reposter?.uid}
+                creator={reposter}
                 />
     
               </div>

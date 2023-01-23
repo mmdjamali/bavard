@@ -1,14 +1,25 @@
-import React from 'react'
+import React , {useRef , useEffect} from 'react'
 
 type props = {
   value : string,
-  onChange : (e : React.ChangeEvent<HTMLInputElement>) => void
+  onChange : (e : React.ChangeEvent<HTMLInputElement>) => void,
+  checked ?: boolean | undefined
 }
 
 const CheckBox : React.FC<props> = ({
   value,
-  onChange
+  onChange,
+  checked
 }) => {
+  const input = useRef<any>();
+
+  useEffect(() => {
+    if(!input.current) return
+    if(checked === undefined) return
+
+    input.current.checked = checked
+  },[])
+
   return (
     <div
     className='
@@ -17,6 +28,7 @@ const CheckBox : React.FC<props> = ({
     justify-center
     '>
         <input
+        ref={input}
         type="checkbox"
         className='
         w-[20px]

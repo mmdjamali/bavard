@@ -157,7 +157,7 @@ const NewPost :React.FC<props> = ({
             className={`
             ${(content && (content.length <= 180)) ? "bg-violet-500" : "bg-violet-300 pointer-events-none"} 
             text-white
-            px-3 py-1 rounded-md mx-4
+            px-4 py-1 rounded-full mx-4
             `}>
               { loading ? 
               <CgSpinner

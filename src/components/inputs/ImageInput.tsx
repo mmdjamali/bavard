@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useState , useEffect } from "react"
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
+import { getFile } from "../../features/storage/utils"
 
 type props = {
     value : string | ArrayBuffer | File | null,
     setValue : React.Dispatch<React.SetStateAction<string | ArrayBuffer| File | null>>,
-    defaultURL : string | null,
+    defaultURL : string | null ,
     setDefaultURL : React.Dispatch<React.SetStateAction<string | null>>,
     sx? : string
 }
@@ -17,6 +18,10 @@ const ImageInput : React.FC<props> = ({
     sx,
 }) => {
     const [image , setImage] = useState<string | ArrayBuffer | null>(defaultURL)
+
+    useEffect(() => {
+        setImage(defaultURL)
+    },[defaultURL])
 
     return(
         <div

@@ -1,25 +1,26 @@
-import React , { useState } from 'react'
+import React , { useEffect, useState } from 'react'
 import useSidebarChanger from '../hooks/useSidebarChanger'
 import { useSelector } from 'react-redux';
 import { rootType } from '../redux/store';
 import { getFile } from '../features/storage/utils';
-import { RiUserLine } from 'react-icons/ri';
-import { useGetUserPosts } from '../features/posts/hooks';
-import { Post } from '../features/posts';
-import Repost from '../features/posts/components/Repost';
-import { useGetFollowers, useGetUserProfile } from '../features/auth/hooks';
+import { RiMessage2Line, RiUserLine, RiUserSettingsLine } from 'react-icons/ri';
+import { useGetFollowers, useGetUserProfile, useGetUserProfileByUsername } from '../features/auth/hooks';
 import { SkeletonProfile } from '../features/auth';
+import { useGetLikedPosts } from '../features/Profiles/Hooks';
+import LikedPosts from '../features/Profiles/components/LikedPosts';
+import OnlyPosts from '../features/Profiles/components/OnlyPosts';
+import { EditProfileButton, FollowButton, UserPosts } from '../features/Profiles';
+import { useParams } from 'react-router-dom';
 
 const Profile = () => {
-  useSidebarChanger("Profile")
-  const [max,setMax] = useState<number>(10)
-  const user : any = useSelector((state : rootType) => state?.AuthSlice?.user);
-  const [profile , P_pending] : any = useGetUserProfile(user || "");
-
-  const [posts,pending,err,hasMore] = useGetUserPosts(max , user || "")
+  const { username } = useParams()
+  useSidebarChanger(username ? "" : "Profile")
+  const [section , setSection] = useState<string>("Posts")
   
+  const Profile : any = useSelector((state : rootType) => state?.AuthSlice?.profile);
+  const USERNAME = username || Profile?.username;
+  const [profile , P_pending] : any = useGetUserProfileByUsername(USERNAME || "");
   const [followers , F_pending , F_err] = useGetFollowers(profile?.uid || "")
-
   const pp = getFile("profiles",profile?.profile_picture || "");
 
   if(
@@ -139,6 +140,8 @@ const Profile = () => {
         className='
         flex 
         items-center
+        flex-wrap
+        justify-between
         '>
           
           {    
@@ -151,9 +154,9 @@ const Profile = () => {
             z-[9] 
             relative
             rounded-full
-            w-[90px] 
-            h-[90px] 
-            mt-[-45px]
+            w-[100px] 
+            h-[100px] 
+            mt-[-50px]
             border-[4px]
             border-white
             object-cover
@@ -164,11 +167,11 @@ const Profile = () => {
             :
             <div
             className='
-            w-[90px] 
-            h-[90px] 
+            w-[100px] 
+            h-[100px] 
             flex 
             z-[9]
-            mt-[-45px]
+            mt-[-50px]
             items-center 
             justify-center
             bg-violet-200 
@@ -183,19 +186,47 @@ const Profile = () => {
                 <RiUserLine/>
             </div>
           }
-          
-          <button
+          <div
           className='
+          mr-2
           ml-auto
-          mr-4
-          bg-violet-500
-          text-white
-          px-4
-          p-1
-          rounded-full
+          flex
+          flex-wrap
+          items-center
+          justify-center
+          gap-2
           '>
-            Follow
-          </button>
+            {
+              profile?.uid === Profile?.uid ?
+              <EditProfileButton/>
+              :
+              <>
+              <button
+              className='
+              grid
+              place-items-center
+              w-[35px]
+              h-[35px]
+              text-[1.2rem]
+              text-neutral-600
+              rounded-full
+              border-[1px]
+              border-neutral-300
+              hover:bg-neutral-100
+              transition-all
+              '>
+
+                <RiMessage2Line/>
+
+              </button>
+
+              <FollowButton
+              userID={profile.uid}/>
+            </>
+            }
+
+          </div>
+          
           
         </div>
         
@@ -212,6 +243,7 @@ const Profile = () => {
           font-semibold
           text-neutral-800
           text-[1.25rem]
+          select-none
           '>
             {profile?.display_name}
           </span>
@@ -220,6 +252,7 @@ const Profile = () => {
           className='
           text-neutral-600/90
           text-[.9rem]
+          select-none
           '>
             {profile?.username}
           </span>
@@ -228,21 +261,20 @@ const Profile = () => {
 
         </div>
 
-        { !profile?.description &&
+        { profile?.bio &&
           <div
           className='
           px-5
           pb-1
           '>
 
-            
               <span
               className='
               text-neutral-700
               text-[.9rem]
               break-words
               '>
-                {profile?.description}
+                {profile?.bio}
               </span>
 
           </div>
@@ -274,33 +306,88 @@ const Profile = () => {
           </span>
         </div>
 
-      </div>
-
-      <div>
-        {
-          posts &&
-          posts?.map((post : any, idx : number) => {
-            if(post?.parent) return(
-              <Repost
-              repostID={post?.ID}
-              key={idx+Math.random()}
-              parent={post?.parent}
-              pId={post?.ID}
-              rId={post?.created_by}
-              content={post?.content}
-              />
+        <div
+        className='
+        max-w-full
+        flex
+        flex-row
+        items-center
+        justify-start
+        overflow-x-auto
+        '>
+          {profileSections.map((item : string , idx : number) => {
+            return(
+              <button
+              onClick={() => {
+                setSection(item)
+              }}
+              key={idx}
+              className={`
+              hover:bg-violet-50
+              w-full
+              whitespace-nowrap
+              px-4
+              text-[.9rem]
+              text-neutral-700
+              grid
+              place-items-center
+              transition-all
+              `}>
+                <p
+                className={`
+                ${
+                  section === item ?
+                  "border-b-4 border-violet-500 font-medium"
+                :
+                  "border-b-4 border-transparent"
+                }
+                py-2
+                px-1
+                w-fit
+                transition-all
+                `}>
+                  {item}
+                </p>
+              </button>
             )
+          })}
+        </div>
 
-            return(<Post
-            key={idx}
-            ID={post?.ID}
-            />)
-          })
-        }
       </div>
+
+          {(() => {
+            switch(section){
+              case("Posts") : 
+              return(
+                <OnlyPosts
+                username={profile?.username}
+                />
+              )
+
+              case("Posts & Replies") : 
+              return(
+                <UserPosts
+                username={profile?.username}
+                />
+              )
+
+              case("Likes") : 
+              return(
+                <LikedPosts
+                username={profile?.username}
+                />
+              )
+
+              default :
+              return <></>
+            }
+          })()}
 
     </div>
   )
 }
 
 export default Profile
+
+
+const profileSections = ["Posts" , "Posts & Replies" , "Likes"];

@@ -12,6 +12,7 @@ import {
     RiBookmarkLine ,
     RiBookmarkFill
 } from "react-icons/ri"
+import { CgSpinner } from 'react-icons/cg'
 
 type props = {
     ID : string,
@@ -35,6 +36,7 @@ const VeriticalActionBar : React.FC<props> = ({
     <div
     className='
     relative ml-auto
+    transition-all
     '>
         <button
         onClick={() => {
@@ -67,9 +69,8 @@ const VeriticalActionBar : React.FC<props> = ({
         right-0
         overflow-hidden
         transition-all
-        delay-150
         `}>
-            { profile && <>
+            { profile ? <>
                 { created_by === user ?
                 <button
                 onClick={async () => {
@@ -140,6 +141,14 @@ const VeriticalActionBar : React.FC<props> = ({
                     </button>
             
             </>
+            :
+            <CgSpinner
+            className='
+            text-[1.5rem]
+            text-neutral-700
+            animate-spin
+            m-4
+            '/>
             }
         </div>
 

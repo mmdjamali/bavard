@@ -26,7 +26,6 @@ const Post : React.FC<props> = ({
       noInteraction
 }) => {
   const auth : any = useSelector((state : rootType) => state.AuthSlice);
-  const [show , setShow] = useState<boolean>(false)
   const [post , error , pending] : any = useGetPost(ID)
   const [repliedPost , repliedError , repliedPending] : any = useGetPost(post?.replying || "")
   const [profile] : any = useGetUserProfile(post?.created_by || "");
@@ -54,18 +53,21 @@ const Post : React.FC<props> = ({
     flex-col
     `}>
 
-      { repliedPost &&
-      <span
-      className='
-      flex
-      flex-row
-      items-center
-      text-[.9rem] pl-3 pt-1
-      font-normal
-      text-neutral-700
-      '>
-        replying to <Link to="" className='text-violet-500 hover:underline'>{repliedProfile?.username}</Link>
-      </span>}
+      { 
+        repliedPost &&
+        <span
+        className='
+        flex
+        flex-row
+        gap-1
+        items-center
+        text-[.9rem] pl-3 pt-1
+        font-normal
+        text-neutral-700
+        '>
+          replying to<Link to={"/profile/" + repliedProfile?.username} className='text-violet-500 hover:underline'>{repliedProfile?.uid === auth?.user ? "You" : repliedProfile?.username }</Link>
+        </span>
+      }
 
       <div
       className={`
@@ -132,15 +134,17 @@ const Post : React.FC<props> = ({
                 {profile?.display_name.toString() || "..."}
               </p>
 
-              <p
+              <Link
+              to={"/profile/"+profile?.username}
               className='
               mx-1 font-normal
               text-neutral-500
               text-[.9rem]
               overflow-hidden text-ellipsis
+              hover:underline
               '>
                 {profile?.username.toString() || "..."}
-              </p>
+              </Link>
 
               <p
               className='

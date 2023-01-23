@@ -27,10 +27,10 @@ const SkeletonProfile = () => {
           
             <div
             className='
-            w-[90px] 
-            h-[90px] 
+            w-[100px] 
+            h-[100px] 
             flex 
-            mt-[-45px]
+            mt-[-50px]
             z-[9]
             items-center 
             justify-center

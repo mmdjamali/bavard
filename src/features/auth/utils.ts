@@ -80,6 +80,64 @@ export const createProfile  = async (
   }
 }
 
+export const updateProfile = async (
+  NAME : string | null,
+  USERNAME : string | null,
+  BIO : string | null,
+  INTERESTS : string[] | [] | null,
+  IMAGE : any,
+  PROFILE : any
+) => {
+  if(!await checkForUserName(USERNAME || "") && USERNAME !== PROFILE?.username.replace("@","")) return
+
+  if(IMAGE){
+    const remove = await supabase
+      .storage
+      .from("profiles")
+      .remove([PROFILE?.profile_picture])
+
+    console.log(remove)
+
+    const insert = await supabase
+      .storage
+      .from("profiles")
+      .upload(
+        `public/${PROFILE?.uid}.png`,
+        IMAGE
+      )
+      
+    console.log(insert)
+    if(insert.error){
+      
+      return
+    }
+    
+  }
+
+  const updateProfile = await supabase
+      .from("profiles")
+      .update([
+        IMAGE ? 
+        {
+          bio : BIO || null,
+          display_name : NAME || "unknown",
+          username : "@" + USERNAME || await createRandomUser(),
+          interests : INTERESTS,
+          profile_picture : `public/${PROFILE?.uid}.png`,
+        }
+        :
+        {
+          bio : BIO || null,
+          display_name : NAME || "unknown",
+          username : "@" + USERNAME || await createRandomUser(),
+          interests : INTERESTS,
+        }])
+        .eq("uid",PROFILE?.uid);
+
+      console.log(updateProfile)
+
+}
+
 export const getUserProfile = async (
   uid : string
 ) => {

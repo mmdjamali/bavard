@@ -10,6 +10,7 @@ import { QueryClientProvider , QueryClient } from 'react-query'
 import { NewPostPopup } from "./features/posts"
 import LoaderLogo from "./components/LoaderLogo"
 import { logout } from "./features/auth/utils"
+import EditProfile from "./features/Profiles/components/EditProfile"
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Auth = React.lazy(() => import("./pages/Auth"))
@@ -34,7 +35,19 @@ function App() {
     <QueryClientProvider client={new QueryClient}>
     <Sidebar/>
     <NewPostPopup/>
-    <Suspense fallback={<Loader/>}>
+    <EditProfile/>
+    <Suspense fallback={
+    <Loader
+    sx="
+    w-full
+    xs:w-[min(calc(100%_-_79px),450px)]
+    sm:w-[min(calc(100%_-_14rem),450px)]    
+    min-h-screen
+    border-x-[1px]
+    border-color
+    "
+    />
+    }>
       <Routes>
         <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>
         <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
@@ -44,6 +57,7 @@ function App() {
         <Route path="/messages" element={<ProtectedAuth><Messages/></ProtectedAuth>}/>
         <Route path="/bookmarks" element={<ProtectedAuth><Bookmarks/></ProtectedAuth>}/>
         <Route path="/profile" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
+        <Route path="/profile/:username" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
       </Routes>
     </Suspense>
     <BottomNavbar/>

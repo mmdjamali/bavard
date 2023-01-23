@@ -1,0 +1,5 @@
+export { default as LikedPosts } from "./components/LikedPosts"
+export { default as OnlyPosts } from "./components/OnlyPosts"
+export { default as UserPosts } from "./components/UserPosts"
+export { default as FollowButton } from "./components/FollowButton"
+export { default as EditProfileButton } from "./components/EditProfileButton"

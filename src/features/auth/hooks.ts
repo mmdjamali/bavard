@@ -173,6 +173,41 @@ export const useGetUserProfile = (
       return [profile , pending]
 }
 
+export const useGetUserProfileByUsername = (
+    username : string
+  ) => {
+    const [profile , setProfile] = useState<profile | null>(null)
+    const [pending , setPending] = useState<boolean>(true)
+    
+    useLayoutEffect(() => {
+
+        if(!username) return
+
+        setPending(true)
+        setProfile(null)
+        const func = async () => {
+            const {data , error} = await supabase
+              .from("profiles")
+              .select()
+              .eq("username" , username)
+              .single()
+            
+            if(error){
+                setPending(false)
+                setProfile(null)
+              return
+            }            
+            setProfile(data)
+            setPending(false)
+
+          }
+          func()
+    },[username])
+    
+
+      return [profile , pending]
+}
+
 export const useCheckForUserName = (
     username :string
 ) => {

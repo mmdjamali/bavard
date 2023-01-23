@@ -33,7 +33,7 @@ const Input : React.FC<props> = ({
       !value ?
       "border-violet-300 text-violet-300 bg-violet-50/50"
       :
-        valid ?
+        !!valid ?
         "border-emerald-400 text-emerald-400 bg-emerald-50/50"
         :
         "border-red-400 text-red-400 bg-red-50/50"
@@ -66,7 +66,7 @@ const Input : React.FC<props> = ({
         text-[1rem]
         bg-transparent
         outline-none
-        text-gray-600
+        text-neutral-700
         w-full
         "
         placeholder={placeholder}

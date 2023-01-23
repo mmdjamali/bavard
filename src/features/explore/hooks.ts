@@ -12,7 +12,7 @@ export const useGetPostByQuery = (query : string ,  column : string , max? :numb
         const func = async () => {
             const { data , error , count } = await supabase
             .from("posts")
-            .select("ID",{count : "exact"})
+            .select("ID,parent,created_by,content",{count : "exact"})
             .order(column, { ascending: false })
             .textSearch("content",`${query}`,{
                 config : "english"

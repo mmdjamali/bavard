@@ -6,7 +6,7 @@ const useSidebarChanger = (section : string , param? : string) => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setCurrent(section))
-        document.getElementsByTagName("title")[0].innerText = section ? "Elatwit / " + section : "Elatwit"
+        document.getElementsByTagName("title")[0].innerText = section ? section + " / Bavard" : "Bavard"
     },[param])
 }
 

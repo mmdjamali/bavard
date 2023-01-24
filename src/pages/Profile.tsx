@@ -93,8 +93,8 @@ const Profile = () => {
       fixed p-2
       bg-white/75 z-10
       w-full
-      xs:w-[min(calc(100%_-_79px),450px)]
-      sm:w-[min(calc(100%_-_14rem),calc(450px_-_2px))]    
+      xs:w-[min(calc(100%_-_79px),calc(450px-_2px))]
+      sm:w-[min(calc(100%_-_14rem),calc(450px-_2px))]    
       backdrop-blur-sm
       '>
         <h2
@@ -293,7 +293,7 @@ const Profile = () => {
           cursor-pointer
           text-[.8rem]
           '>
-            <span className='mr-1 text-neutral-700'>{profile?.followed?.length}</span>Following
+            <span className='mr-1 text-neutral-700'>{`${profile?.followed?.length || "0"}`}</span>Following
           </span>
 
           <span

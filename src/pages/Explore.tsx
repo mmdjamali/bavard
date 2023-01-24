@@ -4,8 +4,9 @@ import { SearchBox } from '../features/explore';
 import { NewPost } from '../features/posts';
 import { useGetPostByQuery } from '../features/explore/hooks';
 import { useParams } from 'react-router-dom';
-import HashTagRelated from '../features/explore/components/HashTagRelated';
 import SearchResult from '../features/explore/components/SearchResult';
+import TopicRelatedPosts from '../features/explore/components/TopicRelatedPosts';
+import Topics from '../features/explore/components/Topics';
 
 const Explore = () => {
   const { query } = useParams()
@@ -38,8 +39,8 @@ const Explore = () => {
         className='
         fixed
         w-full
-        xs:w-[min(calc(100%_-_79px),450px)]
-        sm:w-[min(calc(100%_-_14rem),calc(450px_-_2px))]
+        xs:w-[min(calc(100%_-_79px),calc(450px-_2px))]
+        sm:w-[min(calc(100%_-_14rem),calc(450px-_2px))]
         bg-white h-[60px] z-[8]
         '/>
         {
@@ -51,8 +52,7 @@ const Explore = () => {
           w-full
           '
           >
-            <HashTagRelated query={"#hokage"}/>
-            <HashTagRelated query={"#FreeIran"}/>
+            <Topics/>
           </div>
         }
     </div>

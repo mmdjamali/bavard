@@ -1,6 +1,7 @@
 import {useState , useEffect } from "react";
 import store from "../../redux/store";
 import supabase from "../../libs/supabase";
+import { PostgrestError } from "@supabase/supabase-js";
 
 export const useGetLikedPosts = (
     max : number = 10,
@@ -34,7 +35,7 @@ export const useGetLikedPosts = (
           const {count , data , error} = await supabase
               .from("posts")
               .select("ID,parent,content,created_by",{count : "exact"})
-              .in("ID",[...profile?.data?.liked])
+              .in("ID",[...profile?.data?.liked || ""])
               .order('created_at', { ascending: false })
               .range(0, max)
           
@@ -384,4 +385,52 @@ export const useGetUserPosts = (
     },[max,user])
 
     return[posts,pending,err,hasMore]
+}
+
+export const useGetUsersWithSameInterests = (
+    max : number
+) => {
+    const [users, setUsers] = useState<{uid : string}[] | null>(null)
+    const [pending, setPending] = useState<boolean>(true)
+    const [hasMore, setHasMore] = useState<boolean>(false)
+    const [err, setErr] = useState<PostgrestError | null | string>(null)
+
+    useEffect(() => {
+        const profile : any = store.getState().AuthSlice.profile;
+
+        const func = async () => {
+            if(!profile?.interests) {
+                setPending(false)
+                setHasMore(false)
+                setErr(null)
+                setUsers(null)
+                return
+            }
+
+            const getUsers = await supabase
+                .from("profiles")
+                .select("uid",{count : "exact"})
+                .overlaps("interests",[...profile.interests])
+                .neq("uid",profile?.uid)
+                .range(0,max)
+
+            if(getUsers?.error){
+                setPending(false)
+                setHasMore(false)
+                setErr(getUsers?.error?.message)
+                setUsers(null)
+                return
+            }
+
+            setPending(false)
+            setHasMore(max - 1 < (getUsers?.count || 0))
+            setErr(null)
+            setUsers(getUsers?.data)
+        }
+
+        func()
+
+    },[max])
+
+    return[users,pending,err,hasMore]
 }

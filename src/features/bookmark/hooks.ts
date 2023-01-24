@@ -33,7 +33,7 @@ export const useGetBookmarkedPosts = (max : number | undefined = 10) => {
             const {data , count , error} = await supabase
                 .from("posts")
                 .select("*" , {count : "exact"})
-                .in("ID",[...profile?.data?.bookmarked])
+                .in("ID",[...profile?.data?.bookmarked || ""])
                 .range(0,max)
 
             if(error){

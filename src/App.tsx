@@ -19,6 +19,7 @@ const Messages = React.lazy(() => import("./pages/Messages"))
 const Profile = React.lazy(() => import("./pages/Profile"))
 const CreateProfile = React.lazy(() => import("./pages/CreateProfile"))
 const Bookmarks = React.lazy(() => import("./pages/Bookmarks"))
+const WhoToFollow = React.lazy(() => import("./pages/WhoToFollow"));
 
 function App() {
   const {user , profile , pending , error} = useSelector((state : rootType) => state.AuthSlice)
@@ -42,6 +43,7 @@ function App() {
     w-full
     xs:w-[min(calc(100%_-_79px),450px)]
     sm:w-[min(calc(100%_-_14rem),450px)]    
+    lg:w-[min(calc(100%_-_14rem),850px)]    
     min-h-screen
     border-x-[1px]
     border-color
@@ -59,6 +61,7 @@ function App() {
         <Route path="/profile" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
         <Route path="/profile/:username" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
       </Routes>
+      <WhoToFollow/>
     </Suspense>
     <BottomNavbar/>
   </QueryClientProvider>

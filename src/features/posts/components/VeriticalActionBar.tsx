@@ -69,6 +69,7 @@ const VeriticalActionBar : React.FC<props> = ({
         right-0
         overflow-hidden
         transition-all
+        delay-150
         `}>
             { profile ? <>
                 { created_by === user ?

@@ -55,7 +55,9 @@ export const createProfile  = async (
           .from("profiles")
           .upload(
             `public/${data.user.id}.png`,
-            profilePic
+            profilePic,{
+              cacheControl : "60"
+            }
           )
       }
     if(pic?.error) {
@@ -105,7 +107,9 @@ export const updateProfile = async (
       .from("profiles")
       .upload(
         `public/${PROFILE?.uid}.png`,
-        IMAGE
+        IMAGE,{
+          cacheControl : "60"
+        }
       )
       
     console.log(insert)

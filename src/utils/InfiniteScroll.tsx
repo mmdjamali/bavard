@@ -4,14 +4,16 @@ type props = {
     hasMore : boolean,
     setMax : React.Dispatch<React.SetStateAction<number>>,
     pending : boolean,
-    data : any
+    data : any,
+    num ?: number
 }
 
 const InfiniteScroll : React.FC<props> = ({
     hasMore,
     setMax,
     pending,
-    data
+    data,
+    num = 10
 }) => {
     const observer = useRef<IntersectionObserver | null>(null)
 
@@ -22,7 +24,7 @@ const InfiniteScroll : React.FC<props> = ({
       observer.current = new IntersectionObserver(entries => {
         if(entries[0].isIntersecting){
           if(pending || !hasMore) return
-          setMax(prev => prev + 10)
+          setMax(prev => prev + num)
         }
       })
   

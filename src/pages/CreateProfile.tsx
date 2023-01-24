@@ -47,7 +47,7 @@ const CreateProfile : React.FC = () => {
       w-full md:w-[60%]
       lg:w-[50%]
       pb-12
-      min-h-fit
+      min-h-screen
       '>
         {/* TODO: in future if steps become more than
         two add progressbar. */}
@@ -163,7 +163,7 @@ const CreateProfile : React.FC = () => {
           }
         }}
         className='
-        flex flex-col justify-center items-start
+        flex flex-col justify-center
         w-[min(80%_,_20rem)]
         '>
           {

@@ -46,6 +46,7 @@ export const createProfile  = async (
   try{
     const {data , error} = await supabase.auth.getUser()
     let pic :any;
+    console.log(data,error)
     if(error) return
 
       if(!imageURL && profilePic){
@@ -57,15 +58,15 @@ export const createProfile  = async (
             profilePic
           )
       }
-
-    if(pic?.error) return
-
+    if(pic?.error) {
+      return
+    }
 
     const profile = await supabase
       .from("profiles")
       .insert({
-        profile_picture : imageURL ? imageURL : pic.data?.path,
-        uid:data?.user?.id,
+        profile_picture : imageURL ? imageURL : pic ? pic.data?.path : "",
+        uid : data?.user?.id,
         display_name : name || "unknown",
         username : username ? "@" + username : await createRandomUser(),
         email : data?.user?.email,
@@ -76,6 +77,7 @@ export const createProfile  = async (
     store.dispatch(setProfile(profile?.data))
   }
   catch(err){
+    console.log(err)
     throw err
   }
 }

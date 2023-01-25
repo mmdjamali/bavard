@@ -86,7 +86,7 @@ const FollowButtonMobile : React.FC<props> = ({
     <button
     onClick={async () => {
       try{
-        followUser(userID || "")
+        await followUser(userID || "")
         setFollowed(true
           )
       }

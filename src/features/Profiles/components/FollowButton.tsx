@@ -46,7 +46,7 @@ const FollowButton : React.FC<props> = ({
     <button
     onClick={async () => {
       try{
-        followUser(userID || "")
+        await followUser(userID || "")
         setFollowed(false)
       }
       catch(err){
@@ -80,7 +80,7 @@ const FollowButton : React.FC<props> = ({
     <button
     onClick={async () => {
       try{
-        followUser(userID || "")
+        await followUser(userID || "")
         setFollowed(true
           )
       }

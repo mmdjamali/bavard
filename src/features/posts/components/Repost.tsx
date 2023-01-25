@@ -41,7 +41,6 @@ const Repost : React.FC<props> = ({
   if(
     pending || 
     !post || 
-    !pp ||
     !profile ||
     !reposter
   ) return(

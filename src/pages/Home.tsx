@@ -5,8 +5,9 @@ import { useGetPosts } from '../features/storage/hooks';
 import { Post } from '../features/posts';
 import Loader from '../components/Loader';
 import Repost from '../features/posts/components/Repost';
-import SkeletonPost from '../features/posts/components/SkeletonPost';
 import InfiniteScroll from '../utils/InfiniteScroll';
+import { RiEmotionSadLine } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   useSidebarChanger("Home")
@@ -85,6 +86,22 @@ const Home = () => {
         {pending &&
         <Loader
         sx='h-fit py-4'/>
+        }
+
+        {
+          data?.length === 0 && !pending &&
+          <>
+            <p
+            className='
+            text-neutral-500
+            text-center
+            text-[1rem]
+            mx-[1rem]
+            mt-[1rem]
+            '>
+              No posts to see lets <Link className="text-violet-500 hover:underline" to="/explore">Explore</Link> the app
+            </p>
+          </>
         }
 
         <InfiniteScroll

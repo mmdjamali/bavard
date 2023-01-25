@@ -25,7 +25,7 @@ export const getFile : getFile = (bucket , path) => {
     return data.publicUrl
     }
     catch(err){
-        console.log(err)
+        // console.log(err)
         return null
     }
 }

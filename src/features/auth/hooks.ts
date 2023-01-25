@@ -91,7 +91,7 @@ export const useCheckForUser = () => {
                     .single()
 
             if(profile.error && profile.error.code !== "PGRST116"){
-                console.log(profile.error)
+                // console.log(profile.error)
                 return
             }
 
@@ -122,7 +122,7 @@ export const useCheckForUser = () => {
 
         }
         catch(err){
-            console.log(err)
+            // console.log(err)
             dispatch(setPending(false))
             dispatch(setError(err?.toString()))
             dispatch(setUser(null))

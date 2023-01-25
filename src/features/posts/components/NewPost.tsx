@@ -73,7 +73,7 @@ const NewPost :React.FC<props> = ({
             cleanup && cleanup()
           }
           catch(err){
-            console.log(err)
+            // console.log(err)
             setLoading(false)
             cleanup && cleanup()
           }

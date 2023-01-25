@@ -106,7 +106,7 @@ export const useGetPosts = (max : number) => {
           .range(0, max)
       
       if(error || !data){
-        console.log(error)
+        // console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])
@@ -139,7 +139,7 @@ export const useGetPosts = (max : number) => {
           .range(0 , max)
       
       if(error || !data){
-        console.log(error)
+        // console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])

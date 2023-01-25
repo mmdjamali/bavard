@@ -88,6 +88,7 @@ const EditProfile = () => {
             text-neutral-700
             font-medium
             xs:mx-[2rem]
+            mx-[.5rem]
             '>
               PROFILE PICTURE
             </span>
@@ -105,6 +106,7 @@ const EditProfile = () => {
             text-neutral-700
             font-medium
             xs:mx-[2rem]
+            mx-[.5rem]
             '>
               NAME
             </span>
@@ -119,7 +121,12 @@ const EditProfile = () => {
               }
               return true
              }}
-             sx="mb-[.5rem] xs:mx-[2rem] w-auto"
+             sx="
+             mb-[.5rem] 
+             xs:mx-[2rem] 
+             mx-[.5rem] 
+             w-auto
+             "
             />
 
             <span
@@ -127,6 +134,7 @@ const EditProfile = () => {
             text-neutral-700
             font-medium
             xs:mx-[2rem]
+            mx-[.5rem]
             '>
               USERNAME
             </span>
@@ -141,7 +149,12 @@ const EditProfile = () => {
               let bool = await checkForUserName(data)
               return bool
              }}
-             sx="mb-[.5rem] xs:mx-[2rem] w-auto"
+             sx="
+             mb-[.5rem] 
+             xs:mx-[2rem] 
+             mx-[.5rem] 
+             w-auto
+             "
             />
 
             <span
@@ -149,6 +162,7 @@ const EditProfile = () => {
             text-neutral-700
             font-medium
             xs:mx-[2rem]
+            mx-[.5rem]
             '>
               BIO
             </span>
@@ -157,7 +171,12 @@ const EditProfile = () => {
             value={bio}
             setValue={setBio}
             placeholder="Who are you?"
-            sx="xs:mx-[2rem] mb-[.5rem] w-auto"
+            sx="
+            xs:mx-[2rem] 
+            mx-[.5rem] 
+            mb-[.5rem] 
+            w-auto
+            "
             limit={120}
             />
 
@@ -166,6 +185,7 @@ const EditProfile = () => {
             text-neutral-700
             font-medium
             xs:mx-[2rem]
+            mx-[.5rem]
             my-[.5rem]
             '>
               INTERESTS
@@ -174,13 +194,14 @@ const EditProfile = () => {
             <div
             className='
             xs:mx-[2rem]
+            mx-[.5rem]
             '>
             {
               data?.map((item , idx) => {
                 return(
                   <div
                   className={`
-                  ${idx === 0 ? "" : "mt-[1rem"}
+                  mt-[1rem]
                   `}>
                     <span
                     key={idx.toString() + item}
@@ -232,6 +253,10 @@ const EditProfile = () => {
             <FullWidthButton
             loading={loading}
             onClick={async () => {
+              if(name?.length > 16) return
+              if(!await checkForUserName(username) && username !== profile?.username.replace("@",'')) return
+              if(bio?.length > 120) return
+
               try{
                 setLoading(true)
                 await updateProfile(
@@ -243,6 +268,7 @@ const EditProfile = () => {
                   profile
                 )
                 setLoading(false)
+                window.location.reload()
               }
               catch(err){
                 setLoading(false)
@@ -250,9 +276,10 @@ const EditProfile = () => {
             }}
             sx="
             xs:mx-[2rem]
-            mt-[1rem]
+            mx-[.5rem]
+            mt-[2rem]
             w-auto
-            mb-1
+            mb-2
             "
             title="Save"
             />

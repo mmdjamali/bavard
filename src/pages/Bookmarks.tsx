@@ -28,9 +28,40 @@ const Bookmarks = () => {
     w-full
     xs:w-[min(calc(100%_-_79px),calc(450px-_2px))]
     sm:w-[min(calc(100%_-_14rem),calc(450px-_2px))]    
-    min-h-screen border-x-[1px] border-color
+    min-h-[calc(100vh_-_56px)]
+    xs:min-h-screen 
+    border-x-[1px] border-color
     '
     >
+      <div
+      className='
+      fixed p-2
+      bg-white/75 z-10
+      backdrop-blur-sm
+      '>
+        <h2
+        className='
+        text-[1.25rem] font-semibold
+        text-violet-dark
+        '>
+          Bookmarks
+        </h2>
+      </div>
+
+      {/*placeholder for title*/}
+      <div
+      className='
+      p-2 sticky top-0
+      bg-white z-[8]
+      '>
+        <p
+        className='
+        text-[1.25rem] font-semibold
+        text-transparent
+        '>
+          Bookmarks
+        </p>
+      </div>
 
       {
         posts && posts?.length !== 0 &&
@@ -52,7 +83,8 @@ const Bookmarks = () => {
       <div
       className='
       w-full
-      h-screen
+      min-h-[calc(100vh_-_102px)]
+      xs:min-h-[calc(100vh_-_46px)]
       flex
       flex-col
       items-center
@@ -61,8 +93,8 @@ const Bookmarks = () => {
       >
         <RiBookmarkLine
         className='
-        text-[4rem]
-        text-neutral-600
+        text-[3rem]
+        text-neutral-500
         '
         />
         <p
@@ -71,7 +103,7 @@ const Bookmarks = () => {
         text-center
         mt-[.5rem]
         font-medium
-        text-neutral-600
+        text-neutral-500
         '>
           You haven't bookmarked any posts
         </p>

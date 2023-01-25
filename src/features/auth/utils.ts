@@ -33,7 +33,7 @@ export const SignUpWithEmail = async (
       email,
       password
     })
-    console.log(error)
+    // console.log(error)
 }
 
 export const createProfile  = async ( 
@@ -46,7 +46,7 @@ export const createProfile  = async (
   try{
     const {data , error} = await supabase.auth.getUser()
     let pic :any;
-    console.log(data,error)
+    // console.log(data,error)
     if(error) return
 
       if(!imageURL && profilePic){
@@ -75,11 +75,12 @@ export const createProfile  = async (
         interests
       })
       .select()
+      .single()
 
     store.dispatch(setProfile(profile?.data))
   }
   catch(err){
-    console.log(err)
+    // console.log(err)
     throw err
   }
 }
@@ -100,7 +101,7 @@ export const updateProfile = async (
       .from("profiles")
       .remove([PROFILE?.profile_picture])
 
-    console.log(remove)
+    // console.log(remove)
 
     const insert = await supabase
       .storage
@@ -112,7 +113,7 @@ export const updateProfile = async (
         }
       )
       
-    console.log(insert)
+    // console.log(insert)
     if(insert.error){
       
       return
@@ -140,7 +141,7 @@ export const updateProfile = async (
         }])
         .eq("uid",PROFILE?.uid);
 
-      console.log(updateProfile)
+      // console.log(updateProfile)
 
 }
 
@@ -155,16 +156,16 @@ export const getUserProfile = async (
       .single()
     
     if(error){
-      console.log(error)
+      // console.log(error)
       return
     }
       
-    console.log(data)
+    // console.log(data)
     return data
   }
 
   catch(err){
-    console.log(err)
+    // console.log(err)
   }
 }
 

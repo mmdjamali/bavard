@@ -4,7 +4,7 @@ import { useGetUsersWithSameInterests } from '../features/Profiles/Hooks'
 import { useSelector } from 'react-redux'
 import { rootType } from '../redux/store'
 import Loader from '../components/Loader'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const  WhoToFollow = () => {
   const { user , profile } : any= useSelector((state : rootType) => state.AuthSlice);
@@ -52,63 +52,103 @@ const  WhoToFollow = () => {
         overflow-hidden
         '>
   
-            <span
+            {profile?.interests?.length === 0 ?
+            <div
             className='
-            px-4
             py-2
-            text-[1.15rem]
-            font-semibold
-            text-neutral-700
+            px-4
             '>
-                Who to follow
-            </span>
-
-            <div>
-                { 
-                users ?
-                users?.map((item : {uid : string} , idx : number) => {
-                    return(
-                        <ProfileCard
-                        userID={item?.uid}
-                        />
-                    )
-                })
-                :
-                <></>
-                }
+                <p
+                className='
+                text-neutral-600
+                text-[.9rem]
+                '>
+                    Add your interests to your 
+                    <Link
+                    to="/profile"
+                    className='
+                    text-violet-500
+                    hover:underline
+                    mx-1
+                    '>Profile</Link>
+                    to find people with same interests
+                </p>
             </div>
+            :
+            <>
+                <span
+                className='
+                px-4
+                py-2
+                text-[1.15rem]
+                font-semibold
+                text-neutral-700
+                '>
+                    Who to follow
+                </span>
+
+                <div>
+                    { 
+                    users?.length !== 0 ?
+                    users?.map((item : {uid : string} , idx : number) => {
+                        return(
+                            <ProfileCard
+                            userID={item?.uid}
+                            />
+                        )
+                    })
+                    :
+                    <div
+                    className='
+                    border-t-[1px]
+                    border-color
+                    py-2
+                    px-4
+                    '>
+                        <p
+                        className='
+                        text-neutral-600
+                        text-[.9rem]
+                        '>
+                            No users to be found
+                        </p>
+                    </div>
+                    }
+                </div>
 
 
-            {
-                pending &&
-                <Loader
-                sx='h-fit'
-                />
-            }
-
-            <span
-            onClick={() => {
-                if(pending) return
-
-                if(!hasMore){
-                    navigate("/explore")
-                    return
+                {
+                    pending &&
+                    <Loader
+                    sx='h-fit'
+                    />
                 }
 
-                setMax(prev => prev + 10)
-            }}
-            className='
-            hover:bg-violet-100
-            px-4
-            py-2
-            text-[.9rem]
-            text-violet-500
-            border-t-[1px]
-            border-color
-            cursor-pointer
-            '>
-                Show more
-            </span>
+                <span
+                onClick={() => {
+                    if(pending) return
+
+                    if(!hasMore){
+                        navigate("/explore")
+                        return
+                    }
+
+                    setMax(prev => prev + 10)
+                }}
+                className='
+                hover:bg-violet-100
+                px-4
+                py-2
+                text-[.9rem]
+                text-violet-500
+                border-t-[1px]
+                border-color
+                cursor-pointer
+                '>
+                    Show more
+                </span>
+            </>
+            }
 
         </div>
 

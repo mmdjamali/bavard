@@ -4,7 +4,7 @@ import useSidebarChanger from '../hooks/useSidebarChanger'
 
 const Auth : React.FC = () => {
   const [isLogin , setIsLogin] = useState<boolean>(true)
-  useSidebarChanger("login")
+  useSidebarChanger("Login")
   return (
     <div className="flex flex-row w-[100%]">
 

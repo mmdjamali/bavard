@@ -20,9 +20,11 @@ const SearchResult : React.FC<props> = ({
 
   return (
     <div>
-        {posts && posts.map((item : any , idx : number) => {
+        {posts.length !== 0 ? 
+        posts.map((item : any , idx : number) => {
             if(item?.parent)return(
               <Repost
+              key={idx}
               postId={item?.ID}
               reposterId={item?.created_by}
               parent={item?.parent}
@@ -35,7 +37,17 @@ const SearchResult : React.FC<props> = ({
             ID={item?.ID}
             key={idx}
             />)
-        })}
+        })
+        :
+        <div>
+          <p
+          className='
+          mt-2
+          text-center
+          text-neutral-500
+          '>No results</p>
+        </div>
+        }
     </div>
   )
 }

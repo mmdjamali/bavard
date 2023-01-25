@@ -24,6 +24,14 @@ const AuthProviderButton : React.FC<props> = ({
         ${sx ? sx : ""}
         `}
         >
+            
+            <p
+            className='
+            px-[.25rem] text-neutral-700
+            '>
+                {"Continue with " + provider}
+            </p>
+
             <div
             className='
             text-[1.25rem] px-[.25rem] text-neutral-700
@@ -31,12 +39,6 @@ const AuthProviderButton : React.FC<props> = ({
                 {icon}
             </div>
 
-            <p
-            className='
-            px-[.25rem] text-neutral-700
-            '>
-                {"Continue with " + provider}
-            </p>
         </button>
   )
 }

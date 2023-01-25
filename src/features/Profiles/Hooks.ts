@@ -85,7 +85,7 @@ export const useGetLikedPosts = (
             .range(0 , max)
         
         if(error || !data){
-        console.log(error)
+        // console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])
@@ -168,7 +168,7 @@ export const useGetOnlyPosts = (
               .range(0, max)
           
           if(error || !data){
-            console.log(error)
+            // console.log(error)
             setPending(false)
             setErr(error.toString())
             setPosts([])
@@ -215,7 +215,7 @@ export const useGetOnlyPosts = (
             .range(0, max)
         
         if(error || !data){
-        console.log(error)
+        // console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])
@@ -297,7 +297,7 @@ export const useGetUserPosts = (
               .range(0, max)
           
           if(error || !data){
-            console.log(error)
+            // console.log(error)
             setPending(false)
             setErr(error.toString())
             setPosts([])
@@ -343,7 +343,7 @@ export const useGetUserPosts = (
             .range(0, max)
         
         if(error || !data){
-        console.log(error)
+        // console.log(error)
         setPending(false)
         setErr(error.toString())
         setPosts([])

@@ -52,7 +52,7 @@ const ImageInput : React.FC<props> = ({
             htmlFor="ImageInput"
             className={`
             flex w-[9rem] h-[9rem] border-[2px] border-violet-400
-            bg-violet-200 hover:bg-violet-300 rounded-full
+            bg-violet-50 hover:bg-violet-100 rounded-full
             justify-center items-center transition-colors
             cursor-pointer bg-center bg-cover
             bg-no-repeat

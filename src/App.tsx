@@ -43,7 +43,7 @@ function App() {
     w-full
     xs:w-[min(calc(100%_-_79px),450px)]
     sm:w-[min(calc(100%_-_14rem),450px)]    
-    lg:w-[min(calc(100%_-_14rem),850px)]    
+    lg:w-[min(calc(100%_-_14rem),800px)]    
     min-h-screen
     border-x-[1px]
     border-color

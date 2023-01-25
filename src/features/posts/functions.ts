@@ -25,7 +25,7 @@ export const createPost = async (
             .insert([postData]);
 
     if(error){
-        console.log(error)
+        // console.log(error)
         return
     }
 
@@ -182,7 +182,7 @@ export const likePost = async (pId : string) => {
     .select("*",{count :"exact"})
     .contains("liked",[pId])
 
-    console.log(error , count)
+    // console.log(error , count)
 
     const updateLikes = await supabase
         .from("posts")
@@ -238,14 +238,14 @@ export const deleteRepost = async (pId : string , rId : string) => {
       .delete()
       .eq("ID",rId)
     
-  console.log(remove)
+  // console.log(remove)
 
   const parent = await supabase
       .from("posts")
       .select("*",{count:"exact"})
       .eq("parent",pId)
 
-  console.log(parent)
+  // console.log(parent)
  
   const change = await supabase
       .from("posts")
@@ -254,7 +254,7 @@ export const deleteRepost = async (pId : string , rId : string) => {
       })
       .eq("ID",pId)
 
-  console.log(change)
+  // console.log(change)
 }
 
 export const changeReposts = async (pId : string) => {
@@ -272,14 +272,14 @@ export const changeReposts = async (pId : string) => {
     })
     .eq("ID",pId);
 
-    console.log(update)
+    // console.log(update)
 }
 
 export const bookmarkPost = async ( 
   profile : {bookmarked : string[] , uid : string} ,
   pId : string
 ) => {
-  console.log(profile)
+  // console.log(profile)
 
   if(!profile.bookmarked){
       const l = await supabase

@@ -33,12 +33,12 @@ const Post : React.FC<props> = ({
   // const [pp] = useGetPicture("profiles" , profile?.profile_picture || "")
   const pp = getFile("profiles" , profile?.profile_picture || "")
   let time = TimeFormater(post?.created_at || "")
+    
   if(
     pending || 
     repliedPending|| 
     !post || 
     !profile ||
-    !pp||
     (repliedPost && !repliedProfile)
     ) return(
     <SkeletonPost/>

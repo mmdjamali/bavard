@@ -25,16 +25,20 @@ export const createRandomUser : returnString =  async () => {
 }
 
 export const SignUpWithEmail = async (
-    e: React.FormEvent<HTMLFormElement>,
     email: string ,
     password: string
   ) => {
-    e.preventDefault()
+    if(!email || !password){
+      throw "All fields are required"
+    }
      const { data , error } = await supabase.auth.signUp({
       email,
       password
     })
-    // console.log(error)
+
+    if(error){
+      throw error.message
+    }
 }
 
 export const createProfile  = async ( 

@@ -15,16 +15,24 @@ function Login() {
   const [username , setUsername]  = useState<string>("")
   const [password , setPassword]  = useState<string>("")
   const [loading , setLoading]  = useState<boolean>(false)
+  const [err , setErr] = useState<string>("")
 
   const LoginWithEmail = async (e: React.FormEvent<HTMLFormElement>, email: string , password: string) => {
     e.preventDefault()
 
-    if(password === "" || username === "") return
+    if(password === "" || username === ""){
+      setErr("All fields are required")
+      return
+    }
      
     const { data , error } = await supabase.auth.signInWithPassword({
       email,
       password
     })
+
+    if(error){
+      setErr(error?.message)
+    }
   }
 
   return (
@@ -61,7 +69,7 @@ function Login() {
               placeholder="Password"
               />
               <Link
-              to="/hello"
+              to="/"
               className="
               text-[.9rem]
               underline
@@ -72,6 +80,7 @@ function Login() {
               </Link>
 
               <FullWidthButton
+              Error={err}
               title="Login"
               sx="mt-4"
               loading={loading}

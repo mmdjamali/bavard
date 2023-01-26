@@ -14,13 +14,21 @@ const Signup :React.FC = () => {
     const [password , setPassword]  = useState<string>("")
     const [confirm , setConfirm]  = useState<string>("")
     const [loading , setLoading]  = useState<boolean>(false)
+    const [err , setErr]  = useState<string>("")
   
     return (
       <form
       onSubmit={ async (e) => {
-        setLoading(true)
-        await SignUpWithEmail(e , email , password)
-        setLoading(false)
+        e.preventDefault()
+        try{
+          setLoading(true)
+          await SignUpWithEmail(email , password)
+          setLoading(false)
+        }
+        catch(err : any){
+          setErr(err)
+          setLoading(false)
+        }
       }}
         className={`
       flex flex-col w-[min(80%_,_18rem)] my-auto
@@ -59,6 +67,7 @@ const Signup :React.FC = () => {
         />
 
         <FullWidthButton
+        Error={err}
         title="Create account"
         sx="mt-4"
         loading={loading}

@@ -24,7 +24,7 @@ const Auth : React.FC = () => {
           
           <div
           className={`
-          rounded-full bg-violet-50 mt-2
+          rounded-full bg-violet-50 mt-4
           `}>
 
             <button

@@ -11,7 +11,7 @@ import AllPosts from '../features/explore/components/AllPosts';
 
 const Explore = () => {
   const { query } = useParams()
-  const [section , setSection] = useState<string>("All")
+  const [section , setSection] = useState<string>(query ? "Search" : "All")
 
   const [searchValue , setSearchValue] = useState<string | undefined>(query ? "#" + query : "")
 
@@ -21,6 +21,7 @@ const Explore = () => {
 
   useEffect(() => {
     setSearchValue(query ? "#" + query : "")
+    setSection(query ? "Search" : "All")
   },[query])
 
   return (
@@ -39,6 +40,8 @@ const Explore = () => {
       flex
       flex-col
       z-[10]
+      border-b-[1px]
+      border-color
       '>
         <SearchBox
         setSearchValue={setSearchValue}

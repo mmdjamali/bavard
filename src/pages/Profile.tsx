@@ -43,36 +43,30 @@ const Profile = () => {
     >
 
       <div
+      style={{
+        backfaceVisibility: "hidden"
+      }}
       className='
-      fixed p-2
-      bg-white/75 z-10
-      w-full
-      xs:w-[min(calc(100%_-_79px),450px)]
-      sm:w-[min(calc(100%_-_14rem),calc(450px_-_2px))]    
+      sticky py-2 px-4
+      bg-white/75 z-[10]
       backdrop-blur-sm
+      top-0
+      flex
+      w-full
+      border-b-[1px]
+      border-color
       '>
-        <h2
+        <div
         className='
-        text-[1.25rem] font-semibold
-        text-violet-dark
         '>
-          Profile
-        </h2>
-      </div>
-
-      {/*placeholder for title*/}
-      <div
-      className='
-      p-2 sticky top-0
-      bg-white z-[8]
-      '>
-        <p
-        className='
-        text-[1.25rem] font-semibold
-        text-transparent
-        '>
-          Profile
-        </p>
+          <h2
+          className='
+          text-[1.25rem] font-medium
+          text-violet-dark/90
+          '>
+            Profile
+          </h2>
+        </div>
       </div>
 
       <SkeletonProfile/>
@@ -93,36 +87,30 @@ const Profile = () => {
     >
 
       <div
+      style={{
+        backfaceVisibility: "hidden"
+      }}
       className='
-      fixed p-2
-      bg-white/75 z-10
-      w-full
-      xs:w-[min(calc(100%_-_79px),calc(450px-_2px))]
-      sm:w-[min(calc(100%_-_14rem),calc(450px-_2px))]    
+      sticky py-2 px-4
+      bg-white/75 z-[10]
       backdrop-blur-sm
+      top-0
+      flex
+      w-full
+      border-b-[1px]
+      border-color
       '>
-        <h2
+        <div
         className='
-        text-[1.25rem] font-semibold
-        text-violet-dark
         '>
-          Profile
-        </h2>
-      </div>
-
-      {/*placeholder for title*/}
-      <div
-      className='
-      p-2 sticky top-0
-      bg-white z-[8]
-      '>
-        <p
-        className='
-        text-[1.25rem] font-semibold
-        text-transparent
-        '>
-          Profile
-        </p>
+          <h2
+          className='
+          text-[1.25rem] font-medium
+          text-violet-dark/90
+          '>
+            Profile
+          </h2>
+        </div>
       </div>
 
       <div

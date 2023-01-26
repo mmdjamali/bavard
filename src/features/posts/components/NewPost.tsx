@@ -45,7 +45,7 @@ const NewPost :React.FC<props> = ({
             z-[9]
             rounded-full
             w-[45px] h-[45px] object-cover
-            my-2 mr-4 ml-3
+            my-2 mx-3
             "
             /> 
             :
@@ -53,7 +53,7 @@ const NewPost :React.FC<props> = ({
             className='
             w-[45px] h-[45px] flex items-center justify-center
             bg-violet-200 rounded-full
-            text-violet-dark text-[1.25rem] m-2
+            text-violet-dark text-[1.25rem] my-2 mx-3
             '>
                 <RiUserLine/>
             </div>
@@ -89,8 +89,12 @@ const NewPost :React.FC<props> = ({
           className='
           w-[90%]
           relative
-          resize-none outline-none
-          m-2
+          resize-none 
+          outline-none
+          mt-3
+          mb-1
+          text-neutral-600
+          text-[1rem]
           '
           ref={input}
           value={content}
@@ -107,13 +111,13 @@ const NewPost :React.FC<props> = ({
           <div
           className='
           inline w-[95%] h-[1px]
-          bg-neutral-200
+          bg-neutral-200/75
           
           '/>
           
           <div
           className='
-          flex w-full my-4 
+          flex w-full my-3 
           justify-end
           '>
 

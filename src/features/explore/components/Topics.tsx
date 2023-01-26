@@ -42,6 +42,7 @@ const Topics = () => {
           flex
           flex-wrap
           gap-2
+            justify-center
           '>
 
               <a

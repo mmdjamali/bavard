@@ -99,10 +99,14 @@ const VeriticalActionBar : React.FC<props> = ({
                     followUser(created_by || "")
                 }}
                 className='
-                text-[.9rem]
+                text-[.9rem] text-neutral-700
+                hover:bg-violet-100
                 px-2
                 py-1
+                text-left
+                w-full
                 flex
+                flex-row
                 items-center
                 justify-left
                 gap-2

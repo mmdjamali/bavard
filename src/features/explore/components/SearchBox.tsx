@@ -42,6 +42,7 @@ const SearchBox : React.FC<props> = ({
     bg-violet-50
     rounded-lg
     my-2
+    mx-4
     border-2 border-transparent
     focus-within:border-violet-500 
     focus-within:text-violet-500
@@ -53,9 +54,14 @@ const SearchBox : React.FC<props> = ({
         <RiSearchLine
         className={`
         text-[1.25rem]
-        min-w-10
+        min-w-[20px]
         `}/>
+
         <form
+        className='
+        overflow-hidden
+
+        '
         onSubmit={(e) => {
           e.preventDefault()
           setSearchValue(value)
@@ -68,7 +74,8 @@ const SearchBox : React.FC<props> = ({
               setValue(e.target.value)
           }}
           className='
-          w-[75%]
+          w-full
+          overflow-hidden
           outline-none
           bg-transparent
           text-[1rem]
@@ -83,6 +90,7 @@ const SearchBox : React.FC<props> = ({
         className={`
         text-[1.25rem]
         cursor-pointer
+        min-w-[20px]
 
         ${!value ? " pointer-events-none opacity-0 " : ""}
         `}

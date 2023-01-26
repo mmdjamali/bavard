@@ -51,6 +51,7 @@ const Post : React.FC<props> = ({
     flex w-full relative
     cursor-pointer
     flex-col
+    z-[4]
     `}>
 
       { 

@@ -143,6 +143,7 @@ export const useGetUserProfile = (
   ) => {
     const [profile , setProfile] = useState<profile | null>(null)
     const [pending , setPending] = useState<boolean>(true)
+    const [err , setErr] = useState<string | null>(null)
     
     useLayoutEffect(() => {
 
@@ -160,13 +161,37 @@ export const useGetUserProfile = (
             if(error){
                 setPending(false)
                 setProfile(null)
+                setErr(error.message)
               return
             }            
             setProfile(data)
             setPending(false)
+            setErr(null)
 
           }
           func()
+    },[uid])
+
+    useEffect(() => {
+        const channel = supabase.channel("profile" + uid)
+                .on(
+                "postgres_changes",
+                {
+                    event : "*",
+                    schema : "public",
+                    table : "profiles",
+                    filter : "uid=eq." + uid
+                },
+                (payload : any) => {
+                    if(payload?.new){
+                        setProfile(payload?.new)
+                    }
+                })
+                .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
     },[uid])
     
 

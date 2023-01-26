@@ -14,7 +14,7 @@ const SkeletonProfile = () => {
         className='
         bg-neutral-300
         w-full
-        h-[100px]
+        aspect-[4/1]
         z-[9]
         animate-pulse
         '
@@ -78,28 +78,28 @@ const SkeletonProfile = () => {
           gap-2
           '>
 
-              <span
-              className='
-              bg-neutral-200
-              w-full
-              h-[10px]
-              flex
-              rounded-full
-              animate-pulse
-              '/>
+            <span
+            className='
+            bg-neutral-200
+            w-full
+            h-[10px]
+            flex
+            rounded-full
+            animate-pulse
+            '/>
 
-              <span
-              className='
-              flex
-              bg-neutral-200
-              text-[.9rem]
-              w-[40%]
-              h-[10px]
-              rounded-full
-              animate-pulse
-              '/>
+            <span
+            className='
+            flex
+            bg-neutral-200
+            text-[.9rem]
+            w-[40%]
+            h-[10px]
+            rounded-full
+            animate-pulse
+            '/>
 
-          </div>
+        </div>
 
         <div
         className='

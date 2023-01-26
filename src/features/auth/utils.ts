@@ -1,6 +1,7 @@
 import supabase from "../../libs/supabase"
 import store from "../../redux/store"
 import { setProfile } from "../../redux/AuthSlice"
+import React from "react"
 
 type returnString = () => Promise<string>
 
@@ -38,36 +39,57 @@ export const SignUpWithEmail = async (
 
 export const createProfile  = async ( 
   name : string, 
-  profilePic : any ,// string | ArrayBuffer | File | null,
+  pp : any ,// string | ArrayBuffer | File | null,
   imageURL : string | null,
   username : string,
-  interests : string[] | []
+  interests : string[] | [],
+  banner : any
   ) => {
   try{
     const {data , error} = await supabase.auth.getUser()
-    let pic :any;
+    let profilePic :any;
+    let bannerPic :any;
+
     // console.log(data,error)
     if(error) return
 
-      if(!imageURL && profilePic){
-          pic = await supabase
-          .storage
-          .from("profiles")
-          .upload(
-            `public/${data.user.id}.png`,
-            profilePic,{
-              cacheControl : "60"
-            }
-          )
-      }
-    if(pic?.error) {
+    if(!imageURL && pp){
+        profilePic = await supabase
+        .storage
+        .from("profiles")
+        .upload(
+          `public/${data.user.id}.png`,
+          pp,{
+            cacheControl : "60"
+          }
+        )
+    }
+    
+    if(profilePic?.error) {
+      return
+    }
+
+    if(banner){
+      bannerPic = await supabase
+        .storage
+        .from("profiles")
+        .upload(
+          `public/${data.user.id + "Banner"}.png`,
+          banner,{
+            cacheControl : "60"
+          }
+        )
+    }
+
+    if(bannerPic?.error){
       return
     }
 
     const profile = await supabase
       .from("profiles")
       .insert({
-        profile_picture : imageURL ? imageURL : pic ? pic.data?.path : "",
+        banner_picture : bannerPic?.data?.path || "",
+        profile_picture : imageURL ? imageURL : profilePic ? profilePic.data?.path : "",
         uid : data?.user?.id,
         display_name : name || "unknown",
         username : username ? "@" + username : await createRandomUser(),
@@ -91,7 +113,10 @@ export const updateProfile = async (
   BIO : string | null,
   INTERESTS : string[] | [] | null,
   IMAGE : any,
-  PROFILE : any
+  IMAGE_URL : string,
+  PROFILE : any,
+  BANNER : any,
+  BANNER_URL : string
 ) => {
   if(!await checkForUserName(USERNAME || "") && USERNAME !== PROFILE?.username.replace("@","")) return
 
@@ -121,23 +146,40 @@ export const updateProfile = async (
     
   }
 
+  if(BANNER){
+    const remove = await supabase
+      .storage
+      .from("profiles")
+      .remove([PROFILE?.banner_picture])
+
+    // console.log(remove)
+
+    const insert = await supabase
+      .storage
+      .from("profiles")
+      .upload(
+        `public/${PROFILE?.uid}Banner.png`,
+        BANNER,{
+          cacheControl : "60"
+        }
+      )
+      
+    // console.log(insert)
+    if(insert.error){
+      
+      return
+    }
+  }
+
   const updateProfile = await supabase
       .from("profiles")
-      .update([
-        IMAGE ? 
-        {
-          bio : BIO || null,
+      .update([{
+          bio : BIO?.replaceAll("\n" , " ") || null,
           display_name : NAME || "unknown",
           username : "@" + USERNAME || await createRandomUser(),
           interests : INTERESTS,
-          profile_picture : `public/${PROFILE?.uid}.png`,
-        }
-        :
-        {
-          bio : BIO || null,
-          display_name : NAME || "unknown",
-          username : "@" + USERNAME || await createRandomUser(),
-          interests : INTERESTS,
+          profile_picture : IMAGE ? `public/${PROFILE?.uid}.png` : IMAGE_URL,
+          banner_picture : BANNER ? `public/${PROFILE?.uid}Banner.png` : BANNER_URL,
         }])
         .eq("uid",PROFILE?.uid);
 
@@ -249,7 +291,7 @@ export const signInWithLinkedin = async () => {
 }
 
 export const checkForUserName = async (
-  username : string
+  username : string,
 ) => {
   if(!/^[a-zA-Z][a-zA-Z0-9_#]*$/i.test(username)) return false
 
@@ -263,6 +305,6 @@ export const checkForUserName = async (
             if(error) return false
 
             if(data.length === 0) return true
-
+            
             return false
 }

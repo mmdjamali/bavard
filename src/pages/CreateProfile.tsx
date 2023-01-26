@@ -2,18 +2,22 @@ import React , {useState} from 'react'
 import { TypographyLG , TypographySM } from '../components/typographies'
 import { ImageInput , Input } from '../components/inputs'
 import { FullWidthButton } from '../components/buttons'
-import { checkForUserName, createProfile } from '../features/auth/utils'
+import { checkForUserName, createProfile, logout } from '../features/auth/utils'
 import { useSelector } from 'react-redux'
 import { rootType } from '../redux/store'
 import CheckBox from '../components/inputs/CheckBox'
 import { RiChatSmile2Fill , RiArrowLeftLine } from "react-icons/ri"
 import { data } from '../data/interests'
+import BannerInput from '../components/inputs/BannerInput'
 
 const CreateProfile : React.FC = () => {
   const { profileURL , name : NAME , email } = useSelector((state : rootType) => state.DefaultProfileSlice)
-
+  
+  // for users who logged in with a provider
   const [imageURL , setImageURL] = useState<string | null>(profileURL || "")
+  
   const [image , setImage] = useState<string | ArrayBuffer | File | null>("")
+  const [banner , setBanner] = useState<string | ArrayBuffer | File | null>("")
   const [name , setName] = useState<string>(NAME || "")
   const [username , setUsername] = useState<string>(email || "")
   const [loading , setLoading] = useState<boolean>(false)
@@ -155,7 +159,7 @@ const CreateProfile : React.FC = () => {
           e.preventDefault()
           try{
             setLoading(true)
-            await createProfile(name , image , imageURL , username , interests)
+            await createProfile(name , image , imageURL , username , interests , banner)
             setLoading(false)
           }
           catch(err){
@@ -164,187 +168,221 @@ const CreateProfile : React.FC = () => {
         }}
         className='
         flex flex-col justify-center
-        w-[min(80%_,_20rem)]
+        w-[min(85%_,_20rem)]
         '>
-          {
-            !show &&
-            <button
-            onClick={() => {
-              setShow(true)
-            }}
-            type='button'
-            className='
-            text-[2rem]
-            rounded-full
-            p-[.5rem]
-            hover:bg-violet-50
-            '>
-              <RiArrowLeftLine/>
-            </button>
-          }
 
-        { 
-          show &&
-          <>
-          <TypographyLG
-          text="Your Profile"
-          sx="mb-[.5rem] mx-auto"
-          />
+          { 
+            show ?
+            <>
+              <div
+              className='
+              flex
+              gap-2
+              items-center
+              mb-[1rem]
+              '>
 
-          <TypographySM
-          text="Complete your profile and continue!"
-          sx="mb-[1rem] mx-auto"
-          />
-
-          <ImageInput
-          defaultURL={imageURL}
-          setDefaultURL={setImageURL}
-          value={image}
-          setValue={setImage}
-          sx='mb-[.5rem] mx-auto'
-          />
-
-          <span
-          className='
-          text-neutral-700
-          font-medium
-          '>
-            NAME
-          </span>
-
-          <Input
-          sx="my-[.5rem]"
-          placeholder="unknown..."
-          value={name}
-          setValue={setName}
-          validationFunc={(value : string) => {
-              if(value?.length > 16){
-                return false
-              }
-              return true
-          }}
-          />
-
-          <span
-          className='
-          text-neutral-700
-          font-medium
-          '>
-            USERNAME
-          </span>
-
-          <Input
-          sx="my-[.5rem] mb-[1rem]"
-          placeholder="user999.."
-          value={username}
-          setValue={setUsername}
-          validationFunc={async (value : string) => {
-            let bool = await checkForUserName(value)
-            return bool
-          }}
-          />
-
-          <FullWidthButton
-          title='Continue'
-          loading={loading}
-          TYPE={"button"}
-          onClick={async () => {
-            try{
-
-              setLoading(true)
-
-              if(username && !await checkForUserName(username)){
-                setLoading(false)
-                return
-              }
-
-              if(name && name?.length > 16){
-                setLoading(false)
-                return
-              }
-
-              setShow(false)
-              setLoading(false)
-
-            }
-            catch(err){
-              setLoading(false)
-            }
-          }}
-          />
-          </>
-        }
-
-        { !show &&
-          <>
-            <TypographyLG
-            text="Your Interests"
-            sx="mb-[.5rem] mx-auto"
-            />
-
-            <TypographySM
-            text="Select your interested topics for a better user experience (optional)"
-            sx="mb-[.25rem] mx-auto"
-            />
-
-          {
-          data?.map((item , idx) => {
-            return(
-              <>
-                <span
-                key={idx.toString() + item}
+              <button
+                onClick={() => {
+                  logout()
+                }}
+                type='button'
                 className='
-                mt-[1rem]
-                mb-[.5rem]
-                text-[1rem]
-                font-medium
-                text-neutral-700
+                text-[1.5rem]
+                rounded-full
+                p-2
+                hover:bg-violet-50
+                w-fit
                 '>
-                  {item?.category}
-                </span>
+                  <RiArrowLeftLine/>
+                </button>
 
-                <div
-                key={idx}
-                className='
-                flex 
-                flex-wrap
-                gap-x-3
-                gap-y-4
-                '>
-                  {
-                    item?.values?.map((item , idx) => {
-                      return(
-                        <CheckBox
-                        key={idx.toString() + item}
-                        value={item}
-                        onChange={(e) => {
-                          e.target.checked ?
-                          setInterests(prev => [...prev,item])
-                          :
-                          setInterests(prev => {
-                            let array = [...prev];
-                            array.splice(array.findIndex((v) => v === item),1)
-                            return [...array]
-                          })
-                        }}
-                        />
-                      )
-                    })
+                <TypographyLG
+                text="Your Profile"
+                sx="
+                text-left
+                w-fit
+                "
+                />
+
+              </div>
+
+              <BannerInput
+              value={banner}
+              setValue={setBanner}
+              setDefaultURL={() => {}}
+              defaultURL={null}
+              />
+
+              <ImageInput
+              defaultURL={imageURL}
+              setDefaultURL={setImageURL}
+              value={image}
+              setValue={setImage}
+              imageSX='
+              w-[min(90px,20vw)]
+              mt-[max(-45px,-10vw)]
+              ml-[1rem]
+              aspect-[1/1]
+              '
+              />
+
+              <Input
+              sx="mt-[1rem]"
+              title="Name"
+              value={name}
+              setValue={setName}
+              validationFunc={(data , setErr) => {
+                  if(data?.length > 16){
+                    setErr("Name is too long")
+                    return false
                   }
-                </div>
-              </>
-              )
-            })
-          }
-          <FullWidthButton
-          title='Continue'
-          loading={loading}
-          sx="mt-[1.5rem]"/>
-          </>
-          
-        }
+                  setErr("")
+                  return true
+               }}
+              />
 
-        
+              <Input
+              sx="mt-[1rem]"
+              title="User name"
+              value={username}
+              setValue={setUsername}
+              validationFunc={async (value : string , setErr) => {
+                if(!value){
+                  setErr("")
+                  return false
+                }
+  
+                if(value?.length < 3) {
+                  setErr("Username is short")
+                  return false
+                }
+                
+                let bool = await checkForUserName(value)
+                if(!bool){
+                  setErr("Username already exists")
+                  return false
+                }
+                setErr("")
+                return true
+               }}
+              />
+
+              <FullWidthButton
+              sx="mt-[1.25rem]"
+              title='Continue'
+              loading={loading}
+              TYPE={"button"}
+              onClick={async () => {
+                try{
+
+                  setLoading(true)
+
+                  if(username && !await checkForUserName(username)){
+                    setLoading(false)
+                    return
+                  }
+
+                  if(name && name?.length > 16){
+                    setLoading(false)
+                    return
+                  }
+
+                  setShow(false)
+                  setLoading(false)
+
+                }
+                catch(err){
+                  setLoading(false)
+                }
+              }}
+              />
+            </>
+            :
+            <>
+              <div
+              className='
+              flex
+              items-center
+              mt-[2rem]
+              gap-2
+              '>
+                <button
+                onClick={() => {
+                  setShow(true)
+                }}
+                type='button'
+                className='
+                text-[1.5rem]
+                rounded-full
+                p-[.5rem]
+                hover:bg-violet-50
+                w-fit
+                '>
+                  <RiArrowLeftLine/>
+                </button>
+
+                <TypographyLG
+                text="Your Interests"
+                sx="w-fit"
+                />
+              </div>
+              
+              {
+              data?.map((item , idx) => {
+                return(
+                  <>
+                    <span
+                    key={idx.toString() + item}
+                    className='
+                    mt-[1.5rem]
+                    mb-[.5rem]
+                    text-[1.25rem]
+                    font-medium
+                    text-neutral-700
+                    '>
+                      {item?.category}
+                    </span>
+
+                    <div
+                    key={idx}
+                    className='
+                    flex 
+                    flex-wrap
+                    gap-x-3
+                    gap-y-4
+                    '>
+                      {
+                        item?.values?.map((item , idx) => {
+                          return(
+                            <CheckBox
+                            key={idx.toString() + item}
+                            value={item}
+                            onChange={(e) => {
+                              e.target.checked ?
+                              setInterests(prev => [...prev,item])
+                              :
+                              setInterests(prev => {
+                                let array = [...prev];
+                                array.splice(array.findIndex((v) => v === item),1)
+                                return [...array]
+                              })
+                            }}
+                            />
+                          )
+                        })
+                      }
+                    </div>
+                  </>
+                  )
+                })
+              }
+              <FullWidthButton
+              title='Continue'
+              loading={loading}
+              sx="mt-[1.5rem]"/>
+            </>
+          }
 
         </form>
 

@@ -11,6 +11,8 @@ import LikedPosts from '../features/Profiles/components/LikedPosts';
 import OnlyPosts from '../features/Profiles/components/OnlyPosts';
 import { EditProfileButton, FollowButton, UserPosts } from '../features/Profiles';
 import { useParams } from 'react-router-dom';
+import ProfileImage from '../features/Profiles/components/ProfileImage';
+import LogoutButton from '../features/Profiles/components/LogoutButton';
 
 const Profile = () => {
   const { username } = useParams()
@@ -22,6 +24,8 @@ const Profile = () => {
   const [profile , P_pending] : any = useGetUserProfileByUsername(USERNAME || "");
   const [followers , F_pending , F_err] = useGetFollowers(profile?.uid || "")
   const pp = getFile("profiles",profile?.profile_picture || "");
+  const banner_picture = getFile("profiles",profile?.banner_picture || "");
+
 
   if(
     F_pending ||
@@ -128,14 +132,29 @@ const Profile = () => {
       border-b-[1px]
       border-color
       '>
-        <div
-        className='
-        bg-violet-400
-        w-full
-        h-[100px]
-        z-[9]
-        '
-        />
+        {
+          banner_picture ?
+          <img
+          src={banner_picture}
+          className='
+          bg-violet-300
+          w-full
+          aspect-[4/1]
+          z-[9]
+          object-cover
+          '
+          />
+          :
+          <div
+          className='
+          bg-violet-300
+          w-full
+          aspect-[4/1]
+          z-[9]
+          '
+          />
+        }
+
         <div
         className='
         flex 
@@ -144,48 +163,10 @@ const Profile = () => {
         justify-between
         '>
           
-          {    
-            pp ? 
-            <img 
-            loading='lazy'
-            src={`${pp ? pp : ""}`}
-            draggable="false"
-            className="
-            z-[9] 
-            relative
-            rounded-full
-            w-[100px] 
-            h-[100px] 
-            mt-[-50px]
-            border-[4px]
-            border-white
-            object-cover
-            mx-4
-            cursor-pointer
-            "
-            /> 
-            :
-            <div
-            className='
-            w-[100px] 
-            h-[100px] 
-            flex 
-            z-[9]
-            mt-[-50px]
-            items-center 
-            justify-center
-            bg-violet-200 
-            rounded-full
-            text-violet-dark 
-            text-[2rem]
-            border-[4px]
-            border-white
-            mx-4
-            cursor-pointer
-            '>
-                <RiUserLine/>
-            </div>
-          }
+          <ProfileImage
+          pp={pp || ""}
+          />
+
           <div
           className='
           mr-2
@@ -198,7 +179,10 @@ const Profile = () => {
           '>
             {
               profile?.uid === Profile?.uid ?
+              <>
+              <LogoutButton/>
               <EditProfileButton/>
+              </>
               :
               <>
               <button

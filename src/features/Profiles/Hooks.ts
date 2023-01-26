@@ -412,6 +412,7 @@ export const useGetUsersWithSameInterests = (
                 .select("uid",{count : "exact"})
                 .overlaps("interests",[...profile.interests])
                 .neq("uid",profile?.uid)
+                .not("uid","in",`(${profile?.followed?.join(",") || ""})`)
                 .range(0,max)
 
             if(getUsers?.error){
@@ -422,10 +423,10 @@ export const useGetUsersWithSameInterests = (
                 return
             }
 
-            setPending(false)
             setHasMore(max - 1 < (getUsers?.count || 0))
             setErr(null)
             setUsers(getUsers?.data)
+            setPending(false)
         }
 
         func()

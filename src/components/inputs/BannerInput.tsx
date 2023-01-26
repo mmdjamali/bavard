@@ -11,7 +11,7 @@ type props = {
     imageSX? : string
 }
 
-const ImageInput : React.FC<props> = ({
+const BannerInput : React.FC<props> = ({
     setValue , 
     value ,
     defaultURL,
@@ -31,7 +31,7 @@ const ImageInput : React.FC<props> = ({
         ${sx ? sx : ""}
         `}>
             <input
-            id="ImageInput"
+            id="BannerInput"
             type="file"
             accept=".png,.jpeg"
             className="hidden"
@@ -51,12 +51,12 @@ const ImageInput : React.FC<props> = ({
             />
 
             <label 
-            htmlFor="ImageInput"
+            htmlFor="BannerInput"
             className={`
             flex 
-            ${imageSX ? imageSX : "w-[9rem] h-[9rem]"} 
+            ${imageSX ? imageSX : "aspect-[4/1] w-full"} 
             border-[1px] border-neutral-300
-            bg-white hover:bg-violet-50 rounded-full
+            bg-white hover:bg-violet-50
             justify-center items-center transition-colors
             cursor-pointer bg-center bg-cover
             bg-no-repeat
@@ -76,4 +76,4 @@ const ImageInput : React.FC<props> = ({
     )
 }
 
-export default ImageInput
+export default BannerInput

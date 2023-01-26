@@ -1,4 +1,4 @@
-import React , { useState , useEffect} from 'react'
+import React , { useState , useEffect, useLayoutEffect} from 'react'
 import { useSelector } from 'react-redux'
 import type { rootType } from '../../../redux/store'
 import { useGetUserProfile } from '../../auth/hooks'
@@ -13,15 +13,15 @@ const FollowButtonMobile : React.FC<props> = ({
   userID
 }) => {
   const user : string | null= useSelector((state : rootType) => state.AuthSlice.user);
-  const [profile , pending] : any = useGetUserProfile(user || "");
+  const [profile , pending , err] : any = useGetUserProfile(user || "");
   const [unfollow , setUnfollow] = useState<boolean>(false)
-  const [followed , setFollowed] = useState<boolean>(true);
+  const [followed , setFollowed] = useState<boolean>(profile?.followed?.includes(userID));
 
-  useEffect(() => {
-    setFollowed( profile?.followed?.includes(userID))
+  useLayoutEffect(() => {
+    setFollowed(profile?.followed?.includes(userID))
   },[profile])
 
-  if(pending)return(
+  if(pending || (!profile))return(
     <button
     className='
     grid

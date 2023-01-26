@@ -6,14 +6,17 @@ import { Post } from '../features/posts';
 import Loader from '../components/Loader';
 import Repost from '../features/posts/components/Repost';
 import InfiniteScroll from '../utils/InfiniteScroll';
-import { RiEmotionSadLine } from 'react-icons/ri';
+import { RiEmotionSadLine, RiQuillPenLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { FullWidthButton } from '../components/buttons';
+import { setActive, setProperty, setValue } from '../redux/NewPostPopupSlice';
+import { useDispatch } from 'react-redux';
 
 const Home = () => {
   useSidebarChanger("Home")
   const [max , setMax] = useState<number>(10)
   const [data , pending , error , hasMore] = useGetPosts(max)
-
+  const dispatch = useDispatch()
   return (
     <div
     className='
@@ -112,6 +115,7 @@ const Home = () => {
         />
    
       </div>
+      
     </div>
   )
 }

@@ -93,6 +93,7 @@ const  WhoToFollow = () => {
                     users?.map((item : {uid : string} , idx : number) => {
                         return(
                             <ProfileCard
+                            key={idx}
                             userID={item?.uid}
                             />
                         )
@@ -100,8 +101,6 @@ const  WhoToFollow = () => {
                     :
                     <div
                     className='
-                    border-t-[1px]
-                    border-color
                     py-2
                     px-4
                     '>
@@ -141,8 +140,6 @@ const  WhoToFollow = () => {
                 py-2
                 text-[.9rem]
                 text-violet-500
-                border-t-[1px]
-                border-color
                 cursor-pointer
                 '>
                     Show more

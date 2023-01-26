@@ -85,6 +85,7 @@ const  WhoToFollowMobile = () => {
                         return(
                             <ProfileCardMobile
                             userID={item?.uid}
+                            key={idx}
                             />
                         )
                     })
@@ -115,6 +116,7 @@ const  WhoToFollowMobile = () => {
                     />
                 }
 
+                { users?.length !== 0 && hasMore && 
                 <span
                 onClick={() => {
                     if(pending) return
@@ -138,6 +140,7 @@ const  WhoToFollowMobile = () => {
                 '>
                     Show more
                 </span>
+                }
             </>
             }
 

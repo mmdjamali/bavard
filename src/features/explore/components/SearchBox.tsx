@@ -4,29 +4,30 @@ import { useNavigate } from 'react-router-dom';
 
 type props = {
   setSearchValue : React.Dispatch<React.SetStateAction<string | undefined>>
+  setSection : React.Dispatch<React.SetStateAction<string>>
   searchValue : string | undefined
 }
 
 const SearchBox : React.FC<props> = ({
   setSearchValue,
+  setSection ,
   searchValue
 }) => {
   const [value , setValue] = useState<string>(searchValue || "")
 
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   setValue(searchValue)
-  // }, [searchValue])
+  useEffect(() => {
+    setValue(searchValue || "")
+  }, [searchValue])
   
 
   return (
     <div
     className={`
-    mx-3
     sticky top-0
-    bg-gradient-to-b 
-    from-white/90 to-white/50 z-10
+    bg-white
+    z-10
     backdrop-blur-sm flex items-center justify-center
     `}>
 
@@ -59,6 +60,7 @@ const SearchBox : React.FC<props> = ({
           e.preventDefault()
           setSearchValue(value)
           navigate("/explore/" + value.replace("#",""))
+          setSection("Search")
         }}>
           <input
           value={value}

@@ -11,6 +11,7 @@ import { checkForUserName, updateProfile } from '../../auth/utils'
 import { data } from '../../../data/interests'
 import CheckBox from '../../../components/inputs/CheckBox'
 import { FullWidthButton } from '../../../components/buttons'
+import BannerInput from '../../../components/inputs/BannerInput'
 
 const EditProfile = () => {
   const profileEditor = useSelector((state : rootType) => state.PopupSlice.profileEditor)
@@ -23,6 +24,8 @@ const EditProfile = () => {
   const [bio , setBio] = useState<string>(profile?.bio || "")
   const [profilePicture , setProfilePicture] = useState<string | ArrayBuffer | File | null>(null)
   const [pictureURL , setPictureURL] = useState<string | null>(profile?.profile_picture || "")
+  const [banner , setBanner] = useState<string | ArrayBuffer | File | null>(null)
+  const [bannerURL , setBannerURL] = useState<string | null>(profile?.banner_picture || "")
   const [interests , setInterests] = useState<string[]>(profile?.interests || [])
   
   const [loading , setLoading] = useState<boolean>(false)
@@ -32,6 +35,7 @@ const EditProfile = () => {
     setUserName(profile?.username.replace("@","") || "")
     setBio(profile?.bio || "")
     setPictureURL(profile?.profile_picture || "")
+    setBannerURL(profile?.banner_picture || "")
     setInterests(profile?.interests || [])
   }, [profile , profileEditor])
   
@@ -57,14 +61,13 @@ const EditProfile = () => {
 
         <div
         className='
-        w-[min(400px,100%)]
+        w-[min(450px,100%)]
         bg-white
         rounded-md
         relative
         flex
         flex-col
         justify-center
-        p-2
         my-auto
         '>
             <button
@@ -76,6 +79,7 @@ const EditProfile = () => {
             text-[1.25rem]
             p-1
             w-fit
+            ml-auto
             text-violet-dark
             hover:bg-neutral-200
             rounded-full
@@ -83,115 +87,97 @@ const EditProfile = () => {
               <RiCloseFill/>
             </button>
 
-            <span
-            className='
-            text-neutral-700
-            font-medium
-            xs:mx-[2rem]
-            mx-[.5rem]
-            '>
-              PROFILE PICTURE
-            </span>
+            <BannerInput
+            value={banner}
+            setValue={setBanner}
+            setDefaultURL={setBannerURL}
+            defaultURL={bannerURL}
+            />
 
             <ImageInput
-            defaultURL={getFile("profiles", pictureURL || "")}
+            defaultURL={pictureURL}
             setDefaultURL={setPictureURL}
             value={profilePicture}
             setValue={setProfilePicture}
-            sx='mx-auto mb-[.5rem]'
+            imageSX='
+            w-[min(90px,20vw)]
+            mt-[max(-45px,-10vw)]
+            ml-[.5rem]
+            xs:ml-[2rem]
+            aspect-[1/1]
+            '
             />
-
-            <span
-            className='
-            text-neutral-700
-            font-medium
-            xs:mx-[2rem]
-            mx-[.5rem]
-            '>
-              NAME
-            </span>
 
             <Input
              setValue={setName}
              value={name}
-             placeholder=""
-             validationFunc={(data) => {
+             title="Name"
+             validationFunc={(data , setErr) => {
               if(data?.length > 16){
+                setErr("Name is too long")
                 return false
               }
+              setErr("")
               return true
              }}
              sx="
-             mb-[.5rem] 
+             mt-[1rem]
              xs:mx-[2rem] 
              mx-[.5rem] 
              w-auto
              "
             />
-
-            <span
-            className='
-            text-neutral-700
-            font-medium
-            xs:mx-[2rem]
-            mx-[.5rem]
-            '>
-              USERNAME
-            </span>
 
             <Input
              setValue={setUserName}
              value={username}
-             placeholder=""
-             validationFunc={async (data) => {
-              if(data === profile?.username?.replace("@","")) return true
+             title="User name"
+             validationFunc={async (data , setErr) => {
+              if(data === profile?.username?.replace("@","")){
+                setErr("")
+                return true
+              }
+
+              if(!data){
+                setErr("")
+                return false
+              }
+
+              if(data?.length < 3) {
+                setErr("Username is short")
+                return false
+              }
               
               let bool = await checkForUserName(data)
-              return bool
+              if(!bool){
+                setErr("Username already exists")
+                return false
+              }
+              setErr("")
+              return true
              }}
              sx="
-             mb-[.5rem] 
+             mt-[1rem]
              xs:mx-[2rem] 
              mx-[.5rem] 
              w-auto
              "
             />
 
-            <span
-            className='
-            text-neutral-700
-            font-medium
-            xs:mx-[2rem]
-            mx-[.5rem]
-            '>
-              BIO
-            </span>
-
             <LimitedInput
             value={bio}
             setValue={setBio}
-            placeholder="Who are you?"
+            title="Bio"
             sx="
+            mt-[1rem]
             xs:mx-[2rem] 
             mx-[.5rem] 
-            mb-[.5rem] 
             w-auto
             "
-            limit={120}
+            limit={70}
             />
 
-            <span
-            className='
-            text-neutral-700
-            font-medium
-            xs:mx-[2rem]
-            mx-[.5rem]
-            my-[.5rem]
-            '>
-              INTERESTS
-            </span>
-
-            <div
+            {/* <div
             className='
             xs:mx-[2rem]
             mx-[.5rem]
@@ -248,14 +234,14 @@ const EditProfile = () => {
                   )
                 })
               }
-            </div>
+            </div> */}
 
             <FullWidthButton
             loading={loading}
             onClick={async () => {
               if(name?.length > 16) return
               if(!await checkForUserName(username) && username !== profile?.username.replace("@",'')) return
-              if(bio?.length > 120) return
+              if(bio?.length > 80) return
 
               try{
                 setLoading(true)
@@ -265,7 +251,10 @@ const EditProfile = () => {
                   bio,
                   interests,
                   profilePicture,
-                  profile
+                  pictureURL || "",
+                  profile,
+                  banner,
+                  bannerURL || ""
                 )
                 setLoading(false)
                 window.location.reload()
@@ -275,11 +264,14 @@ const EditProfile = () => {
               }
             }}
             sx="
+            mt-[1.5rem]
             xs:mx-[2rem]
-            mx-[.5rem]
-            mt-[2rem]
-            w-auto
-            mb-2
+            xs:ml-[auto]
+            xs:mr-[2rem]
+            mr-[.5rem]
+            ml-[auto]
+            w-[min(90%,10rem)]
+            mb-4
             "
             title="Save"
             />

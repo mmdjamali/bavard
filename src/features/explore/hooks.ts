@@ -37,6 +37,45 @@ export const useGetPostByQuery = (query : string ,  column : string , max? :numb
         }
 
         func()
-    },[query])
+    },[query,max])
     return [posts,count,pending,err]
+}
+
+export const useGetAllPosts = (
+    max : number = 10
+) => {
+    const [posts , setPosts] = useState<any[] | null>(null)
+    const [hasMore , setHasMore] = useState<boolean>(false)
+    const [pending , setPending] = useState<boolean>(true)
+    const [err , setErr] = useState<PostgrestError | null>()
+    
+    useEffect(() => {
+        const func = async () => {
+            const { data , error , count } = await supabase
+            .from("posts")
+            .select("ID,parent,created_by,content",{count : "exact"})
+            .order("created_at", { ascending: false })
+            .range(max - 10,max)
+
+            if(error){
+                setErr(error)
+                setPosts(null)
+                setHasMore(false)
+                setPending(false)
+                return
+            }
+
+            if(data){
+                setErr(null)
+                setPosts(prev => [...new Set(prev ? [...prev,...data] : [])])
+                setHasMore(max + 1 > (count || 0))
+                setPending(false)
+                return
+            }
+        }
+
+        func()
+    },[max])
+
+    return [posts,hasMore,pending,err]
 }

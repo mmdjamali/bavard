@@ -5,6 +5,7 @@ import { getFile } from '../../storage/utils'
 import { RiUserLine } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
 import FollowButton from './FollowButton'
+import MiniProfile from '../MiniProfile'
 
 type props = {
     userID : string
@@ -23,9 +24,9 @@ const ProfileCard : React.FC<props> = ({
     items-center
     cursor-pointer
     py-2
-    border-t-[1px]
-    border-color
     transition-all
+    relative
+    hover:bg-violet-100
     '>
           {    
             pp ? 
@@ -97,6 +98,7 @@ const ProfileCard : React.FC<props> = ({
             overflow-hidden
             whitespace-nowrap
             w-full
+            relative
             '
             >
                 {profile?.display_name || ""}

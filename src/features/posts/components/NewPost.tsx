@@ -25,6 +25,7 @@ const NewPost :React.FC<props> = ({
   const {user , profile} : any = useSelector((state : rootType) => state.AuthSlice)
   const [content , setContent] = useState<string>("")
   const [loading , setLoading] = useState<boolean>(false)
+  const [focus , setFocus] = useState<boolean>(false)
   
   const input = useRef<any>();
   
@@ -92,12 +93,20 @@ const NewPost :React.FC<props> = ({
           resize-none 
           outline-none
           mt-3
-          mb-1
+          mb-2
           text-neutral-600
           text-[1rem]
           '
           ref={input}
           value={content}
+          onFocus={() => {
+            setFocus(true)
+          }}
+          onBlur={(e) => {
+            if(!e.target.value){
+              setFocus(false)
+            }
+          }}
           onChange={(e) => {
             let target = e.target
             setContent(target.value)
@@ -108,12 +117,12 @@ const NewPost :React.FC<props> = ({
           >
           </textarea>
 
-          <div
+          {/* <div
           className='
           inline w-[95%] h-[1px]
           bg-neutral-200/75
           
-          '/>
+          '/> */}
           
           <div
           className='
@@ -121,52 +130,56 @@ const NewPost :React.FC<props> = ({
           justify-end
           '>
 
-            <div
-            style={{
-            "backgroundImage" 
-              : 
-            `conic-gradient(
-              ${content.length <= 160 ? "#8B5CF6" : ""}
-              ${content.length > 160 && content.length <= 180 ? "rgb(253,224,71)" : ""}
-              ${content.length > 180 ? "#EF4444" : ""}
-              ${(content.length * 2 )+ "deg"} ,#eee ${(content.length * 2) + "deg"} )
-            `}}
+            { focus &&
+            <>
+              <div
+              style={{
+              "backgroundImage" 
+                : 
+              `conic-gradient(
+                ${content.length <= 160 ? "#8B5CF6" : ""}
+                ${content.length > 160 && content.length <= 180 ? "rgb(253,224,71)" : ""}
+                ${content.length > 180 ? "#EF4444" : ""}
+                ${(content.length * 2 )+ "deg"} ,#eee ${(content.length * 2) + "deg"} )
+              `}}
 
-            className={`
-            w-[30px] h-[30px]
-            relative flex items-center justify-center
-            rounded-full 
-            after:content-[""""]
-            after:inline-block 
-            after:w-[80%] after:h-[80%]
-            after:bg-white 
-            after:rounded-full
-            `}
-            >
-              <span
               className={`
-              absolute
-              text-[.75rem]
-              ${content.length <= 160 ? "text-neutral-500" : ""}
-              ${(content.length > 160 && content.length <= 180 ) ? "text-yellow-300" : ""}
-              ${(content.length > 180 ) ? "text-red-500" : ""}
-              `}>
-                {content && 180 - content.length}
-              </span>
-            </div>
+              w-[30px] h-[30px]
+              relative flex items-center justify-center
+              rounded-full 
+              after:content-[""""]
+              after:inline-block 
+              after:w-[80%] after:h-[80%]
+              after:bg-white 
+              after:rounded-full
+              `}
+              >
+                <span
+                className={`
+                absolute
+                text-[.75rem]
+                ${content.length <= 160 ? "text-neutral-500" : ""}
+                ${(content.length > 160 && content.length <= 180 ) ? "text-yellow-300" : ""}
+                ${(content.length > 180 ) ? "text-red-500" : ""}
+                `}>
+                  {content && 180 - content.length}
+                </span>
+              </div>
 
-            {/* TODO! */}
-            {/* Create a custom component for this button */}
-            <button
-            className={`
-            ${(content && (content.length <= 180)) ? "bg-violet-500" : "bg-violet-300 pointer-events-none"} 
-            text-white
-            px-4 py-1 rounded-full mx-4
-            `}>
-              { loading ? 
-              <CgSpinner
-              className='text-[1.5rem] mx-[5px] animate-spin'/> : "Post"}
-            </button>
+              {/* TODO! */}
+              {/* Create a custom component for this button */}
+              <button
+              className={`
+              ${(content && (content.length <= 180)) ? "bg-violet-500" : "bg-violet-300 pointer-events-none"} 
+              text-white
+              px-4 py-1 rounded-full mx-4
+              `}>
+                { loading ? 
+                <CgSpinner
+                className='text-[1.5rem] mx-[5px] animate-spin'/> : "Post"}
+              </button>
+            </>
+            }
 
           </div>
 

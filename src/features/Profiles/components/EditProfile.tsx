@@ -174,7 +174,7 @@ const EditProfile = () => {
             mx-[.5rem] 
             w-auto
             "
-            limit={70}
+            limit={90}
             />
 
             {/* <div
@@ -239,9 +239,12 @@ const EditProfile = () => {
             <FullWidthButton
             loading={loading}
             onClick={async () => {
-              if(name?.length > 16) return
-              if(!await checkForUserName(username) && username !== profile?.username.replace("@",'')) return
-              if(bio?.length > 80) return
+              if(name?.length > 16 ||
+              (!await checkForUserName(username) && username !== profile?.username.replace("@",'')) ||
+              bio?.length > 90){
+                setLoading(false)
+                return
+              }
 
               try{
                 setLoading(true)

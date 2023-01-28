@@ -20,6 +20,7 @@ const Profile = React.lazy(() => import("./pages/Profile"))
 const CreateProfile = React.lazy(() => import("./pages/CreateProfile"))
 const Bookmarks = React.lazy(() => import("./pages/Bookmarks"))
 const WhoToFollow = React.lazy(() => import("./pages/WhoToFollow"));
+const Post = React.lazy(() => import("./pages/Post"));
 
 function App() {
   const {user , profile , pending , error} = useSelector((state : rootType) => state.AuthSlice)
@@ -60,6 +61,7 @@ function App() {
         <Route path="/bookmarks" element={<ProtectedAuth><Bookmarks/></ProtectedAuth>}/>
         <Route path="/profile" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
         <Route path="/profile/:username" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
+        <Route path="/post/:postID" element={<ProtectedAuth><Post/></ProtectedAuth>}/>
       </Routes>
       <WhoToFollow/>
     </Suspense>

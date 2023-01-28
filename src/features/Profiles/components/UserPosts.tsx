@@ -2,7 +2,7 @@ import React , { useState } from 'react'
 import InfiniteScroll from '../../../utils/InfiniteScroll'
 import { useGetUserPosts } from '../Hooks'
 import Repost from '../../posts/components/Repost'
-import { Post } from '../../posts'
+import { PostCard } from '../../posts'
 import Loader from '../../../components/Loader'
 
 type props = {
@@ -29,7 +29,7 @@ const UserPosts : React.FC<props> = ({
               />
             )
 
-            return(<Post
+            return(<PostCard
             key={idx}
             ID={post?.ID}
             />)

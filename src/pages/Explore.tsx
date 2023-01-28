@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import useSidebarChanger from '../hooks/useSidebarChanger'
 import { SearchBox } from '../features/explore';
-import { NewPost } from '../features/posts';
-import { useGetPostByQuery } from '../features/explore/hooks';
 import { useParams } from 'react-router-dom';
 import SearchResult from '../features/explore/components/SearchResult';
-import TopicRelatedPosts from '../features/explore/components/TopicRelatedPosts';
 import Topics from '../features/explore/components/Topics';
 import AllPosts from '../features/explore/components/AllPosts';
 

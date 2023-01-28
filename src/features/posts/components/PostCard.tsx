@@ -8,11 +8,11 @@ import { rootType } from '../../../redux/store'
 import { followUser } from '../../auth/utils'
 import HorizontalActionBar from './HorizontalActionBar'
 import { deletePost } from '../functions'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useGetPost } from '../hooks'
 import VeriticalActionBar from './VeriticalActionBar'
 import Loader from '../../../components/Loader'
-import SkeletonPost from './SkeletonPost'
+import SkeletonPostCard from './SkeletonPostCard'
 import { getFile } from '../../storage/utils'
 
 type props = {
@@ -20,11 +20,12 @@ type props = {
   sx? : string,
   noInteraction? : boolean
 }
-const Post : React.FC<props> = ({
+const PostCard : React.FC<props> = ({
       ID , 
       sx ,
       noInteraction
 }) => {
+  const navigate = useNavigate()
   const auth : any = useSelector((state : rootType) => state.AuthSlice);
   const [post , error , pending] : any = useGetPost(ID)
   const [repliedPost , repliedError , repliedPending] : any = useGetPost(post?.replying || "")
@@ -41,7 +42,7 @@ const Post : React.FC<props> = ({
     !profile ||
     (repliedPost && !repliedProfile)
     ) return(
-    <SkeletonPost/>
+    <SkeletonPostCard/>
   )
 
   return (
@@ -168,6 +169,9 @@ const Post : React.FC<props> = ({
 
             {/* Content section for post */}
             <div
+            onClick={() => {
+              navigate("/post/" + post?.ID)
+            }}
             className='
             relative w-[100%] pr-4
             '>
@@ -210,4 +214,4 @@ const Post : React.FC<props> = ({
   )
 }
 
-export default Post
+export default PostCard

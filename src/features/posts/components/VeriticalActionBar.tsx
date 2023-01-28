@@ -39,7 +39,7 @@ const VeriticalActionBar : React.FC<props> = ({
     transition-all
     '>
         <button
-        onClick={() => {
+        onClick={(e) => {
             setShow(true)
             container.current?.focus();
         }}

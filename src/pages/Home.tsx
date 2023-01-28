@@ -2,15 +2,12 @@ import React , { useState , useRef , useCallback , createRef } from 'react'
 import useSidebarChanger from '../hooks/useSidebarChanger'
 import { NewPost } from '../features/posts';
 import { useGetPosts } from '../features/storage/hooks';
-import { Post } from '../features/posts';
 import Loader from '../components/Loader';
 import Repost from '../features/posts/components/Repost';
 import InfiniteScroll from '../utils/InfiniteScroll';
-import { RiEmotionSadLine, RiQuillPenLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import { FullWidthButton } from '../components/buttons';
-import { setActive, setProperty, setValue } from '../redux/NewPostPopupSlice';
 import { useDispatch } from 'react-redux';
+import PostCard from '../features/posts/components/PostCard';
 
 const Home = () => {
   useSidebarChanger("Home")
@@ -76,7 +73,7 @@ const Home = () => {
                 />
             )
 
-            return(<Post
+            return(<PostCard
             key={idx}
             ID={post?.ID}
             />)

@@ -2,7 +2,7 @@ import React from 'react'
 import { RiChat3Fill } from "react-icons/ri";
 import { useGetPostByQuery } from '../hooks';
 import Repost from '../../posts/components/Repost';
-import { Post } from '../../posts';
+import { PostCard } from '../../posts';
 import Loader from '../../../components/Loader';
 import { useNavigate } from 'react-router-dom';
 
@@ -77,7 +77,7 @@ const TopicRelatedPosts : React.FC<props> = ({
             )
 
             return(
-              <Post
+              <PostCard
               key={idx}
               ID={item?.ID}
               />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useGetPostByQuery } from '../hooks'
-import { Post } from '../../posts'
+import { PostCard } from '../../posts'
 import Loader from '../../../components/Loader'
 import Repost from '../../posts/components/Repost'
 
@@ -33,7 +33,7 @@ const SearchResult : React.FC<props> = ({
             )
             
             return (
-            <Post
+            <PostCard
             ID={item?.ID}
             key={idx}
             />)

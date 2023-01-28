@@ -11,6 +11,8 @@ type props = {
     color : string,
     fillColor : string,
     post : any,
+    showNumber?: boolean,
+    iconSize ?: string
 }
 
 const ReplyButton : React.FC<props> = ({
@@ -19,6 +21,8 @@ const ReplyButton : React.FC<props> = ({
     color,
     fillColor,
     post,
+    showNumber = true,
+    iconSize
 }) => {
   const user : string | null = useSelector((state : rootType) => state.AuthSlice.user);
   const [replies , setReplies] = useState<number>(post.replies);
@@ -50,24 +54,26 @@ const ReplyButton : React.FC<props> = ({
           
           <FilledIcon
           className={`
-          text-[1rem]
+          ${iconSize ? iconSize : "text-[1rem]"}
           ${fillColor}
           `}/>
         :
           <LinedIcon
           className={`
-          text-[1rem]
+          ${iconSize ? iconSize : "text-[1rem]"}
           `}/>
         }
 
       </button>
       
+      { showNumber &&
       <span
       className='
       text-[.9rem]
       '>
           { replies?.toString() || "0"}
       </span>
+      }
       
     </div>
   )

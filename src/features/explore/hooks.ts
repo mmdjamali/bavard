@@ -67,7 +67,7 @@ export const useGetAllPosts = (
 
             if(data){
                 setErr(null)
-                setPosts(prev => [...new Set(prev ? [...prev,...data] : [...data])])
+                setPosts(data)
                 setHasMore(max + 1 < (count || 0))
                 setPending(false)
                 return

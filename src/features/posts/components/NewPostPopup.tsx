@@ -2,10 +2,9 @@ import React , {ReactNode, useEffect, useState} from 'react'
 import { RiCloseFill } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
-import SkeletonPost from './SkeletonPost';
 import NewPost from './NewPost';
 import { setActive, setProperty, setValue } from '../../../redux/NewPostPopupSlice';
-import Post from './Post';
+import PostCard from './PostCard';
 
 const NewPostPopup = () => {
   const {active , property , value} : {
@@ -100,7 +99,7 @@ const NewPostPopup = () => {
           rounded-md
           mx-2
           '>
-            <Post
+            <PostCard
             sx="border-none"
             ID={value}
             noInteraction={true}

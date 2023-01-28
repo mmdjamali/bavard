@@ -90,6 +90,13 @@ const LimitedInput : React.FC<props> = ({
           </div>
 
       </div>
+      <span
+      className='
+      text-[.9rem]
+      text-red-500
+      '>
+        {value?.length > limit && "Bio can't contain more than : " + limit + " characters"}
+      </span>
     </div>
     
   )

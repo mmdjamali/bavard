@@ -43,7 +43,6 @@ const SkeletonProfile = () => {
             mx-4
             cursor-pointer
             '>
-                <RiUserLine/>
             </div>
           
         </div>

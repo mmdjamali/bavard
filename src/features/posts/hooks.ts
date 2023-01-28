@@ -3,7 +3,7 @@ import supabase from "../../libs/supabase"
 import type { PostgrestError, PostgrestResponse } from "@supabase/supabase-js"
 import store from "../../redux/store"
 
-export const useGetPost = (pId : string) => {
+export const useGetPost = (pId : string ,...dep: any) => {
     const [post, setPost] = useState(null)
     const [err, setErr] = useState<PostgrestError | null>(null)
     const [pending, setPending] = useState(true)
@@ -33,7 +33,7 @@ export const useGetPost = (pId : string) => {
             return
         }
         func()
-    },[pId])
+    },[pId,...dep])
 
     // useEffect(() => {
         
@@ -175,4 +175,100 @@ export const useCheckForReply = (
     },[postID , user])
 
     return [replied]
+}
+
+export const useGetReplies = (
+    max : number = 10,
+    postID : string
+) => {
+    const [posts , setPosts] = useState<any>([])
+    const [pending , setPending] = useState<boolean>(false)
+    const [err , setErr] = useState<null | string>()
+    const [hasMore , setHasMore] = useState<boolean>(false)
+
+    useEffect(() => {
+        const func = async () => {
+            
+          if(!postID){
+            setPending(false)
+            setHasMore(false)
+            setPosts(null)
+            return
+          }
+
+          setPending(true)
+    
+          const {count , data , error} = await supabase
+              .from("posts")
+              .select("ID",{count : "exact"})
+              .eq("replying",postID)
+              .order('created_at', { ascending: false })
+              .range(0, max)
+          
+          if(error || !data){
+            setPending(false)
+            setErr(error.toString())
+            setPosts([])
+            setHasMore(false)
+            return
+          }
+    
+          setPending(false)
+          setErr(null)
+          setPosts(data)
+          setHasMore(max - 1 < (count || 0))
+        }
+        func()
+    },[max,postID])
+
+    useEffect(() : any => {
+
+    let handleChanges = async (payload : any) => {
+
+        if(!postID){
+            setPending(false)
+            setHasMore(false)
+            setPosts(null)
+            return
+        }
+
+        const {count , data , error} = await supabase
+            .from("posts")
+            .select("ID",{count : "exact"})
+            .eq("replying",postID)
+            .order('created_at', { ascending: false })
+            .range(0 , max)
+        
+        if(error || !data){
+        // console.log(error)
+        setPending(false)
+        setErr(error.toString())
+        setPosts([])
+        setHasMore(false)
+        return
+        }
+
+        setPending(false)
+        setErr(null)
+        setPosts(data)
+        setHasMore(max - 1 <= (count || 0))
+    }
+    
+    const channel = supabase.channel('custom-all-channel')
+    .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'posts', filter:"replying=eq." + postID },
+        async (payload : any) => {
+
+        handleChanges(payload)
+
+        }
+    )
+    .subscribe()
+
+    return () => supabase.removeChannel(channel)
+
+    },[max,postID])
+
+    return[posts,pending,err,hasMore]
 }

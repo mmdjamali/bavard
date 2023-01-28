@@ -1,6 +1,6 @@
 import React , { useState } from 'react'
 import { useGetBookmarkedPosts } from '../hooks'
-import { Post } from '../../posts'
+import { PostCard } from '../../posts'
 
 type props = {
     posts : any 
@@ -14,7 +14,7 @@ const BookMarkedPosts : React.FC<props> = ({
     <div>
         {posts?.map((item : any , idx : number) => {
             return(
-                <Post
+                <PostCard
                 key={idx}
                 ID={item?.ID}
                 />

@@ -13,6 +13,8 @@ type props = {
     color : string,
     fillColor : string,
     post : any,
+    showNumber?: boolean,
+    iconSize ?: string
 }
 const LikeButton : React.FC<props> = ({
     FilledIcon , 
@@ -20,6 +22,8 @@ const LikeButton : React.FC<props> = ({
     color,
     fillColor,
     post,
+    showNumber = true,
+    iconSize
 }) => {
   const [liked , setLiked] : any = useCheckForLike(post.ID)
   const [ likes , setLikes ] = useState<number>(post.likes)
@@ -65,24 +69,26 @@ const LikeButton : React.FC<props> = ({
           
           <FilledIcon
           className={`
-          text-[1rem]
+          ${iconSize ? iconSize : "text-[1rem]"}
           ${fillColor}
           `}/>
         :
           <LinedIcon
           className={`
-          text-[1rem]
+          ${iconSize ? iconSize : "text-[1rem]"}          
           `}/>
         }
 
       </button>
-      
+      {
+      showNumber &&
       <span
       className='
       text-[.9rem]
       '>
           {likes?.toString() || "0"}
       </span>
+      }
 
     </div>
   )

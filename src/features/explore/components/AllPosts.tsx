@@ -3,7 +3,7 @@ import { useGetAllPosts } from '../hooks'
 import Loader from '../../../components/Loader';
 import InfiniteScroll from '../../../utils/InfiniteScroll';
 import Repost from '../../posts/components/Repost';
-import { Post } from '../../posts';
+import { PostCard } from '../../posts';
 
 const AllPosts = () => {
   const [max , setMax] = useState<number>(10)
@@ -25,7 +25,7 @@ const AllPosts = () => {
                     />
                 )
     
-                return(<Post
+                return(<PostCard
                 key={idx}
                 ID={item?.ID}
                 />)
@@ -41,6 +41,7 @@ const AllPosts = () => {
         hasMore={hasMore}
         setMax={setMax}
         pending={pending}
+        num={10}
         />
     </div>
   )

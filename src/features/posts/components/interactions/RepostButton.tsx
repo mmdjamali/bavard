@@ -14,6 +14,8 @@ type props = {
     color : string,
     fillColor : string,
     post : any,
+    showNumber?: boolean,
+    iconSize ?: string
 }
 const RepostButton : React.FC<props> = ({
     FilledIcon , 
@@ -21,6 +23,8 @@ const RepostButton : React.FC<props> = ({
     color,
     fillColor,
     post,
+    showNumber = true,
+    iconSize
 }) => {
   const user = useSelector((state : rootType) => state.AuthSlice.user)
   const [reposted] = useCheckForRepost(post?.ID , user || "")
@@ -54,24 +58,26 @@ const RepostButton : React.FC<props> = ({
           
           <FilledIcon
           className={`
-          text-[1rem]
           ${fillColor}
+          ${iconSize ? iconSize : "text-[1rem]"}
           `}/>
         :
           <LinedIcon
           className={`
-          text-[1rem]
+          ${iconSize ? iconSize : "text-[1rem]"}
           `}/>
         }
 
       </button>
       
+      { showNumber &&
       <span
       className='
       text-[.9rem]
       '>
           { reposts?.toString() || "0"}
       </span>
+      }
 
       <div
       ref={container}

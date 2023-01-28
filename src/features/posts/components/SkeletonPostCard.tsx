@@ -4,7 +4,7 @@ type props = {
   sx ?: string
 }
 
-const SkeletonPost : React.FC<props> = ({
+const SkeletonPostCard : React.FC<props> = ({
   sx
 }) => {
   return (
@@ -176,4 +176,4 @@ const SkeletonPost : React.FC<props> = ({
   )
 }
 
-export default SkeletonPost
+export default SkeletonPostCard

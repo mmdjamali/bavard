@@ -3,18 +3,14 @@ import { useGetPost } from '../hooks'
 import { useGetUserProfile } from '../../auth/hooks'
 import { RiRepeatFill, RiUserLine } from 'react-icons/ri'
 import TimeFormater from '../../../utils/timeFormater'
-import { HiOutlineDotsHorizontal } from 'react-icons/hi'
-import { followUser } from '../../auth/utils'
 import { useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
 import HorizontalActionBar from './HorizontalActionBar'
-import { Link } from 'react-router-dom'
-import Loader from '../../../components/Loader'
-import { deletePost, deleteRepost } from '../functions'
+import { Link, useNavigate } from 'react-router-dom'
 import VeriticalActionBar from './VeriticalActionBar'
-import SkeletonPost from './SkeletonPost'
-import Post from './Post'
+import SkeletonPostCard from './SkeletonPostCard'
 import { getFile } from '../../storage/utils'
+import PostCard from './PostCard'
 
 type props = {
   postId : string,
@@ -28,6 +24,7 @@ const Repost : React.FC<props> = ({
   parent,
   content,
 }) => {
+  const navigate = useNavigate()
   const user : any = useSelector((state : rootType) => state.AuthSlice.user);
   const [show , setShow] = useState<boolean>(false)
 
@@ -44,7 +41,7 @@ const Repost : React.FC<props> = ({
     !profile ||
     !reposter
   ) return(
-    <SkeletonPost/>
+    <SkeletonPostCard/>
   )
 
   return (
@@ -189,6 +186,9 @@ const Repost : React.FC<props> = ({
     
               {/* Content section for post */}
               <div
+              onClick={() => {
+                navigate("/post/" + post?.ID)
+              }}
               className='
               relative w-[100%] pr-4
               '>
@@ -239,7 +239,7 @@ const Repost : React.FC<props> = ({
         border-color
         '
         >
-          <Post
+          <PostCard
           ID={parent}
           sx="border-none"
           />

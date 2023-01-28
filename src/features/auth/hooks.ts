@@ -147,7 +147,10 @@ export const useGetUserProfile = (
     
     useLayoutEffect(() => {
 
-        if(!uid) return
+        if(!uid) {
+            setPending(false)
+            return
+        }
 
         setPending(true)
         setProfile(null)

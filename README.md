@@ -7,6 +7,7 @@ I tried creating a Twitter clone with the knowledge I had, my goal was learning 
 ## What is used for this
 * Vite
 * React with TS
+* Redux Toolkit
 * Tailwind CSS
 * Supabase
 

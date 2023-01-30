@@ -200,9 +200,9 @@ const Repost : React.FC<props> = ({
                 { post?.content.replaceAll("\n"," mm✧mm ").split(" ").map((item : string , idx : number) => {
                if(item === "mm✧mm") return <br key={idx}/>
 
-               if(item[0] === "#" && /^[a-zA-Z0-9_#]*$/.test(item)) 
+               if(item[0] === "#" && /^[a-zA-Z0-9_#ء-ي]*$/.test(item)) 
                return(<Link
-               to={"/explore/"+item.replaceAll(/[^a-zA-Z0-9_]/g, '') }
+               to={"/explore/"+item.replaceAll(/[^a-zA-Z0-9_ء-ي]/g, '') }
                key={idx}
                className='
                text-violet-600

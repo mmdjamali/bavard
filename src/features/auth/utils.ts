@@ -124,55 +124,61 @@ export const updateProfile = async (
 ) => {
   if(!await checkForUserName(USERNAME || "") && USERNAME !== PROFILE?.username.replace("@","")) return
 
+  let new_banner ;
+  let new_profile ;
+
   if(IMAGE){
-    const remove = await supabase
+
+    const update = await supabase
       .storage
       .from("profiles")
-      .remove([PROFILE?.profile_picture])
-
-    // console.log(remove)
-
-    const insert = await supabase
-      .storage
-      .from("profiles")
-      .upload(
+      .update(
         `public/${PROFILE?.uid}.png`,
         IMAGE,{
           cacheControl : "60"
         }
       )
       
-    // console.log(insert)
-    if(insert.error){
+    if(update.error){
+      const insert = await supabase
+        .storage
+        .from("profiles")
+        .upload(
+          `public/${PROFILE?.uid}.png`,
+          BANNER,{
+            cacheControl : "60"
+          }
+        )
       
-      return
     }
     
   }
 
   if(BANNER){
-    const remove = await supabase
+
+    const update = await supabase
       .storage
       .from("profiles")
-      .remove([PROFILE?.banner_picture])
-
-    // console.log(remove)
-
-    const insert = await supabase
-      .storage
-      .from("profiles")
-      .upload(
+      .update(
         `public/${PROFILE?.uid}Banner.png`,
         BANNER,{
           cacheControl : "60"
         }
       )
       
-    // console.log(insert)
-    if(insert.error){
-      
-      return
-    }
+    if(update.error){
+
+      const insert = await supabase
+        .storage
+        .from("profiles")
+        .upload(
+          `public/${PROFILE?.uid}Banner.png`,
+          BANNER,{
+            cacheControl : "60"
+          }
+        )
+      }
+
   }
 
   const updateProfile = await supabase

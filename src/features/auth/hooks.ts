@@ -119,6 +119,9 @@ export const useCheckForUser = () => {
             dispatch(setProfile(
                 profile.data
             ))
+            console.log(
+                profile.data
+            )
 
         }
         catch(err){

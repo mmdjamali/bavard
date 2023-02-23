@@ -3,20 +3,18 @@ import { RiCloseFill } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux'
 import { rootType } from '../../../redux/store'
 import NewPost from './NewPost';
-import { setActive, setProperty, setValue } from '../../../redux/NewPostPopupSlice';
 import PostCard from './PostCard';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useGetPost } from '../hooks';
 
 const NewPostPopup = () => {
-  const {active , property , value} : {
-  active : boolean;
-  property : null | string;
-  value : null | string;
-  } = useSelector((state : rootType) => state.NewPostPopupSlice)
-  
-  const dispatch = useDispatch()
-  
-  if(!active) return <></>
+  const queries = new URLSearchParams(useLocation().search)
+  const action = queries.get("action") || null
+  const postID = queries.get("post") || null
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
   return (
     <div
     className={`
@@ -53,9 +51,7 @@ const NewPostPopup = () => {
 
             <button
             onClick={() => {
-              dispatch(setActive(false))
-              dispatch(setProperty(null))
-              dispatch(setValue(null))
+              navigate(location.pathname.replace("/newpost",""))
             }}
             type='button'
             className='
@@ -75,8 +71,8 @@ const NewPostPopup = () => {
             ml-1
             '>
               {(() => {
-                if(!property) return "New post"
-                switch(property){
+                if(!action) return "New post"
+                switch(action){
                   case("parent") :
                     return "Reposting :"
 
@@ -89,7 +85,7 @@ const NewPostPopup = () => {
 
           </div>
 
-          { value && 
+          { postID && 
           <div
           className='
           mt-3
@@ -101,7 +97,7 @@ const NewPostPopup = () => {
           '>
             <PostCard
             sx="border-none"
-            ID={value}
+            ID={postID}
             noInteraction={true}
             />
           </div> 
@@ -112,9 +108,9 @@ const NewPostPopup = () => {
             <NewPost
             sx="border-none mt-3"
             placeholder={(() =>{ 
-              if(!property) return "What's up?"
+              if(!action) return "What's up?"
 
-              switch(property){
+              switch(action){
                 case("parent"):
                   return "Write your thoughts"
 
@@ -125,12 +121,10 @@ const NewPostPopup = () => {
                   return "What's up?"
               }
             })()}
-            property={property}
-            value={value}
+            property={action}
+            value={postID}
             cleanup={() => {
-              dispatch(setActive(false))
-              dispatch(setProperty(null))
-              dispatch(setValue(null))
+              navigate(location.pathname.replace("/newpost",""))
             }}/>
 
         </div>

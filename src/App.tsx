@@ -36,7 +36,6 @@ function App() {
   return (
     <QueryClientProvider client={new QueryClient}>
     <Sidebar/>
-    <NewPostPopup/>
     <EditProfile/>
     <Suspense fallback={
     <Loader
@@ -51,10 +50,16 @@ function App() {
     "
     />
     }>
+      
       <Routes>
+        
         <Route path="/" element={<ProtectedRoute value={!user } path="/home" ><Auth/></ProtectedRoute>}/>
         <Route path="/create-profile" element={<ProtectedRoute value={!profile && user}><CreateProfile/></ProtectedRoute>}/>
-        <Route path="/home" element={<ProtectedAuth><Home/></ProtectedAuth>}/>
+        <Route
+        path="home/*"
+        element={<ProtectedAuth><Home/></ProtectedAuth>
+        }/>
+          
         <Route path="/explore" element={<ProtectedAuth><Explore/></ProtectedAuth>}/>
         <Route path="/explore/:query" element={<ProtectedAuth><Explore/></ProtectedAuth>}/>
         <Route path="/messages" element={<ProtectedAuth><Messages/></ProtectedAuth>}/>
@@ -63,6 +68,13 @@ function App() {
         <Route path="/profile/:username" element={<ProtectedAuth><Profile/></ProtectedAuth>}/>
         <Route path="/post/:postID" element={<ProtectedAuth><Post/></ProtectedAuth>}/>
       </Routes>
+
+      <Routes>
+        <Route path="*">
+          <Route path={`home/newpost`} element={<NewPostPopup/>}/>
+        </Route>
+      </Routes>
+
       <WhoToFollow/>
     </Suspense>
     <BottomNavbar/>

@@ -40,6 +40,7 @@ const VeriticalActionBar : React.FC<props> = ({
     '>
         <button
         onClick={(e) => {
+            e.stopPropagation()
             setShow(true)
             container.current?.focus();
         }}
@@ -74,9 +75,10 @@ const VeriticalActionBar : React.FC<props> = ({
             { profile ? <>
                 { created_by === user ?
                 <button
-                onClick={async () => {
-                 await deletePost(ID)
-                changeReposts(parent || "")
+                onClick={async (e) => {
+                    e.stopPropagation()
+                    await deletePost(ID)
+                    changeReposts(parent || "")
                 }}
                 className='
                 text-[.9rem] text-red-500
@@ -95,7 +97,8 @@ const VeriticalActionBar : React.FC<props> = ({
                 </button>
                 :
                 <button
-                onClick={() => {
+                onClick={(e) => {
+                    e.stopPropagation()
                     followUser(created_by || "")
                 }}
                 className='
@@ -117,7 +120,8 @@ const VeriticalActionBar : React.FC<props> = ({
                 }
 
                     <button
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation()
                         bookmarkPost(profile,ID)
                     }}
                     className='

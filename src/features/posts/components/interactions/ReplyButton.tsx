@@ -3,7 +3,7 @@ import { IconType } from 'react-icons/lib'
 import { useCheckForReply } from '../../hooks'
 import { useSelector , useDispatch } from 'react-redux'
 import { rootType } from '../../../../redux/store'
-import { setActive, setProperty , setValue } from '../../../../redux/NewPostPopupSlice'
+import { useNavigate } from 'react-router-dom'
 
 type props = {
     FilledIcon : IconType,
@@ -28,7 +28,7 @@ const ReplyButton : React.FC<props> = ({
   const [replies , setReplies] = useState<number>(post.replies);
   const [replied] = useCheckForReply(post?.ID, user);
 
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   return (
     <div
@@ -37,10 +37,9 @@ const ReplyButton : React.FC<props> = ({
     relative
     '>
       <button
-      onClick={() => {
-        dispatch(setActive(true))
-        dispatch(setProperty("replying"))
-        dispatch(setValue(post?.ID))
+      onClick={(e) => {
+        e.stopPropagation()
+        navigate(location.pathname + `/newpost?post=${post?.ID}&action=replying`)
       }}
       className={`
       transition-colors

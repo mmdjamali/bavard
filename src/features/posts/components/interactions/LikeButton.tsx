@@ -40,7 +40,8 @@ const LikeButton : React.FC<props> = ({
     relative
     '>
       <button
-      onClick={async () => {
+      onClick={async (e) => {
+        e.stopPropagation()
         if(disable) return
         setDisable(true)
         if(liked){

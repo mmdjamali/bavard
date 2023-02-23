@@ -1,18 +1,17 @@
 import React from 'react'
 import { sidebarSections } from '../../data/sidebar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FullWidthButton } from '../buttons'
 import { ProfileButton } from '../../features/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { rootType } from '../../redux/store'
 import { RiQuillPenLine } from "react-icons/ri";
-import { setActive , setProperty , setValue } from '../../redux/NewPostPopupSlice'
 
 const Sidebar :React.FC = () => {
   const { profile , user , pending } = useSelector((state : rootType) => state.AuthSlice)
   const { current } = useSelector((state : rootType) => state.SidebarSlice) 
   
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   if(!profile ||!user || pending) return(<></>)
 
@@ -88,9 +87,7 @@ const Sidebar :React.FC = () => {
 
         <FullWidthButton
         onClick={() => {
-          dispatch(setActive(true))
-          dispatch(setProperty(null))
-          dispatch(setValue(null))
+          navigate(location.pathname + "/newpost")
         }}
         title={
           <>

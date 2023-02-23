@@ -6,7 +6,7 @@ import { repost } from '../../functions';
 import { useCheckForRepost } from '../../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { rootType } from '../../../../redux/store';
-import { setActive as setPopupActive , setProperty , setValue } from '../../../../redux/NewPostPopupSlice';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 type props = {
     FilledIcon : IconType,
@@ -33,7 +33,7 @@ const RepostButton : React.FC<props> = ({
 
   const container = useRef<any>()
 
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
   
   return (
     <div
@@ -42,7 +42,8 @@ const RepostButton : React.FC<props> = ({
     relative
     '>
       <button
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation()
         setActive(true)
         container.current.focus()
       }}
@@ -106,10 +107,9 @@ const RepostButton : React.FC<props> = ({
       `}>
 
         <button
-        onClick={() => {
-          dispatch(setPopupActive(true))
-          dispatch(setProperty("parent"))
-          dispatch(setValue(post.ID))
+        onClick={(e) => {
+          e.stopPropagation()
+          navigate(location.pathname + `/newpost?post=${post?.ID}&action=parent`)
         }}
         className='
         hover:text-emerald-600
@@ -126,8 +126,9 @@ const RepostButton : React.FC<props> = ({
         </button>
 
         <button
-        onClick={() => {
-            repost(post , false)
+        onClick={(e) => {
+          e.stopPropagation()
+          repost(post , false)
         }}
         className='
         hover:text-emerald-600

@@ -47,6 +47,10 @@ const PostCard : React.FC<props> = ({
 
   return (
     <div
+    onClick={(e) => {
+      e.stopPropagation()
+      navigate("/post/" + post?.ID)
+    }}
     className={`
     bg-white md:hover:bg-violet-50
     flex w-full relative
@@ -67,7 +71,9 @@ const PostCard : React.FC<props> = ({
         font-normal
         text-neutral-700
         '>
-          replying to<Link to={"/profile/" + repliedProfile?.username} className='text-violet-500 hover:underline'>{repliedProfile?.uid === auth?.user ? "You" : repliedProfile?.username }</Link>
+          replying to<Link 
+          onClick={(e) => e.stopPropagation()}
+          to={"/profile/" + repliedProfile?.username} className='text-violet-500 hover:underline'>{repliedProfile?.uid === auth?.user ? "You" : repliedProfile?.username }</Link>
         </span>
       }
 
@@ -137,6 +143,7 @@ const PostCard : React.FC<props> = ({
               </p>
 
               <Link
+              onClick={(e) => e.stopPropagation()}
               to={"/profile/"+profile?.username}
               className='
               mx-1 font-normal
@@ -169,22 +176,29 @@ const PostCard : React.FC<props> = ({
 
             {/* Content section for post */}
             <div
-            onClick={() => {
-              navigate("/post/" + post?.ID)
-            }}
             className='
             relative w-[100%] pr-4
             '>
               <p
-              className='
+              dir={
+                post?.content.split("").filter((item : string) => /[ء-ي]/.test(item)).length > post?.content.split("").filter((item : string) => /[a-zA-Z]/.test(item)).length ?
+                "rtl" : 
+                "ltr"
+              }
+              className={`
               break-words text-neutral-700
               text-[.9rem]
-              '>
-              { post?.content.replaceAll("\n"," mm✧mm ").split(" ").map((item : string , idx : number) => {
-                  if(item === "mm✧mm") return <br key={idx}/>
+              justify-center
+              
+              }
+              `}>
+              { post?.content.replaceAll("\n"," \n ").split(" ").map((item : string , idx : number) => {
+                  if(item === "\n") return <br key={idx}/>
 
-                  if(item[0] === "#" && /^[a-zA-Z0-9_#ء-ي]*$/.test(item)) 
-                  return(<Link
+                  if(/^#[a-zA-Z0-9_ء-ي]{1,}$/.test(item)) 
+                  return(
+                  <Link
+                  onClick={(e) => e.stopPropagation()}
                   to={"/explore/"+item.replaceAll(/[^a-zA-Z0-9_ء-ي]/g, '') }
                   key={idx}
                   className='
@@ -195,7 +209,26 @@ const PostCard : React.FC<props> = ({
                   {item + " "}
                   </Link>)
 
-                return item + " "
+                  if(/^@[a-zA-Z0-9_ء-ي]{1,}$/.test(item)) 
+                  return(
+                  <Link
+                  onClick={(e) => e.stopPropagation()}
+                  to={"/profile/"+ item }
+                  key={idx}
+                  className='
+                  text-violet-600
+                  hover:underline
+                  '
+                  >
+                  {item + " "}
+                  </Link>)
+
+                  return (
+                    <span
+                    key={idx}>
+                      {item + " "}
+                    </span>
+                  )
 
               }) || "" 
               }

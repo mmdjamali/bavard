@@ -1,6 +1,0 @@
-export { default as LoginInput} from "./LoginInput"
-export { default as PasswordInput} from "./PasswordInput"
-export { default as ImageInput } from "./ImageInput"
-export { default as Input } from "./Input"
-export { default as LimitedInput } from "./LimitedInput"
-export { default as TextArea } from "./TextArea"

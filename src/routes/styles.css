@@ -11,3 +11,21 @@
     font-family: Inter;
   }
 }
+
+.btn {
+  @apply h-10 min-h-0 min-w-0 leading-none;
+}
+
+.btn-square,
+.btn-circle {
+  @apply h-10 w-10;
+}
+
+.btn-ghost:hover {
+  --tw-bg-opacity: 0.1;
+}
+
+.input,
+.select {
+  @apply h-10 min-h-0 min-w-0 text-sm caret-primary;
+}

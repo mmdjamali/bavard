@@ -6,6 +6,6 @@
   <meta name="description" content="Percent | " />
 </svelte:head>
 
-<section class="border-x max-w-xl mx-auto p-4 h-full w-full border-base-300">
-  h
-</section>
+<section
+  class="border-x max-w-xl mx-auto relative p-4 h-full w-full border-base-300"
+></section>

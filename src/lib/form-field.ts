@@ -1,5 +1,6 @@
 import { onDestroy } from "svelte";
 import { writable } from "svelte/store";
+import { createDeboundedInput } from "./stores/debounced-input";
 
 type Options = {
     defaultValue?: string,
@@ -12,12 +13,13 @@ export const createFormField = ({
     patterns = [],
     skipOnFirstMount = true
 }: Options) => {
+    const [value, registerValue] = createDeboundedInput({ defaultValue })
     const store = writable(defaultValue)
     const error = writable("")
     let skip = skipOnFirstMount
     let timeout: ReturnType<typeof setTimeout> | null = null;
 
-    const unsub = store.subscribe((new_value) => {
+    const unsub = value.subscribe((new_value) => {
         if (skip) {
             skip = false
             return
@@ -50,5 +52,5 @@ export const createFormField = ({
         unsub()
     })
 
-    return [store, error, reset] as const
+    return { value, registerValue, reset, error } as const
 }

@@ -1,9 +1,11 @@
+import { PUBLIC_BACKEND_URL } from "$env/static/public";
 import type { ApiResponse } from "./types/api"
 
 let token: string;
 
 const refresh = async () => {
-    const res: ApiResponse<{ accessToken: string }> = await fetch("/", {
+    const res: ApiResponse<{ accessToken: string }> = await fetch(PUBLIC_BACKEND_URL + "/api/auth/refresh", {
+        method: "POST",
         credentials: "include",
         mode: "cors",
         headers: {
@@ -11,61 +13,55 @@ const refresh = async () => {
         },
     }).then(res => res?.json())
 
-    if (!res.success) throw "somthing went wrong"
+    if (res.status === 401) throw "UNAUTHENTICATED"
+
+    if (!res.success) throw res.message
 
     return res.data.accessToken
 }
 
 export const fetchWithToken = async (input: RequestInfo | URL, init?: RequestInit | undefined) => {
+    console.log(token)
 
-    try {
-        if (!token) {
-            token = await refresh()
+    if (!token) {
+        token = await refresh()
+    }
+
+    const res = await fetch(
+        input,
+        {
+            mode: "cors",
+            ...(init ?? {}),
+            headers: init?.headers
+                ? {
+                    ...init.headers,
+                    Authorization: `Bearer ${token}`,
+                }
+                : {
+                    Authorization: `Bearer ${token}`,
+                },
         }
+    );
 
-        const res = await fetch(
-            input,
-            init
+    if (res.status !== 401) return res;
+
+    token = await refresh();
+
+    if (!token) return res;
+
+    return await fetch(
+        input,
+        {
+            mode: "cors",
+            ...(init ?? {}),
+            headers: init?.headers
                 ? {
-                    mode: "cors",
-                    ...init,
-                    headers: init.headers
-                        ? {
-                            ...init.headers,
-                            Authorization: `Bearer ${token}`,
-                        }
-                        : {
-                            Authorization: `Bearer ${token}`,
-                        },
+                    ...init.headers,
+                    Authorization: `Bearer ${token}`,
                 }
-                : undefined,
-        );
-
-        if (res.status !== 401) return res;
-
-        token = await refresh();
-
-        if (!token) return res;
-
-        return await fetch(
-            input,
-            init
-                ? {
-                    mode: "cors",
-                    ...init,
-                    headers: init.headers
-                        ? {
-                            ...init.headers,
-                            Authorization: `Bearer ${token}`,
-                        }
-                        : {
-                            Authorization: `Bearer ${token}`,
-                        },
-                }
-                : undefined,
-        );
-    }
-    catch (err) {
-        return;
-    }
+                : {
+                    Authorization: `Bearer ${token}`,
+                },
+        }
+    );
 }

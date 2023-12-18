@@ -14,7 +14,11 @@
     send = true;
   };
 
-  const [email, emailError, reset] = createFormField({
+  const {
+    error: emailError,
+    registerValue: registerEmail,
+    value: email,
+  } = createFormField({
     defaultValue: "",
     patterns: [
       {
@@ -121,6 +125,7 @@
       >
         <div class="w-full flex justify-start mb-5">
           <button
+            type="button"
             class="btn btn-square"
             on:click={() => {
               undosend();
@@ -180,7 +185,7 @@
           <input
             name="email"
             placeholder="email@gmail.com"
-            bind:value={$email}
+            bind:value={$registerEmail}
             class="input mt-6 w-full input-bordered focus:outline-none focus:border-primary transition-colors"
           />
           {#if emailError}

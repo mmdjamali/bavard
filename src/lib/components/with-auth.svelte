@@ -4,21 +4,34 @@
   import { createQuery } from "@tanstack/svelte-query";
 
   import type { ApiResponse } from "$lib/types/api";
+  import { goto } from "$app/navigation";
+  import { browser } from "$app/environment";
+  import type { ProfileEntity } from "$lib/types/entity";
 
   const profile = createQuery({
     queryKey: ["profile", "me"],
     queryFn: async () => {
-      const res: ApiResponse<{ profile: null | { id: string } }> =
-        await fetchWithToken(PUBLIC_BACKEND_URL + "/api/auth/me").then((res) =>
-          res?.json(),
+      const res: ApiResponse<{ profile: null | ProfileEntity }> =
+        await fetchWithToken(PUBLIC_BACKEND_URL + "/api/profile/me").then(
+          (res) => res?.json(),
         );
 
       if (!res?.success) return null;
 
-      return res.data.profile;
+      return res.data?.profile ?? null;
     },
     refetchOnWindowFocus: false,
   });
+
+  $: if (
+    browser &&
+    $profile.error?.message !== "UNAUTHENTICATED" &&
+    !$profile.isError &&
+    !$profile.isLoading &&
+    !$profile.data?.id
+  ) {
+    goto("/auth/profile");
+  }
 </script>
 
 {#if $profile.isLoading}

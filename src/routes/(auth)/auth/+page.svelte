@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { createFormField } from "$lib/form-field";
   import type { ApiResponse } from "$lib/types/api";
@@ -105,6 +106,8 @@
         return;
       }
 
+      goto("/");
+
       loading = false;
     } catch (err) {
       loading = false;
@@ -113,7 +116,7 @@
 </script>
 
 <div
-  class="relative grid-cols-1 md:grid-cols-[25%_75%] lg:grid-cols-2 grid place-items-center h-full"
+  class="relative min-h-[100svh] grid-cols-1 md:grid-cols-[25%_75%] lg:grid-cols-2 grid place-items-center h-full"
 >
   <div class="bg-primary w-full h-full hidden md:grid" />
 

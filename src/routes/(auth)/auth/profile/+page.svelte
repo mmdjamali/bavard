@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { useQueryClient } from "@tanstack/svelte-query";
+
+  import { goto } from "$app/navigation";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import Icon from "$lib/components/icon.svelte";
   import ProfileDialogForm from "$lib/components/profile/profile-dialog-form.svelte";
@@ -8,6 +11,7 @@
   import type { ApiResponse } from "$lib/types/api";
   import { cn } from "$lib/utils";
   import { writable } from "svelte/store";
+  import type { ProfileEntity } from "$lib/types/entity";
 
   const image = writable("");
 
@@ -40,6 +44,8 @@
     image.set(e.detail.value);
   };
 
+  const queryClient = useQueryClient();
+
   let loading = false;
 
   const handleSubmit = async () => {
@@ -53,7 +59,7 @@
     try {
       loading = true;
 
-      const res: ApiResponse<null> = await fetchWithToken(
+      const res: ApiResponse<{ profile: ProfileEntity }> = await fetchWithToken(
         PUBLIC_BACKEND_URL + "/api/profile",
         {
           method: "POST",
@@ -73,6 +79,8 @@
         throw "";
       }
 
+      queryClient.setQueryData(["profile", "me"], res.data.profile);
+      goto("/");
       loading = false;
     } catch (err) {
       loading = false;
@@ -80,7 +88,7 @@
   };
 </script>
 
-<div class="relative grid-cols-1 grid place-items-center h-full">
+<div class="relative min-h-[100svh] grid-cols-1 grid place-items-center h-full">
   <div class="sm:p-12 p-8 w-full h-full relative grid place-items-center">
     <form
       on:submit|preventDefault={handleSubmit}
@@ -127,9 +135,11 @@
                 : "",
             )}
           />
-          <span class="absolute right-3 top-[50%] -translate-y-[50%]">
+          <span
+            class="absolute inline-grid place-items-center right-3 top-[50%] -translate-y-[50%]"
+          >
             {#if $usernameLoading}
-              <span class="loading loading-spinner" />
+              <span class="loading loading-spinner text-primary loading-xs" />
             {:else if $usernameError}
               <Icon class="ri-close-line text-error text-[18px]" />
             {:else if $username && !$usernameExists}

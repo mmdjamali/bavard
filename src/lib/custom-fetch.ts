@@ -13,7 +13,7 @@ const refresh = async () => {
         },
     }).then(res => res?.json())
 
-    if (res.status === 401) throw "UNAUTHENTICATED"
+    if (res.status === 401) throw new Error("UNAUTHENTICATED")
 
     if (!res.success) throw res.message
 
@@ -21,8 +21,6 @@ const refresh = async () => {
 }
 
 export const fetchWithToken = async (input: RequestInfo | URL, init?: RequestInit | undefined) => {
-    console.log(token)
-
     if (!token) {
         token = await refresh()
     }

@@ -3,10 +3,8 @@
   import "./styles.css";
 </script>
 
-<div class="app h-full">
-  <main class="relative w-full h-full text-sm text-base-content">
-    <Providers>
-      <slot />
-    </Providers>
-  </main>
+<div class="h-fit min-h-[100svh] relative text-sm text-base-content">
+  <Providers>
+    <slot />
+  </Providers>
 </div>

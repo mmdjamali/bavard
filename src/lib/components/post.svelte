@@ -5,18 +5,20 @@
     ProfileEntity,
   } from "$lib/types/entity";
   import { timeFormater } from "$lib/utils";
-  import { createQuery, useQueryClient } from "@tanstack/svelte-query";
+  import { createQuery } from "@tanstack/svelte-query";
   import Icon from "./icon.svelte";
   import type { ApiResponse } from "$lib/types/api";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import Count from "./count.svelte";
   import PostReply from "./post-reply.svelte";
   import ReplyingTo from "./post/replying-to.svelte";
+  import PostLike from "./post/post-like.svelte";
+  import PostMore from "./post/post-more.svelte";
 
   export let data: PostEntity & PostWithParent;
 
   const author = createQuery({
-    queryKey: [{ profile: data.id }],
+    queryKey: ["profile", data.created_by],
     queryFn: async () => {
       const res: ApiResponse<{
         profile: null | ProfileEntity;
@@ -87,20 +89,9 @@
           <Count value={data?.repost_count ?? "0"} />
         </button>
 
-        <button
-          type="button"
-          class="btn text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-rose-500/10 hover:text-rose-500 border-none !h-8 !w-8"
-        >
-          <Icon class="ri-heart-line text-[18px]" />
-          <Count value={data?.like_count ?? "0"} />
-        </button>
+        <PostLike {data} />
 
-        <button
-          type="button"
-          class="btn text-base-content/75 hover:text-base-content relative btn-square rounded-full bg-transparent hover:bg-base-200 border-none !h-8 !w-8"
-        >
-          <Icon class="ri-more-fill text-[18px]" />
-        </button>
+        <PostMore {data} />
       </div>
     </div>
   </div>

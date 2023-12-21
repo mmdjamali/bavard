@@ -9,7 +9,7 @@ const CONTEXT_KEY = "PROFILE"
 
 export const setProfileContext = () => {
     const profile = createQuery<null | { profile: ProfileEntity | null, user: { id: string } }>({
-        queryKey: ["profile"],
+        queryKey: ["profile", "me"],
         queryFn: async () => {
             try {
                 const res: ApiResponse<{

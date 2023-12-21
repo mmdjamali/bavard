@@ -23,7 +23,7 @@
       iconFill: "ri-search-fill",
     },
     {
-      path: "/profile/" + $profile.data?.profile?.id,
+      path: "/profile/" + $profile.data?.profile?.username,
       title: "Profile",
       disabled: !$profile.data?.profile?.id,
       icon: "ri-account-circle-line",
@@ -101,3 +101,31 @@
     </button>
   </nav>
 </div>
+
+<nav
+  class="fixed bottom-0 bg-base-100 px-8 shadow-[0px_-4px_30px] shadow-base-content/10 z-50 md:hidden navbar flex items-center justify-between"
+>
+  {#each routes as route (route.title)}
+    {#if !route.disabled}
+      <a
+        href={route.path}
+        class="gap-2.5 h-12 w-12 hover:bg-base-200 rounded-btn text-lg flex justify-center items-center bg-transparent"
+      >
+        <Icon
+          class={cn(
+            "text-[28px]",
+            isRoute(route.path) ? route.iconFill : route.icon,
+          )}
+        />
+        <span
+          class={cn(
+            "hidden lg:inline",
+            isRoute(route.path) ? "font-semibold" : "",
+          )}
+        >
+          {route.title}
+        </span>
+      </a>
+    {/if}
+  {/each}
+</nav>

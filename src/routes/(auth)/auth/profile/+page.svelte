@@ -80,6 +80,7 @@
       }
 
       queryClient.setQueryData(["profile", "me"], res.data.profile);
+      queryClient.refetchQueries({ queryKey: ["profile", "me"] });
       goto("/");
       loading = false;
     } catch (err) {

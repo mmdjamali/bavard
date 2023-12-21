@@ -6,3 +6,16 @@ export type ProfileEntity = {
     picture?: string,
     created_at?: string
 }
+
+export type PostEntity = {
+    id?: string,
+    content?: string,
+    parents?: string,
+    repost_id?: string,
+    deleted?: boolean,
+    reply_count?: string,
+    like_count?: string,
+    repost_count?: string,
+    created_by?: string,
+    created_at?: string
+}

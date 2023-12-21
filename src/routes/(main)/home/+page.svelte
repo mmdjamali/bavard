@@ -45,7 +45,7 @@
 >
   <WithProfile>
     <header
-      class="sticky flex !min-h-0 h-14 p-0 top-0 w-full navbar bg-base-100/50 backdrop-blur-sm border-b border-base-300"
+      class="sticky flex z-50 !min-h-0 h-14 p-0 top-0 w-full navbar bg-base-100/50 backdrop-blur-sm border-b border-base-300"
     >
       <div class="flex h-full w-full text-[16px]">
         <button

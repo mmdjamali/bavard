@@ -16,6 +16,10 @@ export type PostEntity = {
     repost_count?: string,
     created_by?: string,
     created_at?: string
+} & PostWithLike
+
+type PostWithLike = {
+    liked?: boolean
 }
 
 export type PostWithParent = {

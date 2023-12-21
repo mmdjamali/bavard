@@ -3,6 +3,7 @@
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { createFormField } from "$lib/form-field";
   import type { ApiResponse } from "$lib/types/api";
+  import { useQueryClient } from "@tanstack/svelte-query";
   import { writable } from "svelte/store";
   let send = false;
   let loading = false;
@@ -41,6 +42,8 @@
     const value = e.currentTarget.value.replaceAll(/\D/g, "").substring(0, 6);
     e.currentTarget.value = value;
   };
+
+  const queryClient = useQueryClient();
 
   const handleAuth = async () => {
     try {
@@ -108,6 +111,7 @@
 
       goto("/");
 
+      queryClient.refetchQueries({ queryKey: ["profile", "me"] });
       loading = false;
     } catch (err) {
       loading = false;

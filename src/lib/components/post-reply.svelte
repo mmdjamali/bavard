@@ -17,7 +17,7 @@
   export let data: PostEntity;
 
   const author = createQuery({
-    queryKey: [{ profile: data.created_by }],
+    queryKey: ["profile", data.created_by],
     queryFn: async () => {
       const res: ApiResponse<{
         profile: null | ProfileEntity;
@@ -126,7 +126,7 @@
 
       <form
         on:submit|preventDefault={handleSubmit}
-        class="fixed flex flex-col left-[50%] top-[50%] z-50 w-full h-full sm:h-fit sm:max-h-[85vh] sm:w-[90vw] sm:max-w-[450px] translate-x-[-50%] translate-y-[-50%] sm:rounded-box bg-base-100 shadow-lg"
+        class="fixed flex flex-col left-[50%] top-[50%] z-50 w-full h-full sm:h-fit sm:max-h-[85vh] sm:w-[90vw] sm:max-w-[500px] translate-x-[-50%] translate-y-[-50%] sm:rounded-box bg-base-100 shadow-lg"
         use:melt={$dialogContent}
       >
         <div
@@ -150,11 +150,19 @@
         <div class="w- flex flex-col overflow-y-scroll h-full p-6">
           <div class="grid grid-cols-[40px_1fr] gap-3">
             <div class="w-full h-full py-3 shrink-0">
-              <img
-                src={$profile.data?.profile.id}
-                alt=""
-                class="w-full rounded-full object-cover border border-base-300"
-              />
+              {#if $profile.data?.profile.picture}
+                <img
+                  class="w-full aspect-square rounded-full object-cover border border-base-300"
+                  src={$profile.data.profile.picture}
+                  alt="profile"
+                />
+              {:else}
+                <div
+                  class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
+                >
+                  <Icon class="ri-user-fill text-2xl text-base-300" />
+                </div>
+              {/if}
             </div>
 
             <div class="flex flex-col w-full">

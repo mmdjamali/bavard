@@ -13,7 +13,6 @@
   ) {
     goto("/auth/profile");
   }
-  $: console.log($profile.data);
 </script>
 
 {#if $profile.isLoading}

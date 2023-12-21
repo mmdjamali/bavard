@@ -6,6 +6,7 @@
   import Post from "$lib/components/post.svelte";
   import WithProfile from "$lib/components/with-profile.svelte";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
+  import { fetchWithToken } from "$lib/custom-fetch";
 
   import type { ApiResponse } from "$lib/types/api";
   import type { PostEntity } from "$lib/types/entity";
@@ -16,8 +17,8 @@
     queryFn: async () => {
       const res: ApiResponse<{
         feed: null | PostEntity[];
-      }> = await fetch(PUBLIC_BACKEND_URL + "/api/post/feed").then((res) =>
-        res?.json(),
+      }> = await fetchWithToken(PUBLIC_BACKEND_URL + "/api/post/feed").then(
+        (res) => res?.json(),
       );
 
       if (!res?.success) return null;
@@ -29,8 +30,6 @@
   });
 
   const createdPosts = getCreatedPostsContext();
-
-  $: console.log($feed);
 </script>
 
 <svelte:head>
@@ -76,7 +75,7 @@
     {/each}
 
     {#if $feed.isLoading}
-      <div class="w-full grid place-items-center justify-center h-32">
+      <div class="w-full grid place-items-center justify-center h-full my-auto">
         <span class="loading loading-spinner loading-sm" />
       </div>
     {:else if $feed.data?.length}
@@ -88,5 +87,7 @@
     {/if}
 
     <div class="w-full text-center py-3 px-4">- End of feed -</div>
+
+    <div class="navbar invisible md:hidden"></div>
   </WithProfile>
 </section>

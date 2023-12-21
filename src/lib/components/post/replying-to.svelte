@@ -11,12 +11,12 @@
   export let data: PostEntity & PostWithParent;
 
   const parentAuthor = createQuery<ProfileEntity | null>({
-    queryKey: [{ profile: data.created_by }],
+    queryKey: ["profile", data.parent?.created_by],
     queryFn: async () => {
       const res: ApiResponse<{
         profile: null | ProfileEntity;
       }> = await fetch(
-        PUBLIC_BACKEND_URL + "/api/profile/id/" + data.created_by,
+        PUBLIC_BACKEND_URL + "/api/profile/id/" + data.parent?.created_by,
       ).then((res) => res?.json());
 
       if (!res?.success) return null;
@@ -25,7 +25,7 @@
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    staleTime: 1000 * 10,
+    staleTime: 1000 * 60 * 10,
   });
 </script>
 

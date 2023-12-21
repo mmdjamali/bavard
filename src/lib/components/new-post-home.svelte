@@ -113,21 +113,20 @@
 
         <div class="flex items-center gap-2">
           {#if $focused}
+            <span class="text-sm">{MAX_LENGTH - $content.length}</span>
             <div
               class={cn(
-                "radial-progress",
+                "radial-progress border border-base-300",
                 $content.length > MAX_LENGTH
                   ? "text-error"
                   : $content.length > MAX_LENGTH - 10
                     ? "text-warning"
-                    : "",
+                    : "text-primary",
               )}
-              style="--size:2rem;--value:{Math.round(
+              style="--size:32px;--value:{Math.round(
                 ($content.length / MAX_LENGTH) * 100,
               )};--thickness: 2px;"
-            >
-              <span class="text-[10px]">{MAX_LENGTH - $content.length}</span>
-            </div>
+            ></div>
           {/if}
 
           <button

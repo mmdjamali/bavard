@@ -1,17 +1,22 @@
 <script lang="ts">
-  import type { PostEntity, ProfileEntity } from "$lib/types/entity";
+  import type {
+    PostEntity,
+    PostWithParent,
+    ProfileEntity,
+  } from "$lib/types/entity";
   import { timeFormater } from "$lib/utils";
-  import { createQuery } from "@tanstack/svelte-query";
+  import { createQuery, useQueryClient } from "@tanstack/svelte-query";
   import Icon from "./icon.svelte";
   import type { ApiResponse } from "$lib/types/api";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import Count from "./count.svelte";
   import PostReply from "./post-reply.svelte";
+  import ReplyingTo from "./post/replying-to.svelte";
 
-  export let data: PostEntity;
+  export let data: PostEntity & PostWithParent;
 
   const author = createQuery({
-    queryKey: ["profile", data.created_by],
+    queryKey: [{ profile: data.id }],
     queryFn: async () => {
       const res: ApiResponse<{
         profile: null | ProfileEntity;
@@ -55,6 +60,10 @@
         {timeFormater(new Date(data.created_at ?? ""))}
       </span>
     </div>
+
+    {#if data.parent?.created_by}
+      <ReplyingTo {data} />
+    {/if}
 
     <div class="text-[15px]">
       {#each rows as row}

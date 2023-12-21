@@ -17,7 +17,7 @@
   export let data: PostEntity;
 
   const author = createQuery({
-    queryKey: ["profile", data.created_by],
+    queryKey: [{ profile: data.created_by }],
     queryFn: async () => {
       const res: ApiResponse<{
         profile: null | ProfileEntity;
@@ -32,6 +32,7 @@
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
+
   const profile = getProfileContext();
   const createdPosts = getCreatedPostsContext();
 
@@ -192,21 +193,20 @@
           <button type="button" use:melt={$close} class="btn"> Cancel </button>
 
           <div class="flex items-center justify-center gap-3">
+            <span class="text-sm">{MAX_LENGTH - $content.length}</span>
             <div
               class={cn(
-                "radial-progress",
+                "radial-progress border border-base-300",
                 $content.length > MAX_LENGTH
                   ? "text-error"
                   : $content.length > MAX_LENGTH - 10
                     ? "text-warning"
-                    : "",
+                    : "text-primary",
               )}
-              style="--size:2rem;--value:{Math.round(
+              style="--size:32px;--value:{Math.round(
                 ($content.length / MAX_LENGTH) * 100,
               )};--thickness: 2px;"
-            >
-              <span class="text-[10px]">{MAX_LENGTH - $content.length}</span>
-            </div>
+            ></div>
             <button
               class="btn px-5 btn-primary rounded-full leading-none"
               on:click={() => {}}

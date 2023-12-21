@@ -1,7 +1,13 @@
 <script lang="ts">
-  export let value: string;
+  export let value: string | number;
 
-  const count = Number.parseInt(value);
+  $: count = (() => {
+    if (typeof value === "number") {
+      return value;
+    }
+
+    return Number.parseInt(value);
+  })();
 
   function formatLargeNumber(num: number) {
     const formatter = new Intl.NumberFormat("en-US", {

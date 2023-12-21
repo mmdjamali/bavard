@@ -6,6 +6,7 @@
     defaultOptions: {
       queries: {
         enabled: browser,
+        retry: 1,
       },
     },
   });

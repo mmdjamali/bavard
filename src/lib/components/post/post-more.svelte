@@ -4,7 +4,7 @@
   import Icon from "../icon.svelte";
   import { fly } from "svelte/transition";
   import { cn } from "$lib/utils";
-  import type { PostEntity, PostWithParent } from "$lib/types/entity";
+  import type { PostEntity } from "$lib/types/entity";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
   import { createMutation } from "@tanstack/svelte-query";
   import { fetchWithToken } from "$lib/custom-fetch";
@@ -12,7 +12,7 @@
   import type { ApiResponse } from "$lib/types/api";
   import { getDeletedPostsContext } from "$lib/contexts/deleted-posts";
 
-  export let data: PostEntity & PostWithParent;
+  export let data: PostEntity;
 
   const {
     elements: { trigger, menu, item, separator, arrow },

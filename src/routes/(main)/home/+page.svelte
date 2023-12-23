@@ -6,6 +6,7 @@
   import Post from "$lib/components/post.svelte";
   import WithProfile from "$lib/components/with-profile.svelte";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
+  import { getDeletedPostsContext } from "$lib/contexts/deleted-posts";
   import { fetchWithToken } from "$lib/custom-fetch";
 
   import type { ApiResponse } from "$lib/types/api";
@@ -30,6 +31,7 @@
   });
 
   const createdPosts = getCreatedPostsContext();
+  const deletedPosts = getDeletedPostsContext();
 </script>
 
 <svelte:head>
@@ -71,7 +73,9 @@
 
     <NewPostHome />
     {#each $createdPosts as post (post.id)}
-      <Post data={post} />
+      {#if post.id && !$deletedPosts.includes(post.id)}
+        <Post data={post} />
+      {/if}
     {/each}
 
     {#if $feed.isLoading}
@@ -81,7 +85,9 @@
     {:else if $feed.data?.length}
       {#each $feed.data as post (post.id)}
         {#if !$createdPosts.some(({ id }) => id === post.id)}
-          <Post data={post} />
+          {#if post.id && !$deletedPosts.includes(post.id)}
+            <Post data={post} />
+          {/if}
         {/if}
       {/each}
     {/if}

@@ -1,10 +1,6 @@
 <script lang="ts">
-  import type { PostEntity, PostWithParent } from "$lib/types/entity";
-  import {
-    createMutation,
-    createQuery,
-    useQueryClient,
-  } from "@tanstack/svelte-query";
+  import type { PostEntity } from "$lib/types/entity";
+  import { createMutation } from "@tanstack/svelte-query";
   import Count from "../count.svelte";
   import Icon from "../icon.svelte";
   import type { ApiResponse } from "$lib/types/api";
@@ -12,7 +8,7 @@
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { writable } from "svelte/store";
 
-  export let data: PostEntity & PostWithParent;
+  export let data: PostEntity;
 
   const like_count = writable(Number.parseInt(data.like_count ?? "0"));
 

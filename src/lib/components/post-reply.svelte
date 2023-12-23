@@ -2,8 +2,7 @@
   import { melt, createDialog } from "@melt-ui/svelte";
   import Icon from "./icon.svelte";
   import Count from "./count.svelte";
-  import type { PostEntity, ProfileEntity } from "$lib/types/entity";
-  import { createQuery } from "@tanstack/svelte-query";
+  import type { PostEntity } from "$lib/types/entity";
   import type { ApiResponse } from "$lib/types/api";
   import { fetchWithToken } from "$lib/custom-fetch";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
@@ -11,27 +10,11 @@
   import { writable } from "svelte/store";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
+  import { fly } from "svelte/transition";
 
   const MAX_LENGTH = 300;
 
   export let data: PostEntity;
-
-  const author = createQuery({
-    queryKey: ["profile", data.created_by],
-    queryFn: async () => {
-      const res: ApiResponse<{
-        profile: null | ProfileEntity;
-      }> = await fetchWithToken(
-        PUBLIC_BACKEND_URL + "/api/profile/id/" + data.created_by,
-      ).then((res) => res?.json());
-
-      if (!res?.success) return null;
-
-      return res.data?.profile ?? null;
-    },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
 
   const profile = getProfileContext();
   const createdPosts = getCreatedPostsContext();
@@ -120,11 +103,13 @@
   <div class="text-sm text-base-content" use:melt={$portalled}>
     {#if $open}
       <div
+        transition:fly={{ duration: 150, opacity: 0 }}
         use:melt={$overlay}
-        class="fixed inset-0 z-50 backdrop-blur-[2px] bg-base-content/20"
+        class="fixed inset-0 z-50 backdrop-blur-[2px] bg-base-content/10"
       />
 
       <form
+        transition:fly={{ duration: 150, y: 100, opacity: 0 }}
         on:submit|preventDefault={handleSubmit}
         class="fixed flex flex-col left-[50%] top-[50%] z-50 w-full h-full sm:h-fit sm:max-h-[85vh] sm:w-[90vw] sm:max-w-[500px] translate-x-[-50%] translate-y-[-50%] sm:rounded-box bg-base-100 shadow-lg"
         use:melt={$dialogContent}
@@ -137,8 +122,8 @@
             class="m-0 text-lg font-semibold text-base-content"
           >
             Replying to <a
-              href="/profile/{$author.data?.username}"
-              class="link link-primary link-hover">@{$author.data?.username}</a
+              href="/profile/{data.profile?.username}"
+              class="link link-primary link-hover">@{data.profile?.username}</a
             >
           </h2>
 

@@ -44,7 +44,7 @@
 </script>
 
 <div
-  class="sticky h-screen max-h-screen hidden top-0 ml-auto md:flex flex-col justify-end md:border-r md:border-base-300 lg:border-none"
+  class="sticky h-screen max-h-screen hidden top-0 ml-auto sm:flex flex-col justify-end sm:border-r sm:border-base-300 lg:border-none"
 >
   <nav class="h-full lg:w-64 gap-2 flex flex-col ml-auto py-4 px-4">
     <div class="flex items-center mb-2 lg:px-4">
@@ -103,7 +103,7 @@
 </div>
 
 <nav
-  class="fixed bottom-0 bg-base-100 px-8 shadow-[0px_-4px_30px] shadow-base-content/10 z-50 md:hidden navbar flex items-center justify-between"
+  class="fixed bottom-0 bg-base-100 px-8 shadow-[0px_-4px_30px] shadow-base-content/10 z-50 sm:hidden navbar flex items-center justify-between"
 >
   {#each routes as route (route.title)}
     {#if !route.disabled}

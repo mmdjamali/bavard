@@ -15,13 +15,10 @@ export type PostEntity = {
     like_count?: string,
     repost_count?: string,
     created_by?: string,
-    created_at?: string
-} & PostWithLike
-
-type PostWithLike = {
-    liked?: boolean
-}
-
-export type PostWithParent = {
-    parent?: PostEntity
+    created_at?: string,
+    liked?: boolean,
+    replied?: boolean,
+    reposted?: boolean,
+    parent: PostEntity,
+    profile: ProfileEntity
 }

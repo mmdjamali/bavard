@@ -8,6 +8,7 @@
   import type { PostEntity } from "$lib/types/entity";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
+  import { fly } from "svelte/transition";
 
   const MAX_LENGTH = 300;
 
@@ -49,6 +50,8 @@
         clone.push(res.data.post);
         return clone;
       });
+
+      content.set("");
 
       loading = false;
     } catch (err) {
@@ -113,8 +116,14 @@
 
         <div class="flex items-center gap-2">
           {#if $focused}
-            <span class="text-sm">{MAX_LENGTH - $content.length}</span>
+            <span
+              transition:fly={{ duration: 150, x: -15 }}
+              class="text-sm text-opacity-75"
+            >
+              {MAX_LENGTH - $content.length}
+            </span>
             <div
+              transition:fly={{ duration: 150, x: -15 }}
               class={cn(
                 "radial-progress border border-base-300",
                 $content.length > MAX_LENGTH

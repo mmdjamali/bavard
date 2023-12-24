@@ -4,6 +4,8 @@
   import Navbar from "$lib/components/layout/navbar.svelte";
   import NewPostHome from "$lib/components/new-post-home.svelte";
   import Post from "$lib/components/post.svelte";
+  import RepostWithContent from "$lib/components/repost-with-content.svelte";
+  import Repost from "$lib/components/repost.svelte";
   import WithProfile from "$lib/components/with-profile.svelte";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
   import { getDeletedPostsContext } from "$lib/contexts/deleted-posts";
@@ -74,7 +76,13 @@
     <NewPostHome />
     {#each $createdPosts as post (post.id)}
       {#if post.id && !$deletedPosts.includes(post.id)}
-        <Post data={post} />
+        {#if !post.content && post.repost?.id}
+          <Repost data={post} />
+        {:else if post.content && post.repost?.id}
+          <RepostWithContent data={post} />
+        {:else}
+          <Post data={post} />
+        {/if}
       {/if}
     {/each}
 
@@ -86,7 +94,13 @@
       {#each $feed.data as post (post.id)}
         {#if !$createdPosts.some(({ id }) => id === post.id)}
           {#if post.id && !$deletedPosts.includes(post.id)}
-            <Post data={post} />
+            {#if !post.content && post.repost?.id}
+              <Repost data={post} />
+            {:else if post.content && post.repost?.id}
+              <RepostWithContent data={post} />
+            {:else}
+              <Post data={post} />
+            {/if}
           {/if}
         {/if}
       {/each}

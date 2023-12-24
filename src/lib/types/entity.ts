@@ -19,6 +19,7 @@ export type PostEntity = {
     liked?: boolean,
     replied?: boolean,
     reposted?: boolean,
-    parent: PostEntity,
-    profile: ProfileEntity
+    parent?: PostEntity,
+    repost?: PostEntity,
+    profile?: ProfileEntity
 }

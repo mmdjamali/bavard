@@ -85,17 +85,25 @@
 
 {#if !$profile.data?.profile?.id}
   <button
+    on:click={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }}
     type="button"
-    class="btn text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-8 !w-8"
+    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-8 !w-8"
   >
     <Icon class="ri-chat-1-line text-[18px]" />
     <Count value={data?.reply_count ?? "0"} />
   </button>
 {:else}
   <button
+    on:click={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }}
     use:melt={$trigger}
     type="button"
-    class="btn text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-8 !w-8"
+    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-8 !w-8"
   >
     <Icon class="ri-chat-1-line text-[18px]" />
     <Count value={data?.reply_count ?? "0"} />

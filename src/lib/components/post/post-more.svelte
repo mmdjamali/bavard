@@ -86,6 +86,10 @@
 </script>
 
 <button
+  on:click={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }}
   use:melt={$trigger}
   type="button"
   class="btn shadow-none text-base-content/75 hover:text-base-content relative btn-square rounded-full bg-transparent hover:bg-base-200 border-none !h-8 !w-8"

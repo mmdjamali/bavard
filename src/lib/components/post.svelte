@@ -32,7 +32,10 @@
 
   <div class="flex flex-col w-full">
     <div class="flex w-full justify-between text-sm text-[15px] pt-3 mt-0.5">
-      <span class="font-semibold tracking-[1px]">{data.profile?.name}</span>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">{data.profile?.name}</span>
+        <span class="text-base-content/75">@{data.profile?.username}</span>
+      </div>
 
       <span class="text-base-content text-sm text-opacity-75 px-2">
         {timeFormater(new Date(data.created_at ?? ""))}

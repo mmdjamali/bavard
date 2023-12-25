@@ -19,7 +19,10 @@
   href="/post/{data.id}"
   class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300"
 >
-  <div class="w-full relative h-full py-3 shrink-0">
+  <a
+    href="/profile/{data.profile?.username}"
+    class="w-full relative h-full py-3 shrink-0"
+  >
     {#if data.profile?.picture}
       <img
         class="w-full aspect-square rounded-full object-cover border border-base-300"
@@ -33,7 +36,7 @@
         <Icon class="ri-user-fill text-2xl text-base-300" />
       </div>
     {/if}
-  </div>
+  </a>
 
   <div class="flex flex-col w-full">
     <div class="flex w-full justify-between text-sm text-[15px] pt-3 mt-0.5">

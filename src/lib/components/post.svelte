@@ -13,21 +13,26 @@
   const rows = data.content?.split("\n") ?? [];
 </script>
 
-<div class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300">
+<a
+  href="/post/{data?.id}"
+  class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300"
+>
   <div class="w-full relative h-full py-3 shrink-0">
-    {#if data.profile?.picture}
-      <img
-        class="w-full aspect-square rounded-full object-cover border border-base-300"
-        src={data.profile.picture}
-        alt="profile"
-      />
-    {:else}
-      <div
-        class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
-      >
-        <Icon class="ri-user-fill text-2xl text-base-300" />
-      </div>
-    {/if}
+    <a class="w-full relative" href="/profile/{data.profile?.username}">
+      {#if data.profile?.picture}
+        <img
+          class="w-full aspect-square rounded-full object-cover border border-base-300"
+          src={data.profile.picture}
+          alt="profile"
+        />
+      {:else}
+        <div
+          class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
+        >
+          <Icon class="ri-user-fill text-2xl text-base-300" />
+        </div>
+      {/if}
+    </a>
   </div>
 
   <div class="flex flex-col w-full">
@@ -68,4 +73,4 @@
       </div>
     </div>
   </div>
-</div>
+</a>

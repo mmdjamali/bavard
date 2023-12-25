@@ -16,7 +16,7 @@
 </script>
 
 {#if repost}
-  <div class="w-full relative flex flex-col">
+  <a href="/post/{data.repost?.id}" class="w-full relative flex flex-col">
     <span class="px-4 pt-2 font-medium text-base-content/75 text-sm">
       Reposted by <a
         href="/profile/{data?.profile?.username}"
@@ -25,7 +25,10 @@
     </span>
 
     <div class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300">
-      <div class="w-full relative h-full py-3 shrink-0">
+      <a
+        href="/profile/{repost.profile?.username}"
+        class="w-full relative h-full py-3 shrink-0"
+      >
         {#if repost.profile?.picture}
           <img
             class="w-full aspect-square rounded-full object-cover"
@@ -39,7 +42,7 @@
             <Icon class="ri-user-fill text-2xl text-base-300" />
           </div>
         {/if}
-      </div>
+      </a>
 
       <div class="flex flex-col w-full">
         <div
@@ -77,5 +80,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </a>
 {/if}

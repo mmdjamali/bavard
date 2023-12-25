@@ -4,7 +4,11 @@ export type ProfileEntity = {
     name?: string,
     username?: string,
     picture?: string,
-    created_at?: string
+    created_at?: string,
+    followd?: boolean,
+    follower_count?: string,
+    followed_count?: string,
+    post_count?: string
 }
 
 export type PostEntity = {

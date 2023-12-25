@@ -38,7 +38,7 @@ export const createUsernameStore = ({ defaultValue = "" }: { defaultValue?: stri
         loading.set(true)
 
         try {
-            const res: ApiResponse<{ exists: boolean }> = await fetch(PUBLIC_BACKEND_URL + "/api/username/check/" + newValue).then(res => res?.json())
+            const res: ApiResponse<{ exists: boolean }> = await fetch(PUBLIC_BACKEND_URL + "/api/profile/check-username?username=" + encodeURIComponent(newValue)).then(res => res?.json())
 
             if (!res?.success) {
                 error.set(res.message)

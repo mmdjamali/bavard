@@ -16,6 +16,8 @@
 
   export let data: PostEntity;
 
+  let input: HTMLTextAreaElement;
+
   const profile = getProfileContext();
   const createdPosts = getCreatedPostsContext();
 
@@ -81,6 +83,8 @@
       loading.set(false);
     }
   };
+
+  $: if (input && $open) input.focus();
 </script>
 
 {#if !$profile.data?.profile?.id}
@@ -160,6 +164,7 @@
 
             <div class="flex flex-col w-full">
               <textarea
+                bind:this={input}
                 bind:value={$content}
                 on:input={(e) => {
                   const target = e.currentTarget;

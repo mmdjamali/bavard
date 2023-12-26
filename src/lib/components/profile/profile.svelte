@@ -7,7 +7,7 @@
   import Icon from "../icon.svelte";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
 
-  export let data: { username: string };
+  export let data: { username?: string };
 
   $: profile = createQuery({
     queryKey: ["profile", data.username],
@@ -38,20 +38,13 @@
 
 {#if $profile.isLoading || (!$profile.data && !$profile.isError)}
   <div class="flex relative items-center flex-col">
-    <div class="w-full h-[150px] bg-base-300 animate-pulse ease-emil px-4 py-4">
-      <button
-        on:click={() => {
-          history.back();
-        }}
-        class="btn btn-square"
-      >
-        <Icon class="ri-arrow-left-line text-[21px]" />
-      </button>
-    </div>
+    <div
+      class="aspect-[3/1] w-full bg-base-300 animate-pulse ease-emil px-4 py-4"
+    />
 
-    <div class="w-full px-4 relative flex items-center justify-end">
+    <div class="w-full px-4 mb-2 relative flex items-center justify-between">
       <div
-        class="w-20 shadow-md shadow-base-content/10 top-0 bg-base-100 left-4 absolute h-20 grid aspect-square border-2 border-base-100 rounded-full translate-y-[-50%]"
+        class="w-[25%] min-w-[48px] mt-[-12.5%] top-0 bg-base-100 grid aspect-square border-4 border-base-100 rounded-full"
       >
         <div
           class="w-full aspect-square bg-base-300 animate-pulse ease-emil rounded-full inline-grid place-items-center"
@@ -70,35 +63,22 @@
     </div>
 
     <div class="w-full flex flex-col px-4">
-      <span class="w-40 h-6 rounded-full animate-pulse ease-emil bg-base-300" />
+      <span class="w-40 h-6 animate-pulse ease-emil bg-base-300" />
 
-      <span
-        class="w-24 h-4 rounded-full animate-pulse ease-emil bg-base-300 my-1"
-      />
+      <span class="w-24 h-4 animate-pulse ease-emil bg-base-300 mt-2" />
 
-      <div class="flex items-center gap-3 py-1">
-        <span
-          class="w-56 h-4 rounded-full animate-pulse ease-emil bg-base-300"
-        />
+      <div class="flex items-center gap-3 pt-2">
+        <span class="w-56 h-4 animate-pulse ease-emil bg-base-300" />
       </div>
     </div>
   </div>
 {:else}
-  <div class="flex relative items-center flex-col">
-    <div class="w-full h-[150px] bg-primary px-4 py-4">
-      <button
-        on:click={() => {
-          history.back();
-        }}
-        class="btn btn-square"
-      >
-        <Icon class="ri-arrow-left-line text-[21px]" />
-      </button>
-    </div>
+  <div class="flex w-full relative items-center flex-col">
+    <div class="w-full aspect-[3/1] bg-primary/10 px-4 py-4"></div>
 
-    <div class="w-full px-4 relative flex items-center justify-end">
+    <div class="w-full mb-2 px-4 relative flex justify-between items-start">
       <div
-        class="w-20 shadow-md shadow-base-content/10 top-0 bg-base-100 left-4 absolute h-20 grid aspect-square border-2 border-base-100 rounded-full translate-y-[-50%]"
+        class="w-[25%] relative min-w-[48px] bg-base-100 grid aspect-square rounded-full mt-[-12.5%] border-4 border-base-100"
       >
         {#if $profile.data?.profile?.picture}
           <img
@@ -130,15 +110,21 @@
     </div>
 
     <div class="w-full flex flex-col px-4">
-      <h1 class="text-lg text-base-content font-semibold">
+      <h1 class="text-xl font-bold tracking-[0.5px] text-base-content">
         {$profile.data?.profile?.name}
       </h1>
 
-      <span class="text-sm text-base-content/75">
+      <span class="text-base-content/90">
         @{$profile.data?.profile?.username}
       </span>
 
-      <div class="flex items-center gap-3 py-1">
+      {#if $profile.data?.profile?.bio || "Software Developer"}
+        <p class="mt-2">
+          {$profile.data?.profile?.bio || "Software Developer"}
+        </p>
+      {/if}
+
+      <div class="flex items-center gap-3 mt-2">
         <span class="text-base-content/75">
           <span class="text-base-content font-semibold">
             {$profile.data?.profile?.follower_count}
@@ -150,17 +136,7 @@
             {$profile.data?.profile?.follower_count}
           </span> following
         </span>
-
-        <span class="text-base-content/75">
-          <span class="text-base-content font-semibold">
-            {$profile.data?.profile?.post_count}
-          </span> posts
-        </span>
       </div>
-
-      {#if $profile.data?.profile?.bio}
-        <p>{$profile.data?.profile?.bio}</p>
-      {/if}
     </div>
   </div>
 {/if}

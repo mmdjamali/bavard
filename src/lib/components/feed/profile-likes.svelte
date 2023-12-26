@@ -14,7 +14,7 @@
 
   export let data: ProfileEntity;
 
-  const feed = createInfiniteQuery({
+  $: feed = createInfiniteQuery({
     queryKey: ["profile", "likes", data.username],
     queryFn: async ({ pageParam = 1 }) => {
       const res: ApiResponse<
@@ -45,18 +45,6 @@
   const createdPosts = getCreatedPostsContext();
   const deletedPosts = getDeletedPostsContext();
 </script>
-
-{#each $createdPosts as post (post.id)}
-  {#if post.id && !$deletedPosts.includes(post.id)}
-    {#if !post.content && post.repost?.id}
-      <Repost data={post} />
-    {:else if post.content && post.repost?.id}
-      <RepostWithContent data={post} />
-    {:else}
-      <Post data={post} />
-    {/if}
-  {/if}
-{/each}
 
 {#if $feed.isLoading}
   <PostLoader />

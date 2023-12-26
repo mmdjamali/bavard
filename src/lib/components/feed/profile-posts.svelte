@@ -11,10 +11,11 @@
   import Post from "../post.svelte";
   import viewport from "$lib/actions/viewport";
   import PostLoader from "../post/post-loader.svelte";
+  import { getProfileContext } from "$lib/contexts/profile/profile-context";
 
   export let data: ProfileEntity;
 
-  const feed = createInfiniteQuery({
+  $: feed = createInfiniteQuery({
     queryKey: ["profile", "posts", data.username],
     queryFn: async ({ pageParam = 1 }) => {
       const res: ApiResponse<
@@ -42,21 +43,25 @@
     staleTime: 1000 * 60 * 5,
   });
 
+  const profile = getProfileContext();
+
   const createdPosts = getCreatedPostsContext();
   const deletedPosts = getDeletedPostsContext();
 </script>
 
-{#each $createdPosts as post (post.id)}
-  {#if post.id && !$deletedPosts.includes(post.id)}
-    {#if !post.content && post.repost?.id}
-      <Repost data={post} />
-    {:else if post.content && post.repost?.id}
-      <RepostWithContent data={post} />
-    {:else}
-      <Post data={post} />
+{#if $profile.data?.profile?.username === data.username}
+  {#each $createdPosts as post (post.id)}
+    {#if post.id && !$deletedPosts.includes(post.id)}
+      {#if !post.content && post.repost?.id}
+        <Repost data={post} />
+      {:else if post.content && post.repost?.id}
+        <RepostWithContent data={post} />
+      {:else}
+        <Post data={post} />
+      {/if}
     {/if}
-  {/if}
-{/each}
+  {/each}
+{/if}
 
 {#if $feed.isLoading}
   <PostLoader />
@@ -90,23 +95,13 @@
   <PostLoader />
 {/if}
 
-{#if $feed.hasNextPage && $feed.data && !$feed.isLoading}
-  <div
-    use:viewport={{
-      enterViewport() {
-        console.log("yo");
-
-        if (
-          !$feed.isLoading &&
-          !$feed.isFetchingNextPage &&
-          $feed.hasNextPage
-        ) {
-          $feed.fetchNextPage();
-        }
-      },
-    }}
-    class="btn w-full"
-  >
-    Next Page
-  </div>
-{/if}
+<div
+  use:viewport={{
+    enterViewport() {
+      if (!$feed.isLoading && !$feed.isFetchingNextPage && $feed.hasNextPage) {
+        $feed.fetchNextPage();
+      }
+    },
+  }}
+  class="h-[1px] flex bg-base-100 w-full"
+/>

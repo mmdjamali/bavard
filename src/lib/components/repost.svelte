@@ -59,7 +59,7 @@
       <div class="flex w-full justify-between text-sm pt-1 mt-0.5">
         <span class="font-semibold tracking-[1px]">{repost.profile?.name}</span>
 
-        <span class="text-base-content text-sm text-opacity-75 px-2">
+        <span class="text-base-content text-xs text-opacity-75 px-2">
           {timeFormater(new Date(repost.created_at ?? ""))}
         </span>
       </div>

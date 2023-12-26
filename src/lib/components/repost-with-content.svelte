@@ -44,14 +44,17 @@
 
   <div class="flex flex-col w-full">
     <div class="flex w-full justify-between text-sm pt-3 mt-0.5">
-      <span class="font-semibold tracking-[1px]">{data.profile?.name}</span>
+      <a
+        href="/profile/{data.profile?.username}"
+        class="font-semibold link link-hover">{data.profile?.name}</a
+      >
 
-      <span class="text-base-content text-sm text-opacity-75 px-2">
+      <span class="text-base-content text-xs text-opacity-75 px-2">
         {timeFormater(new Date(data.created_at ?? ""))}
       </span>
     </div>
 
-    <div class="text-[15px]">
+    <div class="text-sm">
       {#each rows as row}
         {#if row === ""}
           <br />
@@ -66,27 +69,31 @@
       class="grid gap-3 mt-2 px-4 py-3 hover:bg-base-content/3 border rounded-md border-base-300"
     >
       <div class="w-full flex gap-3 items-center relative h-full shrink-0">
-        <div class="w-10 h-10 aspect-square relative">
-          {#if data.profile?.picture}
+        <div
+          class="w-7 h-7 bg-base-100 shrink-0 rounded-full overflow-hidden aspect-square relative"
+        >
+          {#if data.repost?.profile?.picture}
             <img
-              class="w-full aspect-square rounded-full object-cover border border-base-300"
-              src={data.profile.picture}
+              class="w-full aspect-square rounded-full object-cover"
+              src={data.repost?.profile?.picture}
               alt="profile"
             />
           {:else}
             <div
-              class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
+              class="w-full aspect-square rounded-full inline-grid place-items-center"
             >
-              <Icon class="ri-user-fill text-2xl text-base-300" />
+              <Icon class="ri-user-fill text-[16px] text-base-300" />
             </div>
           {/if}
         </div>
         <div class="flex w-full justify-between">
-          <span class="font-semibold tracking-[1px]"
-            >{data?.repost?.profile?.name}</span
+          <a
+            href="/profile/{data?.repost?.profile?.username}"
+            class="font-semibold link link-hover"
+            >{data?.repost?.profile?.name}</a
           >
 
-          <span class="text-base-content text-sm text-opacity-75 px-2">
+          <span class="text-base-content text-xs text-opacity-75 px-2">
             {timeFormater(new Date(data.repost?.created_at ?? ""))}
           </span>
         </div>

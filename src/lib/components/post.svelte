@@ -20,7 +20,7 @@
   <div class="w-full relative h-full py-3 shrink-0">
     <a class="w-full relative" href="/profile/{data.profile?.username}">
       <div
-        class="w-full relative aspect-square rounded-full bg-base-100 overflow-hidden"
+        class="w-full relative aspect-square rounded-full bg-white overflow-hidden"
       >
         {#if data.profile?.picture}
           <img
@@ -42,11 +42,18 @@
   <div class="flex flex-col w-full">
     <div class="flex w-full justify-between pt-3 mt-0.5">
       <div class="flex items-center gap-2">
-        <span class="font-semibold">{data.profile?.name}</span>
-        <span class="text-base-content/75">@{data.profile?.username}</span>
+        <a
+          href="/profile/{data.profile?.username}"
+          class="font-semibold link link-hover">{data.profile?.name}</a
+        >
+        <a
+          href="/profile/{data.profile?.username}"
+          class="text-base-content/75 link link-hover"
+          >@{data.profile?.username}</a
+        >
       </div>
 
-      <span class="text-base-content text-sm text-opacity-75 px-2">
+      <span class="text-base-content text-xs text-opacity-75 px-2">
         {timeFormater(new Date(data.created_at ?? ""))}
       </span>
     </div>

@@ -8,11 +8,12 @@
   html,
   body {
     height: 100%;
-    font-family: Inter;
+    font-family: Inter !important;
   }
 
   body {
     overflow-y: scroll;
+    @apply h-fit;
   }
 }
 

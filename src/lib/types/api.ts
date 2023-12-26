@@ -9,3 +9,8 @@ export type ApiResponse<T> = {
     data: T,
     status: number,
 }
+
+export type PaginatedData = {
+    next_page?: number,
+    has_next_page?: boolean,
+} 

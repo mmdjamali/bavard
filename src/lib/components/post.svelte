@@ -15,28 +15,32 @@
 
 <a
   href="/post/{data?.id}"
-  class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300"
+  class="grid hover:bg-base-content/3 grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300"
 >
   <div class="w-full relative h-full py-3 shrink-0">
     <a class="w-full relative" href="/profile/{data.profile?.username}">
-      {#if data.profile?.picture}
-        <img
-          class="w-full aspect-square rounded-full object-cover border border-base-300"
-          src={data.profile.picture}
-          alt="profile"
-        />
-      {:else}
-        <div
-          class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
-        >
-          <Icon class="ri-user-fill text-2xl text-base-300" />
-        </div>
-      {/if}
+      <div
+        class="w-full relative aspect-square rounded-full bg-base-100 overflow-hidden"
+      >
+        {#if data.profile?.picture}
+          <img
+            class="w-full aspect-square rounded-full object-cover"
+            src={data.profile.picture}
+            alt="profile"
+          />
+        {:else}
+          <div
+            class="w-full bg-base-100 aspect-square rounded-full inline-grid place-items-center"
+          >
+            <Icon class="ri-user-fill text-2xl text-base-300" />
+          </div>
+        {/if}
+      </div>
     </a>
   </div>
 
   <div class="flex flex-col w-full">
-    <div class="flex w-full justify-between text-sm text-[15px] pt-3 mt-0.5">
+    <div class="flex w-full justify-between pt-3 mt-0.5">
       <div class="flex items-center gap-2">
         <span class="font-semibold">{data.profile?.name}</span>
         <span class="text-base-content/75">@{data.profile?.username}</span>

@@ -131,7 +131,7 @@
           </h2>
 
           <button type="button" use:melt={$close} aria-label="close" class="">
-            <Icon class="text-sm ri-close-line text-[18px]" />
+            <Icon class="ri-close-line text-[18px]" />
           </button>
         </div>
 

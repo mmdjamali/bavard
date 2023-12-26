@@ -63,18 +63,18 @@
 {#if $profile.data?.profile?.id}
   <form
     on:submit={handleSubmit}
-    class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300"
+    class="hidden sm:grid grid-cols-[40px_1fr] bg-base-100 gap-3 px-4 border-b border-base-300"
   >
     <div class="w-full h-full py-3 shrink-0">
       {#if $profile.data?.profile.picture}
         <img
-          class="w-full aspect-square rounded-full object-cover border border-base-300"
+          class="w-full aspect-square rounded-full object-cover"
           src={$profile.data.profile.picture}
           alt="profile"
         />
       {:else}
         <div
-          class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
+          class="w-full aspect-square rounded-full inline-grid place-items-center"
         >
           <Icon class="ri-user-fill text-2xl text-base-300" />
         </div>
@@ -99,7 +99,7 @@
         }}
         rows="1"
         placeholder="What's up?"
-        class="w-full max-h-[50svh] resize-none pt-4 pb-3 mt-0.5 text-lg outline-none"
+        class="w-full max-h-[50svh] bg-base-100 resize-none pt-4 pb-3 mt-0.5 text-lg outline-none"
       />
 
       <div

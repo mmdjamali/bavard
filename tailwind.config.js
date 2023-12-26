@@ -8,6 +8,12 @@ export default {
         // ispired by https://github.com/emilkowalski, EASE constant of vaul
         emil: "cubic-bezier(0.32, 0.72, 0, 1)",
       },
+      fontSize: {
+        sm: "0.9375rem",
+      },
+      opacity: {
+        3: "0.03",
+      },
     },
   },
   /** @satisfies {import('daisyui').Config} */

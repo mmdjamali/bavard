@@ -15,7 +15,7 @@
   }
 </script>
 
-{#if $profile.isLoading || (!$profile.data && !$profile.isError)}
+{#if $profile.isLoading}
   <div class="grid place-items-center w-full h-full my-auto">
     <span class="loading loading-dots ease-emil text-base-content" />
   </div>

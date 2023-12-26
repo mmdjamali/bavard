@@ -79,8 +79,8 @@
         throw "";
       }
 
-      queryClient.setQueryData(["profile", "me"], res.data.profile);
-      queryClient.refetchQueries({ queryKey: ["profile", "me"] });
+      queryClient.setQueryData(["profile", "me"], res.data);
+      // queryClient.refetchQueries({ queryKey: ["profile", "me"] });
       goto("/");
       loading = false;
     } catch (err) {

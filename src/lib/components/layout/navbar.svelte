@@ -43,50 +43,34 @@
   };
 </script>
 
-{#if $profile.isLoading || (!$profile.data && !$profile.isError)}
+{#if $profile.isLoading}
   <div
-    class="sticky h-[100svh] max-h-screen hidden top-0 ml-auto sm:grid flex-col justify-end sm:border-r sm:border-base-300 lg:border-none w-full place-items-center"
+    class="sticky h-[100svh] max-h-screen hidden top-0 sm:grid flex-col sm:border-r sm:border-base-300 lg:border-none w-full place-items-center"
   >
     <span class="loading loading-dots" />
   </div>
 {:else}
   <div
-    class="sticky h-screen max-h-[100svh] hidden top-0 ml-auto sm:flex flex-col justify-end sm:border-r sm:border-base-300 lg:border-none"
+    class="sticky h-screen max-h-[100svh] hidden top-0 ml-auto sm:flex flex-col justify-end sm:border-base-300"
   >
     <nav class="h-full lg:w-64 gap-2 flex flex-col ml-auto py-4 px-4">
-      <div class="flex items-center mb-2 lg:px-4">
-        {#if $profile.data?.profile?.id}
-          {#if $profile.data?.profile?.picture}
-            <img
-              alt=""
-              class="w-12 h-12 lg:w-14 lg:h-14 border border-base-300 aspect-square rounded-full object-cover"
-              src={$profile.data?.profile.picture}
-            />
-          {:else}
-            <div
-              class=" h-12 w-12 aspect-square rounded-full inline-grid place-items-center border border-base-300"
-            >
-              <Icon class="ri-user-fill text-3xl text-base-300" />
-            </div>
-          {/if}
-        {:else}
-          <img
-            alt=""
-            class="w-12 h-12 lg:w-14 lg:h-14 aspect-square rounded-full object-cover"
-            src={"/logo.svg"}
-          />
-        {/if}
+      <div class="flex items-center max-lg:justify-center lg:px-4">
+        <img
+          alt=""
+          class="w-8 h-8 aspect-square rounded-full object-cover"
+          src={"/logo.svg"}
+        />
       </div>
 
       {#each routes as route (route.title)}
         {#if !route.disabled}
           <a
             href={route.path}
-            class="lg:px-4 gap-2.5 h-12 w-12 lg:w-full hover:bg-base-200 rounded-btn text-lg flex justify-center lg:justify-start items-center bg-transparent"
+            class="lg:px-4 gap-4 h-12 w-12 lg:w-full hover:bg-base-200 rounded-btn text-lg flex justify-center lg:justify-start items-center bg-transparent"
           >
             <Icon
               class={cn(
-                "text-[28px]",
+                "text-[26px]",
                 isRoute(route.path) ? route.iconFill : route.icon,
               )}
             />
@@ -102,9 +86,16 @@
         {/if}
       {/each}
 
-      <button class="btn mt-4 rounded-full !h-12 w-12 lg:w-full btn-primary">
-        <span class="hidden lg:inline text-lg">POST</span>
-        <Icon class="lg:hidden ri-add-line text-[28px]" />
+      <button class="btn rounded-full !h-12 w-12 lg:w-full btn-primary">
+        <span class="hidden lg:inline text-base capitalize">post</span>
+        <span class="relative">
+          <Icon
+            class="lg:hidden ri-quill-pen-line translate-x-1 text-[28px] font-normal"
+          />
+          <Icon
+            class="lg:hidden absolute top-0 font-bold left-0 -translate-x-0.5 -translate-y-0.5 ri-add-fill text-[16px]"
+          />
+        </span>
       </button>
     </nav>
   </div>

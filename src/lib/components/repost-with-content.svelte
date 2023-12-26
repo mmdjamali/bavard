@@ -17,29 +17,33 @@
 
 <a
   href="/post/{data.id}"
-  class="grid grid-cols-[40px_1fr] gap-3 px-4 border-b border-base-300"
+  class="grid grid-cols-[40px_1fr] hover:bg-base-content/3 gap-3 px-4 border-b border-base-300"
 >
   <a
     href="/profile/{data.profile?.username}"
     class="w-full relative h-full py-3 shrink-0"
   >
-    {#if data.profile?.picture}
-      <img
-        class="w-full aspect-square rounded-full object-cover border border-base-300"
-        src={data.profile.picture}
-        alt="profile"
-      />
-    {:else}
-      <div
-        class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
-      >
-        <Icon class="ri-user-fill text-2xl text-base-300" />
-      </div>
-    {/if}
+    <div
+      class="w-full relative aspect-square rounded-full bg-base-100 overflow-hidden"
+    >
+      {#if data.profile?.picture}
+        <img
+          class="w-full aspect-square object-cover"
+          src={data.profile.picture}
+          alt="profile"
+        />
+      {:else}
+        <div
+          class="w-full aspect-square rounded-full inline-grid place-items-center border border-base-300"
+        >
+          <Icon class="ri-user-fill text-2xl text-base-300" />
+        </div>
+      {/if}
+    </div>
   </a>
 
   <div class="flex flex-col w-full">
-    <div class="flex w-full justify-between text-sm text-[15px] pt-3 mt-0.5">
+    <div class="flex w-full justify-between text-sm pt-3 mt-0.5">
       <span class="font-semibold tracking-[1px]">{data.profile?.name}</span>
 
       <span class="text-base-content text-sm text-opacity-75 px-2">
@@ -59,7 +63,7 @@
 
     <a
       href="/post/{data.repost?.id}"
-      class="grid gap-3 mt-2 px-4 py-3 border rounded-md border-base-300"
+      class="grid gap-3 mt-2 px-4 py-3 hover:bg-base-content/3 border rounded-md border-base-300"
     >
       <div class="w-full flex gap-3 items-center relative h-full shrink-0">
         <div class="w-10 h-10 aspect-square relative">
@@ -77,7 +81,7 @@
             </div>
           {/if}
         </div>
-        <div class="flex w-full justify-between text-sm text-[15px]">
+        <div class="flex w-full justify-between">
           <span class="font-semibold tracking-[1px]"
             >{data?.repost?.profile?.name}</span
           >

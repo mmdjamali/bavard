@@ -9,6 +9,7 @@ export default {
         emil: "cubic-bezier(0.32, 0.72, 0, 1)",
       },
       fontSize: {
+        xs: "0.8125em",
         sm: "0.9375rem",
       },
       opacity: {
@@ -18,7 +19,7 @@ export default {
   },
   /** @satisfies {import('daisyui').Config} */
   daisyui: {
-    themes: ["light"],
+    themes: ["light", "dark"],
   },
   plugins: [
     require("@tailwindcss/typography"),

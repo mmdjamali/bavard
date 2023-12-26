@@ -3,21 +3,16 @@
   import { fetchWithToken } from "$lib/custom-fetch";
   import type { ApiResponse } from "$lib/types/api";
   import type { ProfileEntity } from "$lib/types/entity";
-  import { createQuery } from "@tanstack/svelte-query";
+  import { createMutation, createQuery } from "@tanstack/svelte-query";
   import Icon from "../icon.svelte";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
+  import FollowButton from "../follow-button.svelte";
 
   export let data: { username?: string };
 
   $: profile = createQuery({
     queryKey: ["profile", data.username],
     queryFn: async () => {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve("");
-        }, 3000);
-      });
-
       const res: ApiResponse<{
         profile: ProfileEntity | null;
       }> = await fetchWithToken(
@@ -89,9 +84,7 @@
         {:else}
           <div
             class="w-full aspect-square rounded-full inline-grid place-items-center"
-          >
-            <Icon class="ri-user-fill text-3xl text-base-300" />
-          </div>
+          ></div>
         {/if}
       </div>
 
@@ -101,7 +94,7 @@
             Edit <Icon class="text-[18px] ri-edit-fill" />
           </button>
         {:else}
-          <button class="btn rounded-full px-5 btn-primary"> Follow </button>
+          <FollowButton {data} />
         {/if}
         <button class="btn btn-square rounded-full">
           <Icon class="ri-more-fill text-[21px]" />
@@ -133,7 +126,7 @@
 
         <span class="text-base-content/75">
           <span class="text-base-content font-semibold">
-            {$profile.data?.profile?.follower_count}
+            {$profile.data?.profile?.followed_count}
           </span> following
         </span>
       </div>

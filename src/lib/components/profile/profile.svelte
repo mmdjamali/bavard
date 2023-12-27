@@ -111,11 +111,29 @@
         @{$profile.data?.profile?.username}
       </span>
 
-      {#if $profile.data?.profile?.bio || "Software Developer"}
+      {#if $profile.data?.profile?.bio}
         <p class="mt-2">
-          {$profile.data?.profile?.bio || "Software Developer"}
+          {$profile.data?.profile?.bio}
         </p>
       {/if}
+
+      <div class="flex items-center mt-2">
+        {#if $profile.data?.profile?.created_at}
+          <div
+            class="flex justify-center text-base-content/75 font-medium gap-1 items-center"
+          >
+            <Icon class="ri-calendar-line leading-none text-[18px]" />
+            <span class="text-sm"
+              >Joined {new Date(
+                $profile.data?.profile?.created_at || "2020",
+              ).toLocaleDateString("en-us", {
+                month: "long",
+                year: "numeric",
+              })}</span
+            >
+          </div>
+        {/if}
+      </div>
 
       <div class="flex items-center gap-3 mt-2">
         <span class="text-base-content/75">

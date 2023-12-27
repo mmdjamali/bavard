@@ -5,6 +5,7 @@
   import Navbar from "$lib/components/layout/navbar.svelte";
   import WithProfile from "$lib/components/with-profile.svelte";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
+  import { cn } from "$lib/utils";
 
   const profile = getProfileContext();
 
@@ -49,7 +50,12 @@
           {#each tabs as tab (tab.title)}
             <a
               href={tab.path}
-              class="w-full relative font-semibold h-full transition-colors inline-grid place-items-center hover:bg-base-200"
+              class={cn(
+                "w-full relative h-full transition-colors duration-300 ease-emil inline-grid place-items-center hover:bg-base-200/50",
+                $page.url.pathname === tab.path
+                  ? "font-semibold "
+                  : "font-medium",
+              )}
             >
               {tab.title}
               {#if $page.url.pathname === tab.path}

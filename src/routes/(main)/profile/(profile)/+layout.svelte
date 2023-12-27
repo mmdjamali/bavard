@@ -67,7 +67,7 @@
         <a
           href={tab.path}
           class={cn(
-            "tab h-12 relative capitalize hover:bg-base-200",
+            "tab h-12 text-sm relative capitalize hover:bg-base-200",
             $page.url.pathname === tab.path ? "font-semibold" : "",
           )}
         >

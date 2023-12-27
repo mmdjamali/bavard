@@ -69,7 +69,7 @@
       loading: false,
       disabled: false,
       title: "Share",
-      icon: "ri-share-line",
+      icon: "ri-share-2-line",
       action: () => {
         if (!browser) return;
 
@@ -82,6 +82,13 @@
         });
       },
     },
+    {
+      loading: false,
+      disabled: false,
+      title: "Bookmark",
+      icon: "ri-bookmark-line",
+      action: () => {},
+    },
   ];
 </script>
 
@@ -92,7 +99,7 @@
   }}
   use:melt={$trigger}
   type="button"
-  class="btn shadow-none text-base-content/75 hover:text-base-content relative btn-square rounded-full bg-transparent hover:bg-base-200 border-none !h-8 !w-8"
+  class="btn shadow-none text-base-content/75 hover:text-base-content relative btn-square rounded-full bg-transparent hover:bg-base-200 border-none !h-9 !w-9"
 >
   <Icon class="ri-more-fill text-[18px]" />
 </button>

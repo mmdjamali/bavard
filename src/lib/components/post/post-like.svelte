@@ -78,7 +78,7 @@
   }}
   disabled={$like.isPending || $removeLike.isPending}
   type="button"
-  class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-rose-500/10 hover:text-rose-500 border-none !h-8 !w-8"
+  class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-rose-500/10 hover:text-rose-500 border-none !h-9 !w-9"
 >
   {#if $like.isPending || $removeLike.isPending}
     <span class="loading-spinner loading loading-sm text-red-500" />

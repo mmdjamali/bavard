@@ -94,7 +94,7 @@
       e.stopPropagation();
     }}
     type="button"
-    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-8 !w-8"
+    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-9 !w-9"
   >
     <Icon class="ri-chat-1-line text-[18px]" />
     <Count value={data?.reply_count ?? "0"} />
@@ -107,7 +107,7 @@
     }}
     use:melt={$trigger}
     type="button"
-    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-8 !w-8"
+    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-9 !w-9"
   >
     <Icon class="ri-chat-1-line text-[18px]" />
     <Count value={data?.reply_count ?? "0"} />
@@ -140,7 +140,7 @@
           </h2>
 
           <button type="button" use:melt={$close} aria-label="close" class="">
-            <Icon class="text-sm ri-close-line text-[18px]" />
+            <Icon class="ri-close-line text-[18px]" />
           </button>
         </div>
 

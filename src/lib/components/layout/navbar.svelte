@@ -4,6 +4,7 @@
   import { cn } from "$lib/utils";
   import { page } from "$app/stores";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
+  import NewPostButton from "../new-post-button.svelte";
 
   const profile = getProfileContext();
 
@@ -93,45 +94,42 @@
         {/if}
       {/each}
 
-      <button class="btn rounded-full !h-12 w-12 lg:w-full btn-primary">
-        <span class="hidden lg:inline text-base capitalize">post</span>
-        <span class="relative">
-          <Icon
-            class="lg:hidden ri-quill-pen-line translate-x-1 text-[26px] font-normal"
-          />
-          <Icon
-            class="lg:hidden absolute top-0 font-bold left-0 -translate-x-0.5 -translate-y-0.5 ri-add-fill text-[16px]"
-          />
-        </span>
-      </button>
+      <NewPostButton />
     </nav>
   </div>
 
-  <nav
-    class="fixed bottom-0 bg-base-100 px-4 border-t border-base-300 z-50 sm:hidden navbar h-14 min-h-0 flex items-center justify-between"
+  <div
+    class="fixed pointer-events-none w-full flex flex-col bottom-0 z-50 sm:hidden"
   >
-    {#each routes as route (route.title)}
-      {#if !route.disabled}
-        <a
-          href={route.path}
-          class="gap-2.5 h-10 w-10 hover:bg-base-200 rounded-btn text-lg flex justify-center items-center bg-transparent"
-        >
-          <Icon
-            class={cn(
-              "text-[26px]",
-              isRoute(route.path) ? route.iconFill : route.icon,
-            )}
-          />
-          <span
-            class={cn(
-              "hidden lg:inline",
-              isRoute(route.path) ? "font-semibold" : "",
-            )}
+    <div class="pointer-events-auto mb-3 ml-3">
+      <NewPostButton />
+    </div>
+    <nav
+      class=" pointer-events-auto bg-base-100 px-4 border-t border-base-300 navbar h-14 min-h-0 flex items-center justify-between"
+    >
+      {#each routes as route (route.title)}
+        {#if !route.disabled}
+          <a
+            href={route.path}
+            class="gap-2.5 h-10 w-10 hover:bg-base-200 rounded-btn text-lg flex justify-center items-center bg-transparent"
           >
-            {route.title}
-          </span>
-        </a>
-      {/if}
-    {/each}
-  </nav>
+            <Icon
+              class={cn(
+                "text-[26px]",
+                isRoute(route.path) ? route.iconFill : route.icon,
+              )}
+            />
+            <span
+              class={cn(
+                "hidden lg:inline",
+                isRoute(route.path) ? "font-semibold" : "",
+              )}
+            >
+              {route.title}
+            </span>
+          </a>
+        {/if}
+      {/each}
+    </nav>
+  </div>
 {/if}

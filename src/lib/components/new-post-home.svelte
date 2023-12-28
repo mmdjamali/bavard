@@ -48,6 +48,7 @@
       createdPosts.update((prev) => {
         const clone = structuredClone(prev);
         clone.push(res.data.post);
+        clone.reverse();
         return clone;
       });
 

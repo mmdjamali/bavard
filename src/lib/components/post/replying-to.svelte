@@ -8,7 +8,7 @@
   <div class="text-base-content/75">
     replying to <a
       href="/profile/{data?.parent.profile.username}"
-      class="link link-hover link-primary">@{data?.parent.profile.username}</a
+      class="link link-hover link-info">@{data?.parent.profile.username}</a
     >
   </div>
 {/if}

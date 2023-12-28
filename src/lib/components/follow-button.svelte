@@ -72,7 +72,7 @@
 
 {#if $followed.isLoading}
   <div
-    class="h-10 bg-base-300 animate-pulse w-24 ease-emil rounded-full px-5 text-transparent"
+    class="h-9 bg-base-300 animate-pulse w-24 ease-emil rounded-full px-5 text-transparent"
   />
 {:else if $followed.data?.followed === true}
   <button
@@ -81,9 +81,12 @@
 
       $unfollow.mutate();
     }}
-    class="btn rounded-full px-5 hover:btn-error"
+    class="btn group rounded-full px-5 !h-9 hover:btn-error"
   >
-    Unfollow
+    <span class="absolute text-white opacity-0 group-hover:opacity-100">
+      Unfollow
+    </span>
+    <span class="group-hover:opacity-0"> Following </span>
     {#if $unfollow.isPending}
       <span class="loading loading-spinner loading-xs" />
     {/if}
@@ -95,7 +98,7 @@
 
       $follow.mutate();
     }}
-    class="btn rounded-full px-5 btn-primary"
+    class="btn rounded-full !h-9 px-5 btn-primary"
   >
     Follow
     {#if $follow.isPending}

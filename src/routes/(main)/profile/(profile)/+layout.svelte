@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.profile?.name} | Bavard</title>
+  <title>{data.profile?.name} (@{data?.profile?.username}) | Bavard</title>
   <meta name="description" content="Percent | " />
 </svelte:head>
 

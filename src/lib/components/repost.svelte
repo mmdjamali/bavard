@@ -82,7 +82,7 @@
 
           <PostLike data={repost} />
 
-          <PostMore data={repost} />
+          <PostMore {data} />
         </div>
       </div>
     </div>

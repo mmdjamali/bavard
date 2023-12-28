@@ -55,6 +55,8 @@
     },
   });
 
+  $: isEmptyRepost = !data.content && data.repost?.id;
+
   $: items = [
     {
       loading: $deletePost.isPending,
@@ -78,7 +80,10 @@
         navigator.share({
           title: "Hey! chech this out.",
           text: data.content,
-          url: "https://localhost:5173/post/" + data.id,
+          url:
+            "https://localhost:5173/post/" + isEmptyRepost
+              ? data?.repost?.id
+              : data.id,
         });
       },
     },

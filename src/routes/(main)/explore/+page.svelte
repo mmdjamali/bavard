@@ -22,7 +22,7 @@
             class="ri-search-line shrink-0 text-[21px] text-base-content/75 group-focus-within:text-primary"
           />
           <input
-            placeholder="Search"
+            placeholder="Search Bavard"
             class="bg-transparent w-full outline-none caret-primary"
           />
         </div>

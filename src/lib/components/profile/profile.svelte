@@ -90,13 +90,13 @@
 
       <div class="flex items-center justify-center gap-3 py-2">
         {#if $userProfile.data?.profile?.id === $profile.data?.profile?.id}
-          <button class="btn rounded-full px-5">
+          <button class="btn rounded-full px-5 !h-9">
             Edit <Icon class="text-[18px] ri-edit-fill" />
           </button>
         {:else}
           <FollowButton {data} />
         {/if}
-        <button class="btn btn-square rounded-full">
+        <button class="btn btn-square !h-9 !w-9 rounded-full">
           <Icon class="ri-more-fill text-[21px]" />
         </button>
       </div>

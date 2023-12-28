@@ -71,7 +71,7 @@
           class="aspect-square shrink-0 h-full inline-grid place-items-center"
         >
           <button
-            class="btn btn-square rounded-full shadow-none hover:bg-base-300 bg-transparent border-none"
+            class="btn !h-9 !w-9 btn-square rounded-full shadow-none hover:bg-base-300 bg-transparent border-none"
           >
             <Icon class="ri-equalizer-2-line text-[18px]" />
           </button>

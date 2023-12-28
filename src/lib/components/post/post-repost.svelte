@@ -10,6 +10,7 @@
   import { fetchWithToken } from "$lib/custom-fetch";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { cn } from "$lib/utils";
+  import { fly } from "svelte/transition";
 
   const MAX_LENGTH = 300;
 
@@ -59,16 +60,7 @@
       createdPosts.update((prev) => {
         const clone = structuredClone(prev);
         clone.push(res.data.post);
-        clone.sort((a, b) => {
-          const a_ms = new Date(a.created_at ?? "").getTime();
-          const b_ms = new Date(b.created_at ?? "").getTime();
-
-          if (a_ms === b_ms) return 0;
-
-          if (a_ms < b_ms) return 1;
-
-          return -1;
-        });
+        clone.reverse();
         return clone;
       });
       open.set(false);
@@ -118,24 +110,25 @@
         use:melt={$dialogContent}
       >
         <div
-          class="flex shrink-0 items-center p-6 border-b border-base-300 justify-between"
+          class="flex shrink-0 items-center px-4 py-3 border-b border-base-300 justify-between"
         >
           <h2
             use:melt={$title}
-            class="m-0 text-lg font-semibold text-base-content"
+            class="m-0 text-base font-semibold text-base-content"
           >
             Reposting <a
               href="/profile/{data.profile?.username}"
-              class="link link-primary link-hover">@{data.profile?.username}</a
+              class="link link-info font-medium link-hover"
+              >@{data.profile?.username}</a
             > 's Post
           </h2>
 
           <button type="button" use:melt={$close} aria-label="close" class="">
-            <Icon class="ri-close-line text-[18px]" />
+            <Icon class="ri-close-line text-[21px]" />
           </button>
         </div>
 
-        <div class="w- flex flex-col overflow-y-scroll h-full p-6">
+        <div class="w- flex flex-col overflow-y-scroll h-full px-4 py-3">
           <div class="grid grid-cols-[40px_1fr] gap-3">
             <div class="w-full h-full py-3 shrink-0">
               {#if $profile.data?.profile?.picture}
@@ -168,52 +161,61 @@
                   target.style.height = "auto";
                   target.style.height = target.scrollHeight + "px";
                 }}
-                rows="1"
+                rows="5"
                 placeholder="What's up?"
                 class="w-full md:max-h-72 max-h-[calc(svh100_-_(7))] resize-none pt-4 pb-3 mt-0.5 text-lg outline-none"
               />
-
-              <div
-                class="w-full flex justify-between py-2 gap-4 border-t border-base-300"
-              >
-                <div class="flex items-center">
-                  <button
-                    type="button"
-                    class="btn cursor-not-allowed no-animation btn-square rounded-full bg-transparent hover:bg-primary/10 text-primary border-none !h-8 !w-8"
-                  >
-                    <Icon class="ri-image-line text-[18px]" />
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         <div
-          class="flex shrink-0 items-center p-6 border-t border-base-300 justify-between"
+          class="flex shrink-0 items-center px-4 py-3 border-t border-base-300 justify-between"
         >
-          <button type="button" use:melt={$close} class="btn"> Cancel </button>
+          <div class="w-full flex justify-between gap-4">
+            <div class="flex items-center">
+              <button
+                type="button"
+                class="btn cursor-not-allowed no-animation btn-square rounded-full bg-transparent hover:bg-primary/10 text-primary border-none !h-9 !w-9"
+              >
+                <Icon class="ri-image-line text-[18px]" />
+              </button>
+            </div>
+          </div>
 
-          <div class="flex items-center justify-center gap-3">
-            {#if $focused || $content}
-              <span class="text-sm">{MAX_LENGTH - $content.length}</span>
+          <div class="flex relative items-center justify-center gap-3">
+            {#if $content}
               <div
-                class={cn(
-                  "radial-progress border border-base-300",
-                  $content.length > MAX_LENGTH
-                    ? "text-error"
-                    : $content.length > MAX_LENGTH - 10
-                      ? "text-warning"
-                      : "text-primary",
-                )}
-                style="--size:32px;--value:{Math.round(
-                  ($content.length / MAX_LENGTH) * 100,
-                )};--thickness: 2px;"
-              ></div>
+                transition:fly={{ duration: 200, x: -20 }}
+                class="h-9 w-9 inline-grid place-items-center aspect-square"
+              >
+                <div
+                  class={cn(
+                    "radial-progress transition-all inline-grid place-items-center border border-base-300",
+                    $content.length > MAX_LENGTH
+                      ? "text-error"
+                      : $content.length > MAX_LENGTH - 20
+                        ? "text-warning"
+                        : "text-primary",
+                  )}
+                  style="--size:{MAX_LENGTH - $content.length <= 20
+                    ? 30
+                    : 24}px;--value:{Math.round(
+                    ($content.length / MAX_LENGTH) * 100,
+                  )};--thickness: 3px;"
+                >
+                  {#if MAX_LENGTH - $content.length <= 20}
+                    <span class="text-xs">{MAX_LENGTH - $content.length}</span>
+                  {/if}
+                </div>
+              </div>
             {/if}
 
             <button
-              class="btn px-5 btn-primary rounded-full leading-none"
+              class={cn(
+                "btn px-5 !h-9 btn-primary rounded-full leading-none",
+                !$content ? "opacity-50 no-animation" : "",
+              )}
               on:click={() => {}}
             >
               Post

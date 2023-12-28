@@ -5,6 +5,11 @@
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
   import { writable } from "svelte/store";
   import { cn } from "$lib/utils";
+  import type { ApiResponse } from "$lib/types/api";
+  import { PUBLIC_BACKEND_URL } from "$env/static/public";
+  import { fetchWithToken } from "$lib/custom-fetch";
+  import type { PostEntity } from "$lib/types/entity";
+  import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
 
   const MAX_LENGTH = 300;
 
@@ -25,8 +30,48 @@
   } = createDialog();
 
   const profile = getProfileContext();
+  const createdPosts = getCreatedPostsContext();
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    try {
+      if ($loading) return;
+
+      if (!$content || $content.length > MAX_LENGTH) {
+        return;
+      }
+
+      loading.set(true);
+
+      const res: ApiResponse<{ post: PostEntity }> = await fetchWithToken(
+        PUBLIC_BACKEND_URL + "/api/post",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            content: $content,
+          }),
+        },
+      ).then((res) => res?.json());
+
+      if (!res?.success) throw new Error("Failed");
+
+      createdPosts.update((prev) => {
+        const clone = structuredClone(prev);
+        clone.push(res.data.post);
+        clone.reverse();
+        return clone;
+      });
+
+      content.set("");
+
+      loading.set(false);
+      open.set(false);
+    } catch (err) {
+      loading.set(false);
+    }
+  };
 
   $: if (input && $open) input.focus();
 </script>
@@ -65,7 +110,7 @@
       >
         <h2
           use:melt={$title}
-          class="m-0 text-lg font-semibold text-base-content"
+          class="m-0 text-base font-semibold text-base-content"
         >
           New post
         </h2>
@@ -118,7 +163,7 @@
           <div class="flex items-center">
             <button
               type="button"
-              class="btn cursor-not-allowed no-animation btn-square rounded-full bg-transparent hover:bg-primary/10 text-primary border-none !h-8 !w-8"
+              class="btn cursor-not-allowed no-animation btn-square rounded-full bg-transparent hover:bg-primary/10 text-primary border-none !h-9 !w-9"
             >
               <Icon class="ri-image-line text-[18px]" />
             </button>

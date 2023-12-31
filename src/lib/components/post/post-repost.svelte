@@ -10,11 +10,12 @@
   import { fetchWithToken } from "$lib/custom-fetch";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { cn } from "$lib/utils";
-  import { fly } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
 
   const MAX_LENGTH = 300;
 
   export let data: PostEntity;
+  export let size: "sm" | "lg" | undefined = "sm";
 
   const profile = getProfileContext();
   const createdPosts = getCreatedPostsContext();
@@ -73,38 +74,46 @@
 
 {#if !$profile.data?.profile?.id}
   <button
+    data-size={size}
     on:click={(e) => {
       e.preventDefault();
       e.stopPropagation();
     }}
     type="button"
-    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-green-500/10 hover:text-green-500 border-none !h-9 !w-9"
+    class="btn shadow-none group text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-green-500/10 hover:text-green-500 border-none data-[size=sm]:!h-9 data-[size=lg]:!h-10 data-[size=sm]:!w-9 data-[size=lg]:!w-10"
   >
-    <Icon class="ri-loop-right-line text-[18px]" />
+    <Icon
+      class="ri-loop-right-line group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
     <Count value={data?.repost_count ?? "0"} />
   </button>
 {:else}
   <button
+    data-size={size}
     on:click={(e) => {
       e.preventDefault();
       e.stopPropagation();
     }}
     use:melt={$trigger}
     type="button"
-    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-green-500/10 hover:text-green-500 border-none !h-9 !w-9"
+    class="btn shadow-none group text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-green-500/10 hover:text-green-500 border-none data-[size=sm]:!h-9 data-[size=lg]:!h-10 data-[size=sm]:!w-9 data-[size=lg]:!w-10"
   >
-    <Icon class="ri-loop-right-line text-[18px]" />
+    <Icon
+      class="ri-loop-right-line text-[18px] group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
     <Count value={data?.repost_count ?? "0"} />
   </button>
 
   <div class="text-sm text-base-content" use:melt={$portalled}>
     {#if $open}
       <div
+        transition:fade={{ duration: 150 }}
         use:melt={$overlay}
         class="fixed inset-0 z-50 backdrop-blur-[2px] bg-base-content/20"
       />
 
       <form
+        transition:fly={{ duration: 150, y: 100, opacity: 0 }}
         on:submit|preventDefault={handleSubmit}
         class="fixed flex flex-col left-[50%] top-[50%] z-50 w-full h-full sm:h-fit sm:max-h-[85vh] sm:w-[90vw] sm:max-w-[500px] translate-x-[-50%] translate-y-[-50%] sm:rounded-box bg-base-100 shadow-lg"
         use:melt={$dialogContent}

@@ -12,8 +12,11 @@
   import viewport from "$lib/actions/viewport";
   import PostLoader from "../post/post-loader.svelte";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
+  import { getLikedPostsContext } from "$lib/contexts/liked-posts";
 
   export let data: ProfileEntity;
+
+  const likedPosts = getLikedPostsContext();
 
   $: feed = createInfiniteQuery({
     queryKey: ["profile", "posts", data.username],
@@ -41,6 +44,31 @@
     initialPageParam: 1,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
+  });
+
+  $: likedPosts.update((prev) => {
+    $feed.data?.pages.forEach((row) => {
+      if (!row) return;
+
+      row.feed?.forEach((post) => {
+        let post_id =
+          !post.content && !!post?.repost?.id ? post.repost.id : post?.id;
+        let post_liked =
+          !post.content && !!post?.repost?.id ? post.repost.liked : post?.liked;
+
+        console.log(post?.repost?.liked);
+
+        if (!post_id) return;
+
+        if (typeof prev[post_id] === "boolean") return;
+
+        if (typeof post_liked !== "boolean") return;
+
+        prev[post_id] = post_liked;
+      });
+    });
+
+    return prev;
   });
 
   const profile = getProfileContext();

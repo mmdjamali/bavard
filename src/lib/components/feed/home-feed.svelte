@@ -11,6 +11,9 @@
   import Post from "../post.svelte";
   import viewport from "$lib/actions/viewport";
   import PostLoader from "../post/post-loader.svelte";
+  import { getLikedPostsContext } from "$lib/contexts/liked-posts";
+
+  const likedPosts = getLikedPostsContext();
 
   const feed = createInfiniteQuery({
     queryKey: ["feed"],
@@ -37,6 +40,31 @@
     initialPageParam: 1,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 30,
+  });
+
+  $: likedPosts.update((prev) => {
+    $feed.data?.pages.forEach((row) => {
+      if (!row) return;
+
+      row.feed?.forEach((post) => {
+        let post_id =
+          !post.content && !!post?.repost?.id ? post.repost.id : post?.id;
+        let post_liked =
+          !post.content && !!post?.repost?.id ? post.repost.liked : post?.liked;
+
+        console.log(post?.repost?.liked);
+
+        if (!post_id) return;
+
+        if (typeof prev[post_id] === "boolean") return;
+
+        if (typeof post_liked !== "boolean") return;
+
+        prev[post_id] = post_liked;
+      });
+    });
+
+    return prev;
   });
 
   const createdPosts = getCreatedPostsContext();

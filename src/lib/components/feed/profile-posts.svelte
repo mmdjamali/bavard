@@ -56,8 +56,6 @@
         let post_liked =
           !post.content && !!post?.repost?.id ? post.repost.liked : post?.liked;
 
-        console.log(post?.repost?.liked);
-
         if (!post_id) return;
 
         if (typeof prev[post_id] === "boolean") return;

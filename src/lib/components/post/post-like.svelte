@@ -7,12 +7,17 @@
   import { fetchWithToken } from "$lib/custom-fetch";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { writable } from "svelte/store";
+  import { getLikedPostsContext } from "$lib/contexts/liked-posts";
+  import { onMount } from "svelte";
 
   export let data: PostEntity;
+  export let size: "sm" | "lg" | undefined = "sm";
+
+  const likedPosts = getLikedPostsContext();
 
   const like_count = writable(Number.parseInt(data.like_count ?? "0"));
 
-  const liked = writable(data.liked);
+  $: liked = data.id ? $likedPosts[data.id] ?? false : null;
 
   const like = createMutation({
     mutationKey: ["post", "like", data.id],
@@ -33,7 +38,13 @@
     },
     onSuccess(v) {
       if (typeof v?.liked === "boolean") {
-        liked.set(v.liked);
+        likedPosts.update((prev) => {
+          if (!data.id || typeof v?.liked !== "boolean") return prev;
+
+          prev[data.id] = v.liked;
+
+          return prev;
+        });
         like_count.update((prev) => prev + 1);
       }
     },
@@ -58,7 +69,14 @@
     },
     onSuccess(v) {
       if (typeof v?.liked === "boolean") {
-        liked.set(v.liked);
+        likedPosts.update((prev) => {
+          if (!data.id || typeof v?.liked !== "boolean") return prev;
+
+          prev[data.id] = v.liked;
+
+          return prev;
+        });
+
         like_count.update((prev) => prev - 1);
       }
     },
@@ -66,26 +84,33 @@
 </script>
 
 <button
+  data-size={size}
   on:click={(e) => {
     e.preventDefault();
     e.stopPropagation();
 
     if ($like.isPending || $removeLike.isPending) return;
 
-    if ($liked === true) return $removeLike.mutate();
+    if (liked === true) return $removeLike.mutate();
 
-    if ($liked === false) return $like.mutate();
+    if (liked === false) return $like.mutate();
   }}
   disabled={$like.isPending || $removeLike.isPending}
   type="button"
-  class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-rose-500/10 hover:text-rose-500 border-none !h-9 !w-9"
+  class="btn shadow-none group text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-rose-500/10 hover:text-rose-500 border-none data-[size=sm]:!h-9 data-[size=sm]:!w-9 data-[size=lg]:!w-10 data-[size=lg]:!h-10"
 >
   {#if $like.isPending || $removeLike.isPending}
-    <span class="loading-spinner loading loading-sm text-red-500" />
-  {:else if $liked}
-    <Icon class="ri-heart-fill text-rose-500 text-[18px]" />
+    <span
+      class="loading-spinner loading loading-sm text-red-500 group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
+  {:else if liked}
+    <Icon
+      class="ri-heart-fill text-rose-500 group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
   {:else}
-    <Icon class="ri-heart-line text-[18px]" />
+    <Icon
+      class="ri-heart-line text-[18px] group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
   {/if}
   <Count value={$like_count} />
 </button>

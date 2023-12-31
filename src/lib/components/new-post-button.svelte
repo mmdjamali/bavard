@@ -10,8 +10,7 @@
   import { fetchWithToken } from "$lib/custom-fetch";
   import type { PostEntity } from "$lib/types/entity";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
-
-  const MAX_LENGTH = 300;
+  import { appConfig } from "$lib/config";
 
   let input: HTMLTextAreaElement | null = null;
   const loading = writable(false);
@@ -36,7 +35,7 @@
     try {
       if ($loading) return;
 
-      if (!$content || $content.length > MAX_LENGTH) {
+      if (!$content || $content.length > appConfig.MAX_CONTENT_LENGTH) {
         return;
       }
 
@@ -179,20 +178,23 @@
               <div
                 class={cn(
                   "radial-progress transition-all inline-grid place-items-center border border-base-300",
-                  $content.length > MAX_LENGTH
+                  $content.length > appConfig.MAX_CONTENT_LENGTH
                     ? "text-error"
-                    : $content.length > MAX_LENGTH - 20
+                    : $content.length > appConfig.MAX_CONTENT_LENGTH - 20
                       ? "text-warning"
                       : "text-primary",
                 )}
-                style="--size:{MAX_LENGTH - $content.length <= 20
+                style="--size:{appConfig.MAX_CONTENT_LENGTH - $content.length <=
+                20
                   ? 30
                   : 24}px;--value:{Math.round(
-                  ($content.length / MAX_LENGTH) * 100,
+                  ($content.length / appConfig.MAX_CONTENT_LENGTH) * 100,
                 )};--thickness: 3px;"
               >
-                {#if MAX_LENGTH - $content.length <= 20}
-                  <span class="text-xs">{MAX_LENGTH - $content.length}</span>
+                {#if appConfig.MAX_CONTENT_LENGTH - $content.length <= 20}
+                  <span class="text-xs"
+                    >{appConfig.MAX_CONTENT_LENGTH - $content.length}</span
+                  >
                 {/if}
               </div>
             </div>

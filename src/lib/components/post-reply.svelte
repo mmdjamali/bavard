@@ -10,11 +10,12 @@
   import { writable } from "svelte/store";
   import { getCreatedPostsContext } from "$lib/contexts/created-posts/created-posts-context";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
-  import { fly } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
 
   const MAX_LENGTH = 300;
 
   export let data: PostEntity;
+  export let size: "sm" | "lg" | undefined = "sm";
 
   let input: HTMLTextAreaElement;
 
@@ -90,33 +91,39 @@
 
 {#if !$profile.data?.profile?.id}
   <button
+    data-size={size}
     on:click={(e) => {
       e.preventDefault();
       e.stopPropagation();
     }}
     type="button"
-    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-9 !w-9"
+    class="btn group shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none data-[size=sm]:!h-9 data-[size=sm]:!w-9 data-[size=lg]:!w-10 data-[size=lg]:!h-10"
   >
-    <Icon class="ri-chat-1-line text-[18px]" />
+    <Icon
+      class="ri-chat-1-line group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
     <Count value={data?.reply_count ?? "0"} />
   </button>
 {:else}
   <button
+    data-size={size}
     on:click={(e) => {
       e.preventDefault();
       e.stopPropagation();
     }}
     use:melt={$trigger}
     type="button"
-    class="btn shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none !h-9 !w-9"
+    class="btn group shadow-none text-base-content/75 relative btn-square rounded-full bg-transparent hover:bg-sky-500/10 hover:text-sky-500 border-none data-[size=sm]:!h-9 data-[size=sm]:!w-9 data-[size=lg]:!w-10 data-[size=lg]:!h-10"
   >
-    <Icon class="ri-chat-1-line text-[18px]" />
+    <Icon
+      class="ri-chat-1-line group-data-[size=sm]:text-[18px] group-data-[size=lg]:text-[21px]"
+    />
     <Count value={data?.reply_count ?? "0"} />
   </button>
   <div class="text-sm text-base-content" use:melt={$portalled}>
     {#if $open}
       <div
-        transition:fly={{ duration: 150, opacity: 0 }}
+        transition:fade={{ duration: 150 }}
         use:melt={$overlay}
         class="fixed inset-0 z-50 backdrop-blur-[2px] bg-base-content/10"
       />

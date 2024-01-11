@@ -6,10 +6,8 @@ export const cn = (...inputs: ClassNameValue[]) => clsx(twMerge(inputs))
 export const timeFormater = (
     date: Date
 ) => {
-    const now = new Date(new Date().toISOString())
 
-
-    let time = ((now.getTime() - date.getTime()) / 1000) + now.getTimezoneOffset() * 60
+    let time = ((Date.now() - date.getTime()) / 1000)
 
     if (time <= 60) return (`${Math.floor(time)}s`)
     time = time / 60

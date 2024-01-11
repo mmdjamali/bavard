@@ -108,8 +108,6 @@
   <div
     use:viewport={{
       enterViewport() {
-        console.log("yo");
-
         if (
           !$feed.isLoading &&
           !$feed.isFetchingNextPage &&

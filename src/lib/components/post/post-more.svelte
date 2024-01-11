@@ -41,14 +41,10 @@
       return null;
     },
     onSuccess: () => {
-      console.log("yes yes yes");
       deletedPosts.update((prev) => {
         const clone = structuredClone(prev);
 
         if (typeof data.id === "string") clone.push(data.id);
-
-        console.log(typeof data.id === "string");
-        console.table(clone);
 
         return clone;
       });

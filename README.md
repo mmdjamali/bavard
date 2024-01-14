@@ -13,6 +13,6 @@ bavard is a text based twitter clone Check it out at <a href="https://bavard.mmd
 
 # 🔥Features
 
-- posting.
-- interacting with posts.
-- profiles.
+- Posting.
+- Interacting with posts.
+- Profiles.

@@ -68,7 +68,9 @@
       href="/post/{data.repost?.id}"
       class="grid gap-3 mt-2 px-4 py-3 hover:bg-base-content/3 border rounded-md border-base-300"
     >
-      <div class="w-full flex gap-3 items-center relative h-full shrink-0">
+      <div
+        class="w-full flex gap-3 items-center relative h-full shrink-0 overflow-hidden"
+      >
         <div
           class="w-7 h-7 bg-base-100 shrink-0 rounded-full overflow-hidden aspect-square relative"
         >
@@ -99,8 +101,8 @@
         </div>
       </div>
 
-      <div class="flex flex-col w-full">
-        <div class="text-[15px]">
+      <div class="flex flex-col w-full relative overflow-hidden">
+        <div class="text-[15px] break-words">
           {#each repostRows as row}
             {#if row === ""}
               <br />

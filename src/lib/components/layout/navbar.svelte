@@ -5,6 +5,7 @@
   import { page } from "$app/stores";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
   import NewPostButton from "../new-post-button.svelte";
+  import NavbarMoreMobile from "./navbar-more-mobile.svelte";
 
   const profile = getProfileContext();
 
@@ -146,6 +147,8 @@
             </a>
           {/if}
         {/each}
+
+        <NavbarMoreMobile />
       </nav>
     </div>
   {/if}

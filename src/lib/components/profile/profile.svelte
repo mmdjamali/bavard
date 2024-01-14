@@ -7,6 +7,8 @@
   import Icon from "../icon.svelte";
   import { getProfileContext } from "$lib/contexts/profile/profile-context";
   import FollowButton from "../follow-button.svelte";
+  import ProfileEditModal from "./profile-edit-modal.svelte";
+  import ProfileMore from "./profile-more.svelte";
 
   export let data: { username?: string };
 
@@ -90,15 +92,11 @@
 
       <div class="flex items-center justify-center gap-3 py-2">
         {#if $userProfile.data?.profile?.id === $profile.data?.profile?.id}
-          <button class="btn rounded-full px-5 !h-9">
-            Edit <Icon class="text-[18px] ri-edit-fill" />
-          </button>
+          <ProfileEditModal data={$userProfile.data?.profile ?? {}} />
         {:else}
           <FollowButton {data} />
         {/if}
-        <button class="btn btn-square !h-9 !w-9 rounded-full">
-          <Icon class="ri-more-fill text-[21px]" />
-        </button>
+        <ProfileMore data={$profile.data?.profile ?? {}} />
       </div>
     </div>
 
@@ -112,9 +110,14 @@
       </span>
 
       {#if $profile.data?.profile?.bio}
-        <p class="mt-2">
-          {$profile.data?.profile?.bio}
-        </p>
+        <div class="mt-2">
+          {#each $profile.data.profile.bio.split("\n") as row}
+            {#if row === ""}
+              <br />
+            {/if}
+            <p>{row}</p>
+          {/each}
+        </div>
       {/if}
 
       <div class="flex items-center mt-2">

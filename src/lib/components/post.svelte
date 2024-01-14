@@ -39,7 +39,7 @@
     </a>
   </div>
 
-  <div class="flex flex-col w-full">
+  <div class="flex flex-col w-full overflow-hidden relative">
     <div class="flex w-full justify-between pt-3 mt-0.5">
       <div class="flex items-center gap-2">
         <a
@@ -62,7 +62,7 @@
       <ReplyingTo {data} />
     {/if}
 
-    <div class="text-[15px]">
+    <div class="text-[15px] break-words">
       {#each rows as row}
         {#if row === ""}
           <br />

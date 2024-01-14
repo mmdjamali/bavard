@@ -17,7 +17,7 @@
 
 {#if $profile.isLoading}
   <div class="grid place-items-center w-full h-full my-auto">
-    <span class="loading loading-dots ease-emil text-base-content" />
+    <span class="loading loading-spinner ease-emil text-primary" />
   </div>
 {:else if $profile.isError}
   <p>{$profile.error}</p>

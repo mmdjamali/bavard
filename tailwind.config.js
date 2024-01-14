@@ -20,6 +20,7 @@ export default {
   /** @satisfies {import('daisyui').Config} */
   daisyui: {
     themes: ["light", "dark"],
+    logs: false,
   },
   plugins: [
     require("@tailwindcss/typography"),

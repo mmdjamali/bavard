@@ -42,7 +42,7 @@
     },
     initialPageParam: 1,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 10,
   });
 
   $: likedPosts.update((prev) => {
@@ -82,15 +82,13 @@
   {#each $feed.data.pages as page, idx (idx)}
     {#if page?.feed && page.feed?.length}
       {#each page.feed as post (post.id)}
-        {#if !$createdPosts.some(({ id }) => id === post.id)}
-          {#if post.id && !$deletedPosts.includes(post.id)}
-            {#if !post.content && post.repost?.id}
-              <Repost data={post} />
-            {:else if post.content && post.repost?.id}
-              <RepostWithContent data={post} />
-            {:else}
-              <Post data={post} />
-            {/if}
+        {#if post.id && !$deletedPosts.includes(post.id)}
+          {#if !post.content && post.repost?.id}
+            <Repost data={post} />
+          {:else if post.content && post.repost?.id}
+            <RepostWithContent data={post} />
+          {:else}
+            <Post data={post} />
           {/if}
         {/if}
       {/each}

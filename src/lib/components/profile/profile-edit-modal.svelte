@@ -46,8 +46,16 @@
       if (!res.success) return;
 
       queryClient.setQueryData(["profile", "me"], {
-        profile: res.data.profile,
+        profile: {
+          ...$profile.data?.profile,
+          name: res.data.profile.name,
+          bio: res.data.profile.bio,
+        },
         user: $profile.data?.user,
+      });
+
+      queryClient.setQueryData(["profile", res.data.profile.username], {
+        profile: res.data.profile,
       });
 
       open.set(false);

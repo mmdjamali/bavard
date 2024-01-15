@@ -2,6 +2,7 @@
   import Icon from "$lib/components/icon.svelte";
 
   import Navbar from "$lib/components/layout/navbar.svelte";
+  import OptionalAuth from "$lib/components/protect-route/optional-auth.svelte";
   import WithProfile from "$lib/components/with-profile.svelte";
 </script>
 
@@ -10,7 +11,7 @@
 <section
   class="border-x relative max-w-[600px] mx-auto h-fit min-h-[100svh] w-full border-base-300"
 >
-  <WithProfile>
+  <OptionalAuth>
     <header
       class="sticky flex !min-h-0 h-14 p-0 top-0 w-full navbar bg-base-100/50 backdrop-blur-sm"
     >
@@ -39,5 +40,5 @@
 
     <div class="w-full text-center py-3 px-4">- End of feed -</div>
     <div class="w-full h-screen text-center py-3 px-4" />
-  </WithProfile>
+  </OptionalAuth>
 </section>

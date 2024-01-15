@@ -1,5 +1,3 @@
-@import "@fontsource/inter";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +6,8 @@
   html,
   body {
     height: 100%;
-    font-family: Inter !important;
+    /* font-family: "Rubik Variable" !important; */
+    font-family: "Inter Variable" !important;
   }
 
   body {

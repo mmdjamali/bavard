@@ -48,6 +48,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fontsource-variable/inter": "^5.0.16",
+		"@fontsource-variable/rubik": "^5.0.20",
 		"svelte-sequential-preprocessor": "^2.0.1"
 	}
 }

@@ -14,7 +14,7 @@
       path: "/home",
       title: "Home",
       mobile: true,
-      disabled: !$profile.data?.profile?.id,
+      disabled: false,
       icon: "ri-home-6-line",
       iconFill: "ri-home-6-fill",
     },
